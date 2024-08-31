@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ImageListViewController.swift
 //  ImageFeed
 //
 //  Created by Olga Trofimova on 29.08.2024.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ImageListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
