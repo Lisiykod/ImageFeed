@@ -39,7 +39,7 @@ class ImageListViewController: UIViewController {
         cell.dateLabel.text = dateFormatter.string(from: Date())
         // настраиваем лайк
         let isFavorite = indexPath.row % 2 == 0
-        let imageName = isFavorite ? UIImage(named: "Favorite") : UIImage(named: "Not_favorite")
+        let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
         cell.favoriteImage.setImage(imageName, for: .normal)
     }
 }
