@@ -22,8 +22,11 @@ final class ImagesListCell: UITableViewCell {
         super.layoutSublayers(of: self.layer)
         // добавляем вью с градиентом, чтобы обрезались границы
         mainImage.addSubview(gradientView)
-        // настраиваем область градиента
+//        // настраиваем область градиента
         gradientLayer.frame = gradientView.bounds
+    }
+    
+    func setGradient() {
         // настраиваем цвета
         let colorOne = UIColor.ypBlack.withAlphaComponent(0).cgColor
         let colorTwo = UIColor.ypBlack.withAlphaComponent(0.2).cgColor

@@ -35,12 +35,14 @@ class ImageListViewController: UIViewController {
         cell.mainImage.image = image
         cell.mainImage.layer.cornerRadius = 16
         cell.mainImage.layer.masksToBounds = true
+
         // настраиваем дату
         cell.dateLabel.text = dateFormatter.string(from: Date())
         // настраиваем лайк
         let isFavorite = indexPath.row % 2 == 0
         let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
         cell.favoriteImage.setImage(imageName, for: .normal)
+        cell.setGradient()
     }
 }
 
@@ -53,6 +55,7 @@ extension ImageListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         // говорим какую ячейку будем переиспользовать
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
         
@@ -63,9 +66,10 @@ extension ImageListViewController: UITableViewDataSource {
         
         // конфигурирем ячейку
         configureCell(for: imageListCell, with: indexPath)
+        
+        
         return imageListCell
     }
-    
     
 }
 
