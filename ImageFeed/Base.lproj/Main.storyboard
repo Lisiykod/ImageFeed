@@ -104,7 +104,7 @@
                     <navigationItem key="navigationItem" id="dBC-dk-5m6"/>
                     <connections>
                         <outlet property="tableView" destination="ftS-D7-ty7" id="VWD-bR-08b"/>
-                        <segue destination="w21-1Q-AIi" kind="show" identifier="ShowSingleImage" id="jro-TN-LQd"/>
+                        <segue destination="w21-1Q-AIi" kind="presentation" identifier="ShowSingleImage" id="jro-TN-LQd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -114,23 +114,37 @@
         <!--Single Image View Controller-->
         <scene sceneID="iGP-mS-IH9">
             <objects>
-                <viewController id="w21-1Q-AIi" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="w21-1Q-AIi" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xFv-BG-TzP">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="f0X-7f-X2f">
-                                <rect key="frame" x="0.0" y="92" width="414" height="721"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" name="YP Black"/>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tps-Zp-Dvm">
+                                <rect key="frame" x="8" y="8" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="c6t-go-HCq"/>
+                                    <constraint firstAttribute="width" constant="44" id="eoV-pZ-pRS"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="backward_image"/>
+                                <connections>
+                                    <action selector="didTapBackButton:" destination="w21-1Q-AIi" eventType="touchUpInside" id="461-qJ-xk1"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6cH-SF-Rii"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
-                            <constraint firstItem="6cH-SF-Rii" firstAttribute="trailing" secondItem="f0X-7f-X2f" secondAttribute="trailing" id="Pab-mh-Q1Z"/>
-                            <constraint firstItem="f0X-7f-X2f" firstAttribute="top" secondItem="6cH-SF-Rii" secondAttribute="top" id="Sze-eg-0qz"/>
-                            <constraint firstItem="6cH-SF-Rii" firstAttribute="bottom" secondItem="f0X-7f-X2f" secondAttribute="bottom" id="U17-ke-qYq"/>
-                            <constraint firstItem="f0X-7f-X2f" firstAttribute="leading" secondItem="6cH-SF-Rii" secondAttribute="leading" id="ZcG-2y-Wc9"/>
+                            <constraint firstItem="Tps-Zp-Dvm" firstAttribute="top" secondItem="6cH-SF-Rii" secondAttribute="top" constant="8" id="JZH-lg-zGe"/>
+                            <constraint firstAttribute="trailing" secondItem="f0X-7f-X2f" secondAttribute="trailing" id="Pab-mh-Q1Z"/>
+                            <constraint firstItem="f0X-7f-X2f" firstAttribute="top" secondItem="xFv-BG-TzP" secondAttribute="top" id="Sze-eg-0qz"/>
+                            <constraint firstAttribute="bottom" secondItem="f0X-7f-X2f" secondAttribute="bottom" id="U17-ke-qYq"/>
+                            <constraint firstItem="f0X-7f-X2f" firstAttribute="leading" secondItem="xFv-BG-TzP" secondAttribute="leading" id="ZcG-2y-Wc9"/>
+                            <constraint firstItem="Tps-Zp-Dvm" firstAttribute="leading" secondItem="6cH-SF-Rii" secondAttribute="leading" constant="8" id="wEy-Ed-sMc"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="jGy-mD-BH2"/>
@@ -140,7 +154,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7t2-mR-iL1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1875" y="1"/>
+            <point key="canvasLocation" x="1873.913043478261" y="0.6696428571428571"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="gKi-W6-6rH">
@@ -307,6 +321,7 @@
     </scenes>
     <resources>
         <image name="0" width="1600" height="1059"/>
+        <image name="backward_image" width="24" height="24"/>
         <image name="exit_image" width="24" height="24"/>
         <image name="not_favorite" width="42" height="42"/>
         <image name="tab_editorial_active" width="30" height="30"/>
