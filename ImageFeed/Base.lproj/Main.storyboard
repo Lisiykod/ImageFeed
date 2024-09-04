@@ -83,7 +83,6 @@
                                             <outlet property="favoriteImage" destination="Bd7-da-oi2" id="CSG-7x-uEF"/>
                                             <outlet property="gradientView" destination="0od-pq-oVb" id="oac-c1-i7p"/>
                                             <outlet property="mainImage" destination="oGh-6B-dJq" id="UCd-Dv-WVw"/>
-                                            <segue destination="w21-1Q-AIi" kind="show" id="CmB-GF-odV"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -105,6 +104,7 @@
                     <navigationItem key="navigationItem" id="dBC-dk-5m6"/>
                     <connections>
                         <outlet property="tableView" destination="ftS-D7-ty7" id="VWD-bR-08b"/>
+                        <segue destination="w21-1Q-AIi" kind="show" identifier="ShowSingleImage" id="jro-TN-LQd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -135,7 +135,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="jGy-mD-BH2"/>
                     <connections>
-                        <outlet property="imageView" destination="f0X-7f-X2f" id="CID-uQ-k6t"/>
+                        <outlet property="imageView" destination="f0X-7f-X2f" id="E1l-PT-IRw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7t2-mR-iL1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
