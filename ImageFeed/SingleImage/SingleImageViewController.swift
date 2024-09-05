@@ -34,7 +34,12 @@ class SingleImageViewController: UIViewController {
         
         rescaleAndCenterImageInScrollView(image: image)
     }
+    
     @IBAction func shareButtonTaped(_ sender: Any) {
+        shareImage()
+    }
+    
+    @IBAction func likeButtonTaped(_ sender: Any) {
     }
     
     @IBAction func didTapBackButton(_ sender: Any) {
@@ -68,6 +73,13 @@ class SingleImageViewController: UIViewController {
         let y = (newContentSize.height - visibleRectSize.height) / 2
         // устанавливаем новую точку
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+    }
+    
+    // метод для показа окна "поделиться"
+    private func shareImage() {
+        guard let image = image else { return }
+        let activityController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+        self.present(activityController, animated: true)
     }
 }
 

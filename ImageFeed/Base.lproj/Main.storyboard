@@ -127,32 +127,29 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" name="YP Black"/>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ODc-Lf-BbG">
-                                        <rect key="frame" x="295" y="795" width="51" height="51"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="sharing_button"/>
-                                        <connections>
-                                            <action selector="shareButtonTaped:" destination="w21-1Q-AIi" eventType="touchUpInside" id="AIo-Vt-giL"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jL5-AL-ZY0">
-                                        <rect key="frame" x="68" y="795" width="51" height="51"/>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="circle_button"/>
-                                    </button>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstItem="O6j-Ma-TyA" firstAttribute="trailing" secondItem="ODc-Lf-BbG" secondAttribute="trailing" constant="68" id="6vR-eA-9L1"/>
-                                    <constraint firstItem="O6j-Ma-TyA" firstAttribute="bottom" secondItem="ODc-Lf-BbG" secondAttribute="bottom" constant="50" id="FeR-bO-C5e"/>
-                                    <constraint firstItem="O6j-Ma-TyA" firstAttribute="bottom" secondItem="jL5-AL-ZY0" secondAttribute="bottom" constant="50" id="atB-5w-Ljg"/>
-                                    <constraint firstItem="jL5-AL-ZY0" firstAttribute="leading" secondItem="O6j-Ma-TyA" secondAttribute="leading" constant="68" id="q3J-FJ-grZ"/>
-                                </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="rPK-yh-5WE"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="O6j-Ma-TyA"/>
                                 <connections>
                                     <outlet property="delegate" destination="w21-1Q-AIi" id="tjL-h2-JB8"/>
                                 </connections>
                             </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ODc-Lf-BbG">
+                                <rect key="frame" x="295" y="795" width="51" height="51"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="sharing_button"/>
+                                <connections>
+                                    <action selector="shareButtonTaped:" destination="w21-1Q-AIi" eventType="touchUpInside" id="AIo-Vt-giL"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jL5-AL-ZY0">
+                                <rect key="frame" x="68" y="795" width="51" height="51"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="circle_button"/>
+                                <connections>
+                                    <action selector="likeButtonTaped:" destination="w21-1Q-AIi" eventType="touchUpInside" id="5ew-Hf-mpi"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tps-Zp-Dvm">
                                 <rect key="frame" x="8" y="0.0" width="44" height="44"/>
                                 <constraints>
@@ -169,11 +166,15 @@
                         <viewLayoutGuide key="safeArea" id="6cH-SF-Rii"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
+                            <constraint firstItem="6cH-SF-Rii" firstAttribute="bottom" secondItem="jL5-AL-ZY0" secondAttribute="bottom" constant="50" id="0pT-SW-PIp"/>
+                            <constraint firstItem="jL5-AL-ZY0" firstAttribute="leading" secondItem="6cH-SF-Rii" secondAttribute="leading" constant="68" id="4Gr-5v-sH7"/>
                             <constraint firstItem="Tps-Zp-Dvm" firstAttribute="top" secondItem="6cH-SF-Rii" secondAttribute="top" id="OUR-my-T1q"/>
+                            <constraint firstItem="6cH-SF-Rii" firstAttribute="trailing" secondItem="ODc-Lf-BbG" secondAttribute="trailing" constant="68" id="Y7X-s6-NwK"/>
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="bottom" secondItem="xFv-BG-TzP" secondAttribute="bottom" id="aca-Xs-tO1"/>
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="leading" secondItem="xFv-BG-TzP" secondAttribute="leading" id="d5i-Pf-YDb"/>
                             <constraint firstItem="Tps-Zp-Dvm" firstAttribute="leading" secondItem="6cH-SF-Rii" secondAttribute="leading" constant="8" id="eUE-ev-WCv"/>
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="top" secondItem="xFv-BG-TzP" secondAttribute="top" id="emY-fP-Qtm"/>
+                            <constraint firstItem="6cH-SF-Rii" firstAttribute="bottom" secondItem="ODc-Lf-BbG" secondAttribute="bottom" constant="50" id="nxe-C6-Mpa"/>
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="trailing" secondItem="xFv-BG-TzP" secondAttribute="trailing" id="rbR-48-fae"/>
                         </constraints>
                     </view>
