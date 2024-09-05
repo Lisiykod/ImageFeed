@@ -75,8 +75,8 @@
 				D06086862C8069E7002C6C8C /* SceneDelegate.swift */,
 				D0543F112C83A608004DF2EB /* ImagesList */,
 				D08ABAFC2C874989009A4F82 /* Profile */,
+				D08ABAFF2C89BA08009A4F82 /* SingleImage */,
 				D060868A2C8069E7002C6C8C /* Main.storyboard */,
-				D08ABAFD2C87AEF7009A4F82 /* SingleImageViewController.swift */,
 				D060868D2C8069EB002C6C8C /* Assets.xcassets */,
 				D060868F2C8069EB002C6C8C /* LaunchScreen.storyboard */,
 				D06086922C8069EB002C6C8C /* Info.plist */,
@@ -90,6 +90,14 @@
 				D08ABAFA2C874311009A4F82 /* ProfileViewController.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		D08ABAFF2C89BA08009A4F82 /* SingleImage */ = {
+			isa = PBXGroup;
+			children = (
+				D08ABAFD2C87AEF7009A4F82 /* SingleImageViewController.swift */,
+			);
+			path = SingleImage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

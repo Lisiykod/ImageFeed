@@ -119,12 +119,42 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="f0X-7f-X2f">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sEU-Fd-FDt">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" name="YP Black"/>
-                            </imageView>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="f0X-7f-X2f">
+                                        <rect key="frame" x="0.0" y="0.0" width="434" height="916"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" name="YP Black"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ODc-Lf-BbG">
+                                        <rect key="frame" x="295" y="795" width="51" height="51"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="sharing_button"/>
+                                        <connections>
+                                            <action selector="shareButtonTaped:" destination="w21-1Q-AIi" eventType="touchUpInside" id="AIo-Vt-giL"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jL5-AL-ZY0">
+                                        <rect key="frame" x="68" y="795" width="51" height="51"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="circle_button"/>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="O6j-Ma-TyA" firstAttribute="trailing" secondItem="ODc-Lf-BbG" secondAttribute="trailing" constant="68" id="6vR-eA-9L1"/>
+                                    <constraint firstItem="O6j-Ma-TyA" firstAttribute="bottom" secondItem="ODc-Lf-BbG" secondAttribute="bottom" constant="50" id="FeR-bO-C5e"/>
+                                    <constraint firstItem="O6j-Ma-TyA" firstAttribute="bottom" secondItem="jL5-AL-ZY0" secondAttribute="bottom" constant="50" id="atB-5w-Ljg"/>
+                                    <constraint firstItem="jL5-AL-ZY0" firstAttribute="leading" secondItem="O6j-Ma-TyA" secondAttribute="leading" constant="68" id="q3J-FJ-grZ"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="rPK-yh-5WE"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="O6j-Ma-TyA"/>
+                                <connections>
+                                    <outlet property="delegate" destination="w21-1Q-AIi" id="tjL-h2-JB8"/>
+                                </connections>
+                            </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tps-Zp-Dvm">
-                                <rect key="frame" x="8" y="8" width="44" height="44"/>
+                                <rect key="frame" x="8" y="0.0" width="44" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="c6t-go-HCq"/>
                                     <constraint firstAttribute="width" constant="44" id="eoV-pZ-pRS"/>
@@ -139,17 +169,18 @@
                         <viewLayoutGuide key="safeArea" id="6cH-SF-Rii"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
-                            <constraint firstItem="Tps-Zp-Dvm" firstAttribute="top" secondItem="6cH-SF-Rii" secondAttribute="top" constant="8" id="JZH-lg-zGe"/>
-                            <constraint firstAttribute="trailing" secondItem="f0X-7f-X2f" secondAttribute="trailing" id="Pab-mh-Q1Z"/>
-                            <constraint firstItem="f0X-7f-X2f" firstAttribute="top" secondItem="xFv-BG-TzP" secondAttribute="top" id="Sze-eg-0qz"/>
-                            <constraint firstAttribute="bottom" secondItem="f0X-7f-X2f" secondAttribute="bottom" id="U17-ke-qYq"/>
-                            <constraint firstItem="f0X-7f-X2f" firstAttribute="leading" secondItem="xFv-BG-TzP" secondAttribute="leading" id="ZcG-2y-Wc9"/>
-                            <constraint firstItem="Tps-Zp-Dvm" firstAttribute="leading" secondItem="6cH-SF-Rii" secondAttribute="leading" constant="8" id="wEy-Ed-sMc"/>
+                            <constraint firstItem="Tps-Zp-Dvm" firstAttribute="top" secondItem="6cH-SF-Rii" secondAttribute="top" id="OUR-my-T1q"/>
+                            <constraint firstItem="sEU-Fd-FDt" firstAttribute="bottom" secondItem="xFv-BG-TzP" secondAttribute="bottom" id="aca-Xs-tO1"/>
+                            <constraint firstItem="sEU-Fd-FDt" firstAttribute="leading" secondItem="xFv-BG-TzP" secondAttribute="leading" id="d5i-Pf-YDb"/>
+                            <constraint firstItem="Tps-Zp-Dvm" firstAttribute="leading" secondItem="6cH-SF-Rii" secondAttribute="leading" constant="8" id="eUE-ev-WCv"/>
+                            <constraint firstItem="sEU-Fd-FDt" firstAttribute="top" secondItem="xFv-BG-TzP" secondAttribute="top" id="emY-fP-Qtm"/>
+                            <constraint firstItem="sEU-Fd-FDt" firstAttribute="trailing" secondItem="xFv-BG-TzP" secondAttribute="trailing" id="rbR-48-fae"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="jGy-mD-BH2"/>
                     <connections>
                         <outlet property="imageView" destination="f0X-7f-X2f" id="E1l-PT-IRw"/>
+                        <outlet property="scrollView" destination="sEU-Fd-FDt" id="qeH-wa-NKJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7t2-mR-iL1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -322,8 +353,10 @@
     <resources>
         <image name="0" width="1600" height="1059"/>
         <image name="backward_image" width="24" height="24"/>
+        <image name="circle_button" width="51" height="51"/>
         <image name="exit_image" width="24" height="24"/>
         <image name="not_favorite" width="42" height="42"/>
+        <image name="sharing_button" width="51" height="51"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>
         <image name="userpick_photo" width="70" height="70"/>
