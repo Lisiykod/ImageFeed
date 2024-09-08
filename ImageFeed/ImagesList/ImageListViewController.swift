@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ImageListViewController: UIViewController {
+final class ImageListViewController: UIViewController {
     
     @IBOutlet private var tableView: UITableView!
     
@@ -22,28 +22,22 @@ class ImageListViewController: UIViewController {
         return formatter
     }()
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 200
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
-        
+    
+    // MARK: - Public Methods
+    
     func configureCell(for cell: ImagesListCell, with indexPath: IndexPath) {
+        
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return
         }
-        // настраиваем картинку
-        cell.mainImage.image = image
-        cell.mainImage.layer.cornerRadius = 16
-        cell.mainImage.layer.masksToBounds = true
-
-        // настраиваем дату
-        cell.dateLabel.text = dateFormatter.string(from: Date())
-        // настраиваем лайк
-        let isFavorite = indexPath.row % 2 == 0
-        let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
-        cell.favoriteImage.setImage(imageName, for: .normal)
-        cell.setGradient()
+        
+        cell.configCell(with: dateFormatter, image: image, indexPath: indexPath)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -85,7 +79,6 @@ extension ImageListViewController: UITableViewDataSource {
         // конфигурирем ячейку
         configureCell(for: imageListCell, with: indexPath)
         
-        
         return imageListCell
     }
     
@@ -93,7 +86,7 @@ extension ImageListViewController: UITableViewDataSource {
 
 extension ImageListViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) { 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
     }
     
@@ -105,6 +98,7 @@ extension ImageListViewController: UITableViewDelegate {
         // высчитываем высоту ячейки
         let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
         let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
+        guard image.size.width != 0 else { return 0 }
         let imageWidth = image.size.width
         let scale = imageViewWidth/imageWidth
         let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom

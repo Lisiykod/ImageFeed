@@ -21,6 +21,7 @@ class SingleImageViewController: UIViewController {
         }
     }
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         imageView.image = image
@@ -35,6 +36,7 @@ class SingleImageViewController: UIViewController {
         rescaleAndCenterImageInScrollView(image: image)
     }
     
+    // MARK: - Actions
     @IBAction func shareButtonTaped(_ sender: Any) {
         shareImage()
     }
@@ -46,6 +48,7 @@ class SingleImageViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    // MARK: - Private Methods
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
         // учитываем диапазон зума
         let minZoomScale = scrollView.minimumZoomScale
