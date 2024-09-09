@@ -71,7 +71,7 @@ class SingleImageViewController: UIViewController {
         scrollView.layoutIfNeeded()
         // вычисляем центр
         let newContentSize = scrollView.contentSize
-        // расчитываем координаты для смещения
+        //        // расчитываем координаты для смещения
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         // устанавливаем новую точку
@@ -83,7 +83,23 @@ class SingleImageViewController: UIViewController {
         guard let image = image else { return }
         let activityController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         activityController.overrideUserInterfaceStyle = .dark
-        self.present(activityController, animated: true) 
+        self.present(activityController, animated: true)
+    }
+    
+    
+    // TODO: - Подумать как улучшить и доработать
+    // не очень понятно соответствует ли ожидаемому поведению
+    private func centerImage() {
+        let boundsSize = scrollView.bounds.size
+        var imageFrame = imageView.frame
+        
+        if imageFrame.width < boundsSize.width {
+            imageFrame.origin.x = (boundsSize.width - imageFrame.width) / 2
+        }
+        
+        if imageFrame.height < boundsSize.height {
+            imageFrame.origin.y = (boundsSize.height - imageFrame.height) / 2
+        }
     }
 }
 
@@ -91,4 +107,9 @@ extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView
     }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        centerImage()
+    }
+    
 }
