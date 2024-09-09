@@ -13,6 +13,7 @@ final class ImageListViewController: UIViewController {
     
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
     private let showSingleImageSegueIdentifier: String = "ShowSingleImage"
+    private let currentDate: Date = Date()
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -25,21 +26,10 @@ final class ImageListViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = 200
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
     
     // MARK: - Public Methods
-    
-    func configureCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
-            return
-        }
-        
-        cell.configCell(with: dateFormatter, image: image, indexPath: indexPath)
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
             guard
@@ -55,6 +45,27 @@ final class ImageListViewController: UIViewController {
         } else {
             super.prepare(for: segue, sender: sender)
         }
+    }
+    
+    // MARK: - Private Methods
+    
+    private func configureCell(for cell: ImagesListCell, with indexPath: IndexPath) {
+        
+        guard let image = UIImage(named: photosName[indexPath.row]) else {
+            return
+        }
+        
+        // настраиваем картинку
+        cell.mainImage.image = image
+        cell.mainImage.layer.cornerRadius = 16
+        cell.mainImage.layer.masksToBounds = true
+
+        // настраиваем дату
+        cell.dateLabel.text = dateFormatter.string(from: currentDate)
+        // настраиваем лайк
+        let isFavorite = indexPath.row % 2 == 0
+        let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
+        cell.favoriteImage.setImage(imageName, for: .normal)
     }
 }
 

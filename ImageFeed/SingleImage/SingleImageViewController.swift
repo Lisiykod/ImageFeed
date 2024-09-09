@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SingleImageViewController: UIViewController {
+final class SingleImageViewController: UIViewController {
     
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var scrollView: UIScrollView!
@@ -71,7 +71,7 @@ class SingleImageViewController: UIViewController {
         scrollView.layoutIfNeeded()
         // вычисляем центр
         let newContentSize = scrollView.contentSize
-        //        // расчитываем координаты для смещения
+        // расчитываем координаты для смещения
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         // устанавливаем новую точку
@@ -85,7 +85,6 @@ class SingleImageViewController: UIViewController {
         activityController.overrideUserInterfaceStyle = .dark
         self.present(activityController, animated: true)
     }
-    
     
     // TODO: - Подумать как улучшить и доработать
     // не очень понятно соответствует ли ожидаемому поведению
@@ -111,5 +110,4 @@ extension SingleImageViewController: UIScrollViewDelegate {
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         centerImage()
     }
-    
 }
