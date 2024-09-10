@@ -9,7 +9,7 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
-    private let exitButton: UIButton = {
+    private lazy var exitButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "exit_image"), for: .normal)
         button.addTarget(self, action: #selector(didTapExitButton), for: .touchUpInside)
@@ -17,7 +17,7 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     
-    private var userPick: UIImageView = {
+    private let userPick: UIImageView = {
         let userImage = UIImage(named: "userpick_photo")
         let image = UIImageView(image: userImage)
         return image
@@ -31,7 +31,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private var logoLabel: UILabel = {
+    private let logoLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypGray
@@ -39,7 +39,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private var statusLabel: UILabel = {
+    private let statusLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypWhite

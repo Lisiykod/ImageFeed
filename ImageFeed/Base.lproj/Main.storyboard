@@ -136,19 +136,16 @@
                                 </connections>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ODc-Lf-BbG" userLabel="share button">
-                                <rect key="frame" x="295" y="795" width="51" height="51"/>
+                                <rect key="frame" x="181.5" y="795" width="51" height="51"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ODc-Lf-BbG" secondAttribute="height" multiplier="1:1" id="9KF-yT-ZSv"/>
+                                    <constraint firstAttribute="width" constant="51" id="hjk-VH-O97"/>
+                                    <constraint firstAttribute="height" constant="51" id="lEk-UH-th5"/>
+                                </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="sharing_button"/>
                                 <connections>
                                     <action selector="shareButtonTaped:" destination="w21-1Q-AIi" eventType="touchUpInside" id="AIo-Vt-giL"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jL5-AL-ZY0" userLabel="like button">
-                                <rect key="frame" x="68" y="795" width="51" height="51"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="circle_button"/>
-                                <connections>
-                                    <action selector="likeButtonTaped:" destination="w21-1Q-AIi" eventType="touchUpInside" id="5ew-Hf-mpi"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tps-Zp-Dvm" userLabel="back button">
@@ -167,15 +164,13 @@
                         <viewLayoutGuide key="safeArea" id="6cH-SF-Rii"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
-                            <constraint firstItem="6cH-SF-Rii" firstAttribute="bottom" secondItem="jL5-AL-ZY0" secondAttribute="bottom" constant="50" id="0pT-SW-PIp"/>
-                            <constraint firstItem="jL5-AL-ZY0" firstAttribute="leading" secondItem="6cH-SF-Rii" secondAttribute="leading" constant="68" id="4Gr-5v-sH7"/>
                             <constraint firstItem="Tps-Zp-Dvm" firstAttribute="top" secondItem="6cH-SF-Rii" secondAttribute="top" id="OUR-my-T1q"/>
-                            <constraint firstItem="6cH-SF-Rii" firstAttribute="trailing" secondItem="ODc-Lf-BbG" secondAttribute="trailing" constant="68" id="Y7X-s6-NwK"/>
+                            <constraint firstItem="ODc-Lf-BbG" firstAttribute="centerX" secondItem="xFv-BG-TzP" secondAttribute="centerX" id="S7c-06-EvC"/>
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="bottom" secondItem="xFv-BG-TzP" secondAttribute="bottom" id="aca-Xs-tO1"/>
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="leading" secondItem="xFv-BG-TzP" secondAttribute="leading" id="d5i-Pf-YDb"/>
                             <constraint firstItem="Tps-Zp-Dvm" firstAttribute="leading" secondItem="6cH-SF-Rii" secondAttribute="leading" constant="8" id="eUE-ev-WCv"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="ODc-Lf-BbG" secondAttribute="bottom" constant="50" id="eXd-5p-ctE"/>
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="top" secondItem="xFv-BG-TzP" secondAttribute="top" id="emY-fP-Qtm"/>
-                            <constraint firstItem="6cH-SF-Rii" firstAttribute="bottom" secondItem="ODc-Lf-BbG" secondAttribute="bottom" constant="50" id="nxe-C6-Mpa"/>
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="trailing" secondItem="xFv-BG-TzP" secondAttribute="trailing" id="rbR-48-fae"/>
                         </constraints>
                     </view>
@@ -232,7 +227,6 @@
     <resources>
         <image name="0" width="1600" height="1059"/>
         <image name="backward_image" width="24" height="24"/>
-        <image name="circle_button" width="51" height="51"/>
         <image name="not_favorite" width="42" height="42"/>
         <image name="sharing_button" width="51" height="51"/>
         <image name="tab_editorial_active" width="30" height="30"/>

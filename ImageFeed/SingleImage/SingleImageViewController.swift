@@ -41,9 +41,6 @@ final class SingleImageViewController: UIViewController {
         shareImage()
     }
     
-    @IBAction func likeButtonTaped(_ sender: Any) {
-    }
-    
     @IBAction func didTapBackButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
