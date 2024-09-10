@@ -48,9 +48,7 @@ final class ImageListViewController: UIViewController {
     }
     
     // MARK: - Private Methods
-    
     private func configureCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return
         }
@@ -59,9 +57,10 @@ final class ImageListViewController: UIViewController {
         cell.mainImage.image = image
         cell.mainImage.layer.cornerRadius = 16
         cell.mainImage.layer.masksToBounds = true
-
+        
         // настраиваем дату
         cell.dateLabel.text = dateFormatter.string(from: currentDate)
+        
         // настраиваем лайк
         let isFavorite = indexPath.row % 2 == 0
         let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
@@ -71,7 +70,6 @@ final class ImageListViewController: UIViewController {
 
 
 extension ImageListViewController: UITableViewDataSource {
-    
     // реализуем требуемые методы протокола
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photosName.count
@@ -89,7 +87,6 @@ extension ImageListViewController: UITableViewDataSource {
         
         // конфигурирем ячейку
         configureCell(for: imageListCell, with: indexPath)
-        
         return imageListCell
     }
     
