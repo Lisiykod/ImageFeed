@@ -56,7 +56,7 @@ final class SingleImageViewController: UIViewController {
         let imageSize = image.size
         // определяем видимую область
         let visibleRectSize = scrollView.bounds.size
-        // вычисляем масштаб для горизонтальной и вертикальной осей
+        // вычисляем масштаб для горизонтальной и вертикальной оси
         let hScale = visibleRectSize.width / imageSize.width
         let vScale = visibleRectSize.height / imageSize.height
         // вычисляем минимальное значение, чтобы изображение растягивалось с сохр пропорций
@@ -83,8 +83,7 @@ final class SingleImageViewController: UIViewController {
         self.present(activityController, animated: true)
     }
     
-    // TODO: - Подумать как улучшить и доработать
-    // не очень понятно соответствует ли ожидаемому поведению
+    // метод для центрирования изображения после зума
     private func centerImage() {
         let boundsSize = scrollView.bounds.size
         var imageFrame = imageView.frame
