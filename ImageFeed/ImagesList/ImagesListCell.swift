@@ -20,20 +20,25 @@ final class ImagesListCell: UITableViewCell {
     
     override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: self.layer)
-        // добавляем вью с градиентом, чтобы обрезались границы
-        mainImage.addSubview(gradientView)
-//        // настраиваем область градиента
+        // настраиваем область показа градиента, чтобы он не обрезался
         gradientLayer.frame = gradientView.bounds
     }
     
-    func setGradient() {
+    override func awakeFromNib() {
+        setCellGradient()
+    }
+    
+    // метод для настройки градиента
+    func setCellGradient() {
+        gradientView.layer.masksToBounds = true
+        gradientView.layer.cornerRadius = 16
+        gradientView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         // настраиваем цвета
-        let colorOne = UIColor.ypBlack.withAlphaComponent(0).cgColor
+        let colorOne = UIColor.ypBlack.withAlphaComponent(0.0).cgColor
         let colorTwo = UIColor.ypBlack.withAlphaComponent(0.2).cgColor
         gradientLayer.colors = [colorOne, colorTwo]
         // добавляем слой с градиентом
-        gradientView.layer.insertSublayer(gradientLayer, at: 0)
+        gradientView.layer.addSublayer(gradientLayer)
     }
-    
 }
 

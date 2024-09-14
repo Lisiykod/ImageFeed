@@ -7,11 +7,13 @@
 
 import UIKit
 
-class ImageListViewController: UIViewController {
+final class ImageListViewController: UIViewController {
     
     @IBOutlet private var tableView: UITableView!
     
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
+    private let showSingleImageSegueIdentifier: String = "ShowSingleImage"
+    private let currentDate: Date = Date()
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -21,34 +23,53 @@ class ImageListViewController: UIViewController {
         return formatter
     }()
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = 200
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
-        
-    func configureCell(for cell: ImagesListCell, with indexPath: IndexPath) {
+    
+    // MARK: - Public Methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == showSingleImageSegueIdentifier {
+            guard
+                let viewController = segue.destination as? SingleImageViewController,
+                let indexPath = sender as? IndexPath
+            else {
+                assertionFailure("Invalid segue destination")
+                return
+            }
+            
+            let image = UIImage(named: photosName[indexPath.row])
+            viewController.image = image
+        } else {
+            super.prepare(for: segue, sender: sender)
+        }
+    }
+    
+    // MARK: - Private Methods
+    private func configureCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return
         }
+        
         // настраиваем картинку
         cell.mainImage.image = image
         cell.mainImage.layer.cornerRadius = 16
         cell.mainImage.layer.masksToBounds = true
-
+        
         // настраиваем дату
-        cell.dateLabel.text = dateFormatter.string(from: Date())
+        cell.dateLabel.text = dateFormatter.string(from: currentDate)
+        
         // настраиваем лайк
         let isFavorite = indexPath.row % 2 == 0
         let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
         cell.favoriteImage.setImage(imageName, for: .normal)
-        cell.setGradient()
     }
 }
 
 
 extension ImageListViewController: UITableViewDataSource {
-    
     // реализуем требуемые методы протокола
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photosName.count
@@ -66,8 +87,6 @@ extension ImageListViewController: UITableViewDataSource {
         
         // конфигурирем ячейку
         configureCell(for: imageListCell, with: indexPath)
-        
-        
         return imageListCell
     }
     
@@ -75,7 +94,9 @@ extension ImageListViewController: UITableViewDataSource {
 
 extension ImageListViewController: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) { }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
+    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
@@ -85,6 +106,7 @@ extension ImageListViewController: UITableViewDelegate {
         // высчитываем высоту ячейки
         let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
         let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
+        guard image.size.width != 0 else { return 0 }
         let imageWidth = image.size.width
         let scale = imageViewWidth/imageWidth
         let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
