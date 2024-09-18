@@ -28,6 +28,7 @@ final class ProfileViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
         label.textColor = .ypWhite
         label.text = "Екатерина Новикова"
+        label.numberOfLines = 0
         return label
     }()
     
@@ -36,6 +37,7 @@ final class ProfileViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypGray
         label.text = "@ekaterina_nov"
+        label.numberOfLines = 0
         return label
     }()
     
@@ -44,6 +46,7 @@ final class ProfileViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypWhite
         label.text = "Hello, world!"
+        label.numberOfLines = 0
         return label
     }()
     
@@ -87,11 +90,13 @@ final class ProfileViewController: UIViewController {
         NSLayoutConstraint.activate([
             mainNameLabel.leadingAnchor.constraint(equalTo: userPick.leadingAnchor),
             mainNameLabel.topAnchor.constraint(equalTo: userPick.bottomAnchor, constant: 8),
-            view.trailingAnchor.constraint(greaterThanOrEqualTo: mainNameLabel.trailingAnchor, constant: 124),
+            view.trailingAnchor.constraint(greaterThanOrEqualTo: mainNameLabel.trailingAnchor, constant: 16),
             logoLabel.leadingAnchor.constraint(equalTo: mainNameLabel.leadingAnchor),
             logoLabel.topAnchor.constraint(equalTo: mainNameLabel.bottomAnchor, constant: 8),
+            view.trailingAnchor.constraint(greaterThanOrEqualTo: logoLabel.trailingAnchor, constant: 16),
             statusLabel.leadingAnchor.constraint(equalTo: mainNameLabel.leadingAnchor),
-            statusLabel.topAnchor.constraint(equalTo: logoLabel.bottomAnchor, constant: 8)
+            statusLabel.topAnchor.constraint(equalTo: logoLabel.bottomAnchor, constant: 8),
+            view.trailingAnchor.constraint(greaterThanOrEqualTo: statusLabel.trailingAnchor, constant: 16)
         ])
     }
     
