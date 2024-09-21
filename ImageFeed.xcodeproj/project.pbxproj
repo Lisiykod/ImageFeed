@@ -19,6 +19,7 @@
 		D08ABAFB2C874311009A4F82 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08ABAFA2C874311009A4F82 /* ProfileViewController.swift */; };
 		D08ABAFE2C87AEF7009A4F82 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08ABAFD2C87AEF7009A4F82 /* SingleImageViewController.swift */; };
 		D08F0E052C9D86600038FBB0 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08F0E042C9D86600038FBB0 /* WebViewViewController.swift */; };
+		D08F0E072C9EE0C00038FBB0 /* WebViewViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08F0E062C9EE0C00038FBB0 /* WebViewViewControllerDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		D08ABAFA2C874311009A4F82 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D08ABAFD2C87AEF7009A4F82 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		D08F0E042C9D86600038FBB0 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
+		D08F0E062C9EE0C00038FBB0 /* WebViewViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewControllerDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 			children = (
 				D082C2602C9C4747002C3C00 /* AuthViewController.swift */,
 				D08F0E042C9D86600038FBB0 /* WebViewViewController.swift */,
+				D08F0E062C9EE0C00038FBB0 /* WebViewViewControllerDelegate.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -197,6 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D06086892C8069E7002C6C8C /* ImageListViewController.swift in Sources */,
+				D08F0E072C9EE0C00038FBB0 /* WebViewViewControllerDelegate.swift in Sources */,
 				D0543F102C83A5E4004DF2EB /* ImagesListCell.swift in Sources */,
 				D08ABAFB2C874311009A4F82 /* ProfileViewController.swift in Sources */,
 				D06086852C8069E7002C6C8C /* AppDelegate.swift in Sources */,

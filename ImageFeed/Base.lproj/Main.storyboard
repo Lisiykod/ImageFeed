@@ -234,7 +234,7 @@
                                     <color key="baseForegroundColor" name="YP Black"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <segue destination="t6B-Fw-jLO" kind="show" identifier="ShowWebView" id="9cu-gc-G3w"/>
+                                    <segue destination="t6B-Fw-jLO" kind="presentation" identifier="ShowWebView" modalPresentationStyle="fullScreen" id="9cu-gc-G3w"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -266,24 +266,40 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l9g-Ru-wYO">
-                                <rect key="frame" x="0.0" y="92" width="414" height="804"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" name="YP White"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
                                     <wkPreferences key="preferences"/>
                                 </wkWebViewConfiguration>
                             </wkWebView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kXk-Ny-dVC">
+                                <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="DK4-jx-XWW"/>
+                                    <constraint firstAttribute="width" constant="44" id="PGI-DW-t2j"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="nav_back_button"/>
+                                <connections>
+                                    <action selector="didTapBackButton:" destination="t6B-Fw-jLO" eventType="touchUpInside" id="9vp-if-tf2"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8vs-OH-kC5"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="l9g-Ru-wYO" secondAttribute="bottom" id="7CB-iF-5DM"/>
+                            <constraint firstItem="kXk-Ny-dVC" firstAttribute="top" secondItem="8vs-OH-kC5" secondAttribute="top" id="fdd-5h-EOD"/>
                             <constraint firstAttribute="trailing" secondItem="l9g-Ru-wYO" secondAttribute="trailing" id="meH-bh-rPs"/>
+                            <constraint firstItem="kXk-Ny-dVC" firstAttribute="leading" secondItem="0rk-Gf-p1l" secondAttribute="leading" id="nRl-VV-U9L"/>
                             <constraint firstItem="l9g-Ru-wYO" firstAttribute="top" secondItem="8vs-OH-kC5" secondAttribute="top" id="nys-H8-4VT"/>
                             <constraint firstItem="l9g-Ru-wYO" firstAttribute="leading" secondItem="0rk-Gf-p1l" secondAttribute="leading" id="qc9-Dc-yUh"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="efy-JA-URx"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="wKf-yZ-TXs"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="webView" destination="l9g-Ru-wYO" id="kRU-SI-NMA"/>
                     </connections>
@@ -338,6 +354,7 @@
         <image name="0" width="1600" height="1059"/>
         <image name="backward_image" width="24" height="24"/>
         <image name="logo_of_unsplash" width="60" height="60"/>
+        <image name="nav_back_button" width="24" height="24"/>
         <image name="not_favorite" width="42" height="42"/>
         <image name="sharing_button" width="51" height="51"/>
         <image name="tab_editorial_active" width="30" height="30"/>
