@@ -285,11 +285,18 @@
                                     <action selector="didTapBackButton:" destination="t6B-Fw-jLO" eventType="touchUpInside" id="9vp-if-tf2"/>
                                 </connections>
                             </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Z7R-hm-cgF">
+                                <rect key="frame" x="0.0" y="44" width="414" height="4"/>
+                                <color key="progressTintColor" name="YP Black"/>
+                            </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8vs-OH-kC5"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Z7R-hm-cgF" firstAttribute="leading" secondItem="8vs-OH-kC5" secondAttribute="leading" id="1b0-V0-Na9"/>
                             <constraint firstAttribute="bottom" secondItem="l9g-Ru-wYO" secondAttribute="bottom" id="7CB-iF-5DM"/>
+                            <constraint firstItem="Z7R-hm-cgF" firstAttribute="top" secondItem="kXk-Ny-dVC" secondAttribute="bottom" id="Kem-e0-3m3"/>
+                            <constraint firstItem="8vs-OH-kC5" firstAttribute="trailing" secondItem="Z7R-hm-cgF" secondAttribute="trailing" id="UjL-8f-JKI"/>
                             <constraint firstItem="kXk-Ny-dVC" firstAttribute="top" secondItem="8vs-OH-kC5" secondAttribute="top" id="fdd-5h-EOD"/>
                             <constraint firstAttribute="trailing" secondItem="l9g-Ru-wYO" secondAttribute="trailing" id="meH-bh-rPs"/>
                             <constraint firstItem="kXk-Ny-dVC" firstAttribute="leading" secondItem="0rk-Gf-p1l" secondAttribute="leading" id="nRl-VV-U9L"/>
@@ -301,12 +308,13 @@
                     <navigationItem key="navigationItem" id="wKf-yZ-TXs"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="progressView" destination="Z7R-hm-cgF" id="cwC-X7-3gl"/>
                         <outlet property="webView" destination="l9g-Ru-wYO" id="kRU-SI-NMA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3gF-cr-sb6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="823" y="-723"/>
+            <point key="canvasLocation" x="821.73913043478262" y="-723.21428571428567"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="t8H-Qt-1us">
