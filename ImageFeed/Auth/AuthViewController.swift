@@ -12,6 +12,7 @@ final class AuthViewController: UIViewController {
     @IBOutlet private var logInButton: UIButton!
     
     private let showingWebViewSegueIdentifier: String = "ShowWebView"
+    private let oauth2Service = OAuth2Service.shared
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
