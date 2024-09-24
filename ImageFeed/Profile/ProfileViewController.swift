@@ -9,6 +9,8 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
+    private let tokenStorage: OAuth2TokenStorage = OAuth2TokenStorage()
+    
     private lazy var exitButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "exit_image"), for: .normal)
@@ -103,7 +105,7 @@ final class ProfileViewController: UIViewController {
     // метод для кнопки выход
     @objc
     private func didTapExitButton() {
-        // здесь будет код
+        
     }
     
 }

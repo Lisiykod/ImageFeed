@@ -10,7 +10,7 @@ import Foundation
 final class OAuth2TokenStorage {
     private let storage = UserDefaults.standard
     
-    private var token: String? {
+    private(set) var token: String? {
         get {
             storage.string(forKey: "accessKey")
         }
@@ -21,5 +21,9 @@ final class OAuth2TokenStorage {
     
     func store(token: String) {
         self.token = token
+    }
+    
+    func removeToken() {
+        storage.removeObject(forKey: "accessKey")
     }
 }
