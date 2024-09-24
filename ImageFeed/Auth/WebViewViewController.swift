@@ -56,6 +56,7 @@ final class WebViewViewController: UIViewController {
         guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAutorizeURLString) else {
             return
         }
+        // значения компонентов, которые мы хотим передать в запросе
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: Constants.accessKey),
             URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
@@ -68,6 +69,7 @@ final class WebViewViewController: UIViewController {
         }
         
         let request = URLRequest(url: url)
+        // передаем запрос webView
         webView.load(request)
     }
     
@@ -78,13 +80,14 @@ final class WebViewViewController: UIViewController {
             let url = navigationAction.request.url,
             // получаем из него значения компонентов
             let urlComponents = URLComponents(string: url.absoluteString),
-            // проверяем совпадает ли адрес с получением кода
+            // проверяем совпадает ли адрес запроса с адресом получением кода
             urlComponents.path == "/oauth/authorize/native",
             // проверяем есть ли компоненты запроса
             let items = urlComponents.queryItems,
             // провреяем есть ли "code"
             let codeItem = items.first(where: {$0.name == "code"})
         {
+            print("codeItem = :\(String(describing: codeItem.value))")
             return codeItem.value
         } else {
             return nil
@@ -98,11 +101,16 @@ final class WebViewViewController: UIViewController {
 }
 
 extension WebViewViewController: WKNavigationDelegate {
+    // метод благодаря которому узнаем, что пользователь успешно авторизовался
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        // проверяем получен ли код авторизации
         if let code = code(from: navigationAction) {
-            // TODO: process code
+            // обрабатываем код
+            delegate?.webViewViewController(self, didAuthenticateWithCode: code)
+            // отменяем навигационное действие, т.к сделано все, что нужно
             decisionHandler(.cancel)
         } else {
+            // разрешаем переход, чтобы была возможность перейти на новую стр (возможно в рамках авторизации)
             decisionHandler(.allow)
         }
     }

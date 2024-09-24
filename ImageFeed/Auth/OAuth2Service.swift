@@ -9,17 +9,16 @@ import Foundation
 
 final class OAuth2Service {
     static let shared = OAuth2Service()
+    private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     
     private init() { }
     
-    private enum NetworkError: Error {
-        case codeError
-    }
-    
-    func makeOAuthTokenRequest(code: String) -> URLRequest {
-        guard let baseURL = URL(string: "https://unsplash.com") else {
+    // метод для формирования запроса авторизационного токена
+    private func makeOAuthTokenRequest(code: String) -> URLRequest {
+        guard let baseURL = Constants.defaultBaseURL else {
             preconditionFailure("not base url")
         }
+        
         let url = URL(
             string: "/oauth/token"
             + "?client_id=\(Constants.accessKey)" // перечисляем параметры запроса
@@ -29,29 +28,48 @@ final class OAuth2Service {
             + "&&grant_type=authorization_code",
             relativeTo: baseURL // опираемся на базовый URL, которые содержат схему и имя хоста
         )
+        
         guard let url = url else {
             preconditionFailure("invalid url")
         }
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         return request
     }
     
-    func fetchOAuthToken(code: String, handler: @escaping (Result<Data, Error>) -> Void) {
+    // метод для запроса токена
+    func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         let tokenRequest = makeOAuthTokenRequest(code: code)
-        let task = URLSession.shared.dataTask(with: tokenRequest) { data, response, error in
-            if let error = error {
-                handler(.failure(error))
+        let task = URLSession.shared.data(for: tokenRequest) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let data):
+                do {
+                    let decoder = JSONDecoder()
+                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
+                    let accessToken = response.accessToken
+                    self.storage.store(token: accessToken)
+                    completion(.success(accessToken))
+                } catch {
+                    print("data decoding error: \(error.localizedDescription)")
+                    completion(.failure(error))
+                }
+            case.failure(let error):
+                if let error = error as? NetworkError {
+                    switch error {
+                    case .httpStatusCode(let code):
+                        print("failure status code: \(code)")
+                    case .urlRequestError(let requestError):
+                        print("failed request: \(requestError)")
+                    case .urlSessionError:
+                        print("session unknown error")
+                    }
+                } else {
+                    print("unknown error: \(error.localizedDescription)")
+                }
+                completion(.failure(error))
             }
-            
-            if let response = response as? HTTPURLResponse,
-               response.statusCode < 200 || response.statusCode >= 300 {
-                handler(.failure(NetworkError.codeError))
-            }
-            
-            guard let data = data else { return }
-            handler(.success(data))
-            
         }
         task.resume()
     }
