@@ -105,7 +105,13 @@ final class ProfileViewController: UIViewController {
     // метод для кнопки выход
     @objc
     private func didTapExitButton() {
-        
+        tokenStorage.removeToken()
+        switchToSplashController()
     }
     
+    private func switchToSplashController() {
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+        let splashViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SplashViewController")
+        window.rootViewController = splashViewController
+    }
 }

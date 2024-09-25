@@ -18,6 +18,7 @@ final class WebViewViewController: UIViewController {
     @IBOutlet private var progressView: UIProgressView!
     
     weak var delegate: WebViewViewControllerDelegate?
+    private let tokenStorage: OAuth2TokenStorage = OAuth2TokenStorage()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -51,7 +52,7 @@ final class WebViewViewController: UIViewController {
     }
     
     // MARK: - Private Methods
-    // метод для закрузки окна авторизации
+    // метод для загрузки окна авторизации
     private func loadAuthView() {
         guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAutorizeURLString) else {
             return
@@ -87,7 +88,6 @@ final class WebViewViewController: UIViewController {
             // провреяем есть ли "code"
             let codeItem = items.first(where: {$0.name == "code"})
         {
-            print("codeItem = :\(String(describing: codeItem.value))")
             return codeItem.value
         } else {
             return nil

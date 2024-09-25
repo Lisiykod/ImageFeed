@@ -8,36 +8,11 @@
 import Foundation
 
 final class OAuth2Service {
+    
     static let shared = OAuth2Service()
     private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
     
-    private init() { }
-    
-    // метод для формирования запроса авторизационного токена
-    private func makeOAuthTokenRequest(code: String) -> URLRequest {
-        guard let baseURL = Constants.defaultBaseURL else {
-            preconditionFailure("not base url")
-        }
-        
-        let url = URL(
-            string: "/oauth/token"
-            + "?client_id=\(Constants.accessKey)" // перечисляем параметры запроса
-            + "&&client_secret=\(Constants.secretKey)" // добавляем доп параметры
-            + "&&redirect_uri=\(Constants.redirectURI)"
-            + "&&code=\(code)"
-            + "&&grant_type=authorization_code",
-            relativeTo: baseURL // опираемся на базовый URL, которые содержат схему и имя хоста
-        )
-        
-        guard let url = url else {
-            preconditionFailure("invalid url")
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        return request
-    }
-    
+    // MARK: - Public Methods
     // метод для запроса токена
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         let tokenRequest = makeOAuthTokenRequest(code: code)
@@ -72,5 +47,33 @@ final class OAuth2Service {
             }
         }
         task.resume()
+    }
+    
+    // MARK: - Private Methods
+    private init() { }
+    
+    // метод для формирования запроса авторизационного токена
+    private func makeOAuthTokenRequest(code: String) -> URLRequest {
+        guard let baseURL = Constants.defaultBaseURL else {
+            preconditionFailure("not base url")
+        }
+        
+        let url = URL(
+            string: "/oauth/token"
+            + "?client_id=\(Constants.accessKey)" // перечисляем параметры запроса
+            + "&&client_secret=\(Constants.secretKey)" // добавляем доп параметры
+            + "&&redirect_uri=\(Constants.redirectURI)"
+            + "&&code=\(code)"
+            + "&&grant_type=authorization_code",
+            relativeTo: baseURL // опираемся на базовый URL, которые содержат схему и имя хоста
+        )
+        
+        guard let url = url else {
+            preconditionFailure("invalid url")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        return request
     }
 }

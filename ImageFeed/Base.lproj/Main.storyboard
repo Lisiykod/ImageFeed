@@ -266,7 +266,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l9g-Ru-wYO">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
                                 <color key="backgroundColor" name="YP White"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -300,7 +300,7 @@
                             <constraint firstItem="kXk-Ny-dVC" firstAttribute="top" secondItem="8vs-OH-kC5" secondAttribute="top" id="fdd-5h-EOD"/>
                             <constraint firstAttribute="trailing" secondItem="l9g-Ru-wYO" secondAttribute="trailing" id="meH-bh-rPs"/>
                             <constraint firstItem="kXk-Ny-dVC" firstAttribute="leading" secondItem="0rk-Gf-p1l" secondAttribute="leading" id="nRl-VV-U9L"/>
-                            <constraint firstItem="l9g-Ru-wYO" firstAttribute="top" secondItem="kXk-Ny-dVC" secondAttribute="top" id="nys-H8-4VT"/>
+                            <constraint firstItem="l9g-Ru-wYO" firstAttribute="top" secondItem="kXk-Ny-dVC" secondAttribute="bottom" id="nys-H8-4VT"/>
                             <constraint firstItem="l9g-Ru-wYO" firstAttribute="leading" secondItem="0rk-Gf-p1l" secondAttribute="leading" id="qc9-Dc-yUh"/>
                         </constraints>
                     </view>
@@ -342,7 +342,7 @@
         <!--Splash View Controller-->
         <scene sceneID="AO6-sw-nfK">
             <objects>
-                <viewController id="old-WE-gHJ" customClass="SplashViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SplashViewController" id="old-WE-gHJ" customClass="SplashViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="q4v-k4-ZSo">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
