@@ -25,6 +25,5 @@ final class OAuth2TokenStorage {
     
     func removeToken() {
         token = nil
-        print("removed token is :\(String(describing: token))")
     }
 }
