@@ -16,7 +16,7 @@ final class AuthViewController: UIViewController {
     @IBOutlet private var logInButton: UIButton!
     
     private let showingWebViewSegueIdentifier: String = "ShowWebView"
-    private let oauth2Service: OAuth2Service = OAuth2Service.shared
+    private let oauth2Service = OAuth2Service.shared
     weak var delegate: AuthViewControllerDelegate?
     
     // MARK: - Lifecycle
@@ -50,7 +50,7 @@ final class AuthViewController: UIViewController {
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
             oauth2Service.fetchOAuthToken(code: code) { [weak self] result in
-                guard let self = self else { return }
+                guard let self else { return }
                 switch result {
                 case .success:
                     delegate?.didAuthenticate(self)

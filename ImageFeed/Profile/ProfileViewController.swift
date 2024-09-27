@@ -9,7 +9,7 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
-    private let tokenStorage: OAuth2TokenStorage = OAuth2TokenStorage()
+    private let tokenStorage = OAuth2TokenStorage()
     
     private lazy var exitButton: UIButton = {
         let button = UIButton()

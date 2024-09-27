@@ -10,18 +10,23 @@ import Foundation
 final class OAuth2Service {
     
     static let shared = OAuth2Service()
-    private let storage: OAuth2TokenStorage = OAuth2TokenStorage()
+    private let storage = OAuth2TokenStorage()
     
     // MARK: - Public Methods
     // метод для запроса токена
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         let tokenRequest = makeOAuthTokenRequest(code: code)
+        guard let tokenRequest else {
+            print("invalid token request")
+            return
+        }
         let task = URLSession.shared.data(for: tokenRequest) { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             switch result {
             case .success(let data):
                 do {
                     let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
                     let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
                     let accessToken = response.accessToken
                     self.storage.store(token: accessToken)
@@ -53,9 +58,10 @@ final class OAuth2Service {
     private init() { }
     
     // метод для формирования запроса авторизационного токена
-    private func makeOAuthTokenRequest(code: String) -> URLRequest {
+    private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard let baseURL = Constants.defaultBaseURL else {
-            preconditionFailure("not base url")
+            print("not base url")
+            return nil
         }
         
         let url = URL(
@@ -68,8 +74,9 @@ final class OAuth2Service {
             relativeTo: baseURL // опираемся на базовый URL, которые содержат схему и имя хоста
         )
         
-        guard let url = url else {
-            preconditionFailure("invalid url")
+        guard let url else {
+            print("invalid url")
+            return nil
         }
         
         var request = URLRequest(url: url)

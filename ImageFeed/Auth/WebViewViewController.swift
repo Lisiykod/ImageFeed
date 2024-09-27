@@ -10,8 +10,12 @@ import WebKit
 
 final class WebViewViewController: UIViewController {
     
-    enum WebViewConstants {
+    private enum WebViewConstants {
         static let unsplashAutorizeURLString = "https://unsplash.com/oauth/authorize"
+        static let clientID = "client_id"
+        static let redirectURI = "redirect_uri"
+        static let responseType = "response_type"
+        static let scope = "scope"
     }
     
     @IBOutlet private var webView: WKWebView!
@@ -59,10 +63,10 @@ final class WebViewViewController: UIViewController {
         }
         // значения компонентов, которые мы хотим передать в запросе
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.accessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.accessScope)
+            URLQueryItem(name: WebViewConstants.clientID, value: Constants.accessKey),
+            URLQueryItem(name: WebViewConstants.redirectURI, value: Constants.redirectURI),
+            URLQueryItem(name: WebViewConstants.responseType, value: "code"),
+            URLQueryItem(name: WebViewConstants.scope, value: Constants.accessScope)
         ]
         
         guard let url = urlComponents.url else {
