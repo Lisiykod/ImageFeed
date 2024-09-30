@@ -9,6 +9,8 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
+    private let tokenStorage = OAuth2TokenStorage()
+    
     private lazy var exitButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "exit_image"), for: .normal)
@@ -103,7 +105,13 @@ final class ProfileViewController: UIViewController {
     // метод для кнопки выход
     @objc
     private func didTapExitButton() {
-        // здесь будет код
+        tokenStorage.removeToken()
+        switchToSplashController()
     }
     
+    private func switchToSplashController() {
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+        let splashViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SplashViewController")
+        window.rootViewController = splashViewController
+    }
 }
