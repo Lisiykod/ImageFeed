@@ -170,7 +170,7 @@
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="bottom" secondItem="xFv-BG-TzP" secondAttribute="bottom" id="aca-Xs-tO1"/>
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="leading" secondItem="xFv-BG-TzP" secondAttribute="leading" id="d5i-Pf-YDb"/>
                             <constraint firstItem="Tps-Zp-Dvm" firstAttribute="leading" secondItem="6cH-SF-Rii" secondAttribute="leading" constant="8" id="eUE-ev-WCv"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="ODc-Lf-BbG" secondAttribute="bottom" constant="50" id="eXd-5p-ctE"/>
+                            <constraint firstAttribute="bottom" secondItem="ODc-Lf-BbG" secondAttribute="bottom" constant="50" id="eXd-5p-ctE"/>
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="top" secondItem="xFv-BG-TzP" secondAttribute="top" id="emY-fP-Qtm"/>
                             <constraint firstItem="sEU-Fd-FDt" firstAttribute="trailing" secondItem="xFv-BG-TzP" secondAttribute="trailing" id="rbR-48-fae"/>
                         </constraints>
@@ -375,6 +375,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="12O-zm-tRl" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="GC9-9j-zcg"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="oRH-qO-eCo">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
