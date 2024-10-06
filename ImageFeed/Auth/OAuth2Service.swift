@@ -7,19 +7,40 @@
 
 import Foundation
 
+enum AuthServiceError: Error {
+    case invalidRequest
+}
+
 final class OAuth2Service {
     
     static let shared = OAuth2Service()
     private let storage = OAuth2TokenStorage()
+    private let urlSession = URLSession.shared
+    // переменная для хранения указателя на последнюю созданную задачу
+    private var task: URLSessionTask?
+    // переменная для хранения кода из последнего созданного запроса
+    private var lastCode: String?
     
     // MARK: - Public Methods
     // метод для запроса токена
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        let tokenRequest = makeOAuthTokenRequest(code: code)
-        guard let tokenRequest else {
+        assert(Thread.isMainThread)
+        // если коды не совпадают, то делаем новый запрос
+        guard lastCode != code else {
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+        // старый запрос отменяем и делаем новый
+        task?.cancel()
+        lastCode = code
+        guard
+            let tokenRequest = makeOAuthTokenRequest(code: code)
+        else {
+            completion(.failure(AuthServiceError.invalidRequest))
             print("invalid token request")
             return
         }
+
         let task = URLSession.shared.data(for: tokenRequest) { [weak self] result in
             guard let self else { return }
             switch result {
@@ -31,6 +52,9 @@ final class OAuth2Service {
                     let accessToken = response.accessToken
                     self.storage.store(token: accessToken)
                     completion(.success(accessToken))
+                    // обнуляем таск, вдруг возможно состояние гонки
+                    self.task = nil
+                    self.lastCode = nil
                 } catch {
                     print("data decoding error: \(error.localizedDescription)")
                     completion(.failure(error))
@@ -51,6 +75,8 @@ final class OAuth2Service {
                 completion(.failure(error))
             }
         }
+        // зафиксируем состояние таска
+        self.task = task
         task.resume()
     }
     
@@ -75,6 +101,7 @@ final class OAuth2Service {
         )
         
         guard let url else {
+            assertionFailure("Failed to create URL")
             print("invalid url")
             return nil
         }
