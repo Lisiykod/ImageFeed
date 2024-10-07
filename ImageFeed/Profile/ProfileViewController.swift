@@ -57,20 +57,22 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         addViewsToSuperView()
         setupConstraints()
-        guard let authToken = tokenStorage.token else {
-            print("not token in storage")
-            return
-        }
-        profileService.fetchProfile(authToken) { result in
-            switch result {
-            case .success(let data):
-                self.mainNameLabel.text = data.name
-                self.logoLabel.text = data.login
-                self.statusLabel.text = data.bio
-            case .failure(let error):
-                print(error)
-            }
-        }
+        guard let profile = profileService.profile else { return }
+        updateProfileResult(profile: profile)
+//        guard let authToken = tokenStorage.token else {
+//            print("not token in storage")
+//            return
+//        }
+//        profileService.fetchProfile(authToken) { result in
+//            switch result {
+//            case .success(let data):
+//                self.mainNameLabel.text = data.name
+//                self.logoLabel.text = data.login
+//                self.statusLabel.text = data.bio
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
     }
     
     // метод, в котором всех добавляем в иерархию
@@ -128,5 +130,11 @@ final class ProfileViewController: UIViewController {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
         let splashViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SplashViewController")
         window.rootViewController = splashViewController
+    }
+    
+    private func updateProfileResult(profile: Profile) {
+        self.mainNameLabel.text = profile.name
+        self.logoLabel.text = profile.login
+        self.statusLabel.text = profile.bio
     }
 }

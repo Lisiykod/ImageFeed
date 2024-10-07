@@ -11,24 +11,27 @@ enum ProfileServiceError: Error {
     case invalidRequest
 }
 
+struct Profile {
+    let name: String
+    let login: String
+    let bio: String
+    
+    init(profileInfo: ProfileBody) {
+        self.name = (profileInfo.firstName ?? "") + " " + (profileInfo.lastName ?? "")
+        self.login = "@" + profileInfo.username
+        self.bio = profileInfo.bio ?? ""
+    }
+}
+
 final class ProfileService {
     static let shared = ProfileService()
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
+    private(set) var profile: Profile?
     
-    struct Profile {
-        let name: String
-        let login: String
-        let bio: String
-        
-        init(profileInfo: ProfileBody) {
-            self.name = (profileInfo.firstName ?? "") + " " + (profileInfo.lastName ?? "")
-            self.login = "@" + profileInfo.username
-            self.bio = profileInfo.bio ?? ""
-        }
-    }
 
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
+        
         assert(Thread.isMainThread)
         task?.cancel()
         
@@ -47,7 +50,8 @@ final class ProfileService {
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     let response = try decoder.decode(ProfileBody.self, from: data)
-                    let profile = Profile(profileInfo: response)
+                    self.profile = Profile(profileInfo: response)
+                    guard let profile = self.profile else { return }
                     completion(.success(profile))
                     self.task = nil
                 } catch {
@@ -73,6 +77,8 @@ final class ProfileService {
         self.task = task
         task.resume()
     }
+    
+    //MARK: - Private Methods
     private init() { }
     
     private func makeProfileInfoRequest(with authToken: String) -> URLRequest? {
