@@ -10,6 +10,7 @@ import UIKit
 final class ProfileViewController: UIViewController {
     
     private let tokenStorage = OAuth2TokenStorage()
+    private let profileService = ProfileService.shared
     
     private lazy var exitButton: UIButton = {
         let button = UIButton()
@@ -56,6 +57,20 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         addViewsToSuperView()
         setupConstraints()
+        guard let authToken = tokenStorage.token else {
+            print("not token in storage")
+            return
+        }
+        profileService.fetchProfile(authToken) { result in
+            switch result {
+            case .success(let data):
+                self.mainNameLabel.text = data.name
+                self.logoLabel.text = data.login
+                self.statusLabel.text = data.bio
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
     
     // метод, в котором всех добавляем в иерархию

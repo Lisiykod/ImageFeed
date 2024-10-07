@@ -59,7 +59,7 @@ final class OAuth2Service {
                     print("data decoding error: \(error.localizedDescription)")
                     completion(.failure(error))
                 }
-            case.failure(let error):
+            case .failure(let error):
                 if let error = error as? NetworkError {
                     switch error {
                     case .httpStatusCode(let code):
