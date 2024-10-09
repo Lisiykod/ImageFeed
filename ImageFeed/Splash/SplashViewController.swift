@@ -18,7 +18,9 @@ final class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let token = tokenStorage.token {
+            print(token)
             fetchProfile(token)
+//            switchToTabBarController()
         } else {
             performSegue(withIdentifier: showAuthViewControllerSegueIdentifier, sender: nil)
         }
@@ -78,8 +80,9 @@ extension SplashViewController: AuthViewControllerDelegate {
             UIBlockingProgressHUD.dismiss()
             
             switch result {
-            case .success:
+            case .success(let profile):
                 switchToTabBarController()
+                ProfileImageService.shared.fetchProfileImageURL(username: profile.login, token) { _ in }
             case .failure(let error):
                 // TODO: - показать ошибку получения профиля
                 print(error.localizedDescription)

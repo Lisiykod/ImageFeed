@@ -60,18 +60,7 @@ final class OAuth2Service {
                     completion(.failure(error))
                 }
             case .failure(let error):
-                if let error = error as? NetworkError {
-                    switch error {
-                    case .httpStatusCode(let code):
-                        print("failure status code: \(code)")
-                    case .urlRequestError(let requestError):
-                        print("failed request: \(requestError)")
-                    case .urlSessionError:
-                        print("session unknown error")
-                    }
-                } else {
-                    print("unknown error: \(error.localizedDescription)")
-                }
+                NetworkErrors.shared.errors(error)
                 completion(.failure(error))
             }
         }

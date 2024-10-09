@@ -18,7 +18,7 @@ struct Profile {
     
     init(profileInfo: ProfileBody) {
         self.name = (profileInfo.firstName ?? "") + " " + (profileInfo.lastName ?? "")
-        self.login = "@" + profileInfo.username
+        self.login = profileInfo.username
         self.bio = profileInfo.bio ?? ""
     }
 }
@@ -59,18 +59,7 @@ final class ProfileService {
                     completion(.failure(error))
                 }
             case .failure(let error):
-                if let error = error as? NetworkError {
-                    switch error {
-                    case .httpStatusCode(let code):
-                        print("failure status code: \(code)")
-                    case .urlRequestError(let requestError):
-                        print("failed request: \(requestError)")
-                    case .urlSessionError:
-                        print("session unknown error")
-                    }
-                } else {
-                    print("unknown error: \(error.localizedDescription)")
-                }
+                NetworkErrors.shared.errors(error)
                 completion(.failure(error))
             }
         }

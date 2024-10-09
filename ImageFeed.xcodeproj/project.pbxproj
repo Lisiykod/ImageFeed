@@ -15,6 +15,8 @@
 		D060868E2C8069EB002C6C8C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D060868D2C8069EB002C6C8C /* Assets.xcassets */; };
 		D06086912C8069EB002C6C8C /* Base in Resources */ = {isa = PBXBuildFile; fileRef = D06086902C8069EB002C6C8C /* Base */; };
 		D072D0202CAF26E900E4DCB1 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = D072D01F2CAF26E900E4DCB1 /* ProgressHUD */; };
+		D072F8102CB490C300033611 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D072F80F2CB490C300033611 /* ProfileImageService.swift */; };
+		D072F8122CB53CC800033611 /* NetworkErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D072F8112CB53CC800033611 /* NetworkErrors.swift */; };
 		D082C25E2C9C31C1002C3C00 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082C25D2C9C31C1002C3C00 /* Constants.swift */; };
 		D082C2612C9C4747002C3C00 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D082C2602C9C4747002C3C00 /* AuthViewController.swift */; };
 		D08ABAFB2C874311009A4F82 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D08ABAFA2C874311009A4F82 /* ProfileViewController.swift */; };
@@ -41,6 +43,8 @@
 		D060868D2C8069EB002C6C8C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D06086902C8069EB002C6C8C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D06086922C8069EB002C6C8C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D072F80F2CB490C300033611 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
+		D072F8112CB53CC800033611 /* NetworkErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrors.swift; sourceTree = "<group>"; };
 		D082C25D2C9C31C1002C3C00 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D082C2602C9C4747002C3C00 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		D08ABAFA2C874311009A4F82 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +145,7 @@
 				D08ABAFA2C874311009A4F82 /* ProfileViewController.swift */,
 				D0D3E5C22CB323EC00802B7C /* ProfileService.swift */,
 				D0D3E5C42CB3247B00802B7C /* ProfileBody.swift */,
+				D072F80F2CB490C300033611 /* ProfileImageService.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 			children = (
 				D0D3E5C02CB29E5F00802B7C /* UIBlockingProgressHUD.swift */,
 				D09975592CA19F7D003B4FBB /* URLSession+data.swift */,
+				D072F8112CB53CC800033611 /* NetworkErrors.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -258,11 +264,13 @@
 				D0D3E5C32CB323EC00802B7C /* ProfileService.swift in Sources */,
 				D099755F2CA2110D003B4FBB /* OAuth2TokenStorage.swift in Sources */,
 				D06086852C8069E7002C6C8C /* AppDelegate.swift in Sources */,
+				D072F8102CB490C300033611 /* ProfileImageService.swift in Sources */,
 				D082C2612C9C4747002C3C00 /* AuthViewController.swift in Sources */,
 				D09975612CA34EDB003B4FBB /* SplashViewController.swift in Sources */,
 				D082C25E2C9C31C1002C3C00 /* Constants.swift in Sources */,
 				D099755A2CA19F7D003B4FBB /* URLSession+data.swift in Sources */,
 				D08ABAFE2C87AEF7009A4F82 /* SingleImageViewController.swift in Sources */,
+				D072F8122CB53CC800033611 /* NetworkErrors.swift in Sources */,
 				D08F0E052C9D86600038FBB0 /* WebViewViewController.swift in Sources */,
 				D06086872C8069E7002C6C8C /* SceneDelegate.swift in Sources */,
 			);

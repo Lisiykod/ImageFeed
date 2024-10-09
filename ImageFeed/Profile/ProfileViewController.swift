@@ -59,20 +59,41 @@ final class ProfileViewController: UIViewController {
         setupConstraints()
         guard let profile = profileService.profile else { return }
         updateProfileResult(profile: profile)
-//        guard let authToken = tokenStorage.token else {
-//            print("not token in storage")
-//            return
-//        }
-//        profileService.fetchProfile(authToken) { result in
-//            switch result {
-//            case .success(let data):
-//                self.mainNameLabel.text = data.name
-//                self.logoLabel.text = data.login
-//                self.statusLabel.text = data.bio
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
+        if let avatarURL = ProfileImageService.shared.avatarURL,
+           let url = URL(string: avatarURL) {
+            // TODO: [Sprint 11]  Обновите аватар, если нотификация
+            // была опубликована до того, как мы подписались.
+        }
+    }
+    
+    override init(nibName: String?, bundle: Bundle?) {
+        super.init(nibName: nibName, bundle: bundle)
+        addObserver()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        addObserver()
+    }
+    
+    deinit {
+        removeObserver()
+    }
+    
+    // методы для отслеживания изменений в ProfileImageService через нотификацию
+    private func addObserver() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateAvatar(notification:)),
+            name: ProfileImageService.didChangeNotification,
+            object: nil)
+    }
+    
+    private func removeObserver() {
+        NotificationCenter.default.removeObserver(
+            self,
+            name: ProfileImageService.didChangeNotification,
+            object: nil)
     }
     
     // метод, в котором всех добавляем в иерархию
@@ -126,6 +147,20 @@ final class ProfileViewController: UIViewController {
         switchToSplashController()
     }
     
+    @objc
+    private func updateAvatar(notification: Notification) {
+        guard
+            isViewLoaded,
+            let userInfo = notification.userInfo,
+            let profileImage = userInfo["URL"] as? String,
+            let url = URL(string: profileImage)
+        else {
+            return
+        }
+        
+        // TODO: [Sprint 11] Обновить аватар, используя Kingfisher
+    }
+    
     private func switchToSplashController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
         let splashViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SplashViewController")
@@ -134,7 +169,7 @@ final class ProfileViewController: UIViewController {
     
     private func updateProfileResult(profile: Profile) {
         self.mainNameLabel.text = profile.name
-        self.logoLabel.text = profile.login
+        self.logoLabel.text = "@" + profile.login
         self.statusLabel.text = profile.bio
     }
 }
