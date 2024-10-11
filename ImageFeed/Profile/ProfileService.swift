@@ -42,24 +42,15 @@ final class ProfileService {
             return
         }
         
-        let task = urlSession.data(for: profileRequest) { [weak self] result in
-            guard let self else { return }
+        let task = urlSession.objectTask(for: profileRequest) { (result: Result<ProfileBody, Error>) in
             switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let response = try decoder.decode(ProfileBody.self, from: data)
-                    self.profile = Profile(profileInfo: response)
-                    guard let profile = self.profile else { return }
-                    completion(.success(profile))
-                    self.task = nil
-                } catch {
-                    print("data profile error: \(String(describing: error))")
-                    completion(.failure(error))
-                }
+            case .success(let profile):
+                self.profile = Profile(profileInfo: profile)
+                guard let profile = self.profile else { return }
+                completion(.success(profile))
+                self.task = nil
             case .failure(let error):
-                NetworkErrors.shared.errors(error)
+                print("[ProfileService.fetchProfile]: NetworkError - \(String(describing: error))")
                 completion(.failure(error))
             }
         }

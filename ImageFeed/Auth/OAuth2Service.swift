@@ -40,27 +40,17 @@ final class OAuth2Service {
             print("invalid token request")
             return
         }
-
-        let task = URLSession.shared.data(for: tokenRequest) { [weak self] result in
-            guard let self else { return }
+        
+        let task = urlSession.objectTask(for: tokenRequest) { (result: Result<OAuthTokenResponseBody, Error>) in
             switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    let accessToken = response.accessToken
-                    self.storage.store(token: accessToken)
-                    completion(.success(accessToken))
-                    // обнуляем таск, вдруг возможно состояние гонки
-                    self.task = nil
-                    self.lastCode = nil
-                } catch {
-                    print("data decoding error: \(error.localizedDescription)")
-                    completion(.failure(error))
-                }
+            case .success(let response):
+                let accessToken = response.accessToken
+                self.storage.store(token: accessToken)
+                self.task = nil
+                self.lastCode = nil
+                completion(.success(accessToken))
             case .failure(let error):
-                NetworkErrors.shared.errors(error)
+                print("[OAuth2Service.fetchOAuthToken]: NetworkError -  \(String(describing: error))")
                 completion(.failure(error))
             }
         }

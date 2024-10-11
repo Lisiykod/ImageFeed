@@ -10,6 +10,7 @@ import ProgressHUD
 
 protocol AuthViewControllerDelegate: AnyObject {
     func didAuthenticate(_ vc: AuthViewController)
+    func showFailedLoginAlert(_ vc: WebViewViewController)
 }
 
 final class AuthViewController: UIViewController {
@@ -46,6 +47,7 @@ final class AuthViewController: UIViewController {
         logInButton.layer.masksToBounds = true
         logInButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
     }
+    
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
@@ -57,8 +59,8 @@ extension AuthViewController: WebViewViewControllerDelegate {
             switch result {
             case .success:
                 delegate?.didAuthenticate(self)
-            case .failure(let error):
-                print(error)
+            case .failure:
+                delegate?.showFailedLoginAlert(vc)
             }
         }
     }

@@ -37,30 +37,19 @@ final class ProfileImageService {
             return
         }
         
-        let task = urlSession.data(for: profileImageRequest) { [weak self] result in
-            guard let self else { return }
+        let task = urlSession.objectTask(for: profileImageRequest) { (result: Result<UserResult, Error>) in
             switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let response = try decoder.decode(UserResult.self, from: data)
-                    self.avatarURL = response.profileImage.small
-                    print(avatarURL ?? "not image")
-                    guard let avatarURL = self.avatarURL else { return }
-                    completion(.success(avatarURL))
-                    NotificationCenter.default.post(
-                        name: ProfileImageService.didChangeNotification,
-                        object: self,
-                        userInfo: ["URL": avatarURL])
-                    self.task = nil
-                } catch {
-                    print("data profile error: \(String(describing: error))")
-                    completion(.failure(error))
-                }
+            case .success(let user):
+                self.avatarURL = user.profileImage.small
+                guard let avatarURL = self.avatarURL else { return }
+                completion(.success(avatarURL))
+                NotificationCenter.default.post(
+                    name: ProfileImageService.didChangeNotification,
+                    object: self,
+                    userInfo: ["URL": avatarURL])
+                self.task = nil
             case .failure(let error):
-                NetworkErrors.shared.errors(error)
-                completion(.failure(error))
+                print("[ProfileImageService.fetchProfileImageURL]: NetworkError - \(String(describing: error))")
             }
         }
         self.task = task
@@ -73,10 +62,8 @@ final class ProfileImageService {
     
     private func makeProfileImageRequest(with authToken: String, username: String) -> URLRequest? {
         let baseURL = URL(string: "https://api.unsplash.com")
-//        https://api.unsplash.com/users/airlis
+        //        https://api.unsplash.com/users/airlis
         let url = URL(string: "/users/\(username)", relativeTo: baseURL)
-//        let url = URL(string: "https://api.unsplash.com/users/airlis")
-        print("url: \(url)")
         
         guard let url else {
             assertionFailure("Failed to create URL")

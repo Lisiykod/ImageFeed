@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
     private let tokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     private lazy var exitButton: UIButton = {
         let button = UIButton()
@@ -59,41 +61,19 @@ final class ProfileViewController: UIViewController {
         setupConstraints()
         guard let profile = profileService.profile else { return }
         updateProfileResult(profile: profile)
-        if let avatarURL = ProfileImageService.shared.avatarURL,
-           let url = URL(string: avatarURL) {
-            // TODO: [Sprint 11]  Обновите аватар, если нотификация
-            // была опубликована до того, как мы подписались.
-        }
-    }
-    
-    override init(nibName: String?, bundle: Bundle?) {
-        super.init(nibName: nibName, bundle: bundle)
-        addObserver()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        addObserver()
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(forName: ProfileImageService.didChangeNotification,
+                         object: nil,
+                         queue: .main) { [weak self] _ in
+                guard let self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
     }
     
     deinit {
-        removeObserver()
-    }
-    
-    // методы для отслеживания изменений в ProfileImageService через нотификацию
-    private func addObserver() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(updateAvatar(notification:)),
-            name: ProfileImageService.didChangeNotification,
-            object: nil)
-    }
-    
-    private func removeObserver() {
-        NotificationCenter.default.removeObserver(
-            self,
-            name: ProfileImageService.didChangeNotification,
-            object: nil)
+        profileImageServiceObserver = nil
     }
     
     // метод, в котором всех добавляем в иерархию
@@ -147,18 +127,13 @@ final class ProfileViewController: UIViewController {
         switchToSplashController()
     }
     
-    @objc
-    private func updateAvatar(notification: Notification) {
+    private func updateAvatar() {
         guard
-            isViewLoaded,
-            let userInfo = notification.userInfo,
-            let profileImage = userInfo["URL"] as? String,
-            let url = URL(string: profileImage)
-        else {
-            return
-        }
-        
-        // TODO: [Sprint 11] Обновить аватар, используя Kingfisher
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        userPick.kf.setImage(with: url, options: [.processor(processor)])
     }
     
     private func switchToSplashController() {
