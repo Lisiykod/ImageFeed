@@ -61,7 +61,7 @@ final class ProfileViewController: UIViewController {
         setupConstraints()
         guard let profile = profileService.profile else { return }
         updateProfileResult(profile: profile)
-        
+        // добавляем наблюдателя, что изображение получено 
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(forName: ProfileImageService.didChangeNotification,
                          object: nil,
