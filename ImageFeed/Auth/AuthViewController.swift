@@ -10,7 +10,7 @@ import ProgressHUD
 
 protocol AuthViewControllerDelegate: AnyObject {
     func didAuthenticate(_ vc: AuthViewController)
-    func showFailedLoginAlert(_ vc: WebViewViewController)
+    func showFailedLoginAlert()
 }
 
 final class AuthViewController: UIViewController {
@@ -60,7 +60,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
             case .success:
                 delegate?.didAuthenticate(self)
             case .failure:
-                delegate?.showFailedLoginAlert(vc)
+                delegate?.showFailedLoginAlert()
             }
         }
     }

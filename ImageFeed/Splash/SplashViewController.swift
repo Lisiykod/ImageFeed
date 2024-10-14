@@ -72,13 +72,13 @@ extension SplashViewController: AuthViewControllerDelegate {
         vc.dismiss(animated: true)
     }
     
-    func showFailedLoginAlert(_ vc: WebViewViewController) {
+    func showFailedLoginAlert() {
         let alert = UIAlertController(
             title: "Что-то пошло не так(",
             message: "Не удалось войти в систему",
             preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel) { _ in
-            vc.dismiss(animated: true)
+            self.dismiss(animated: true)
         }
         alert.addAction(action)
         var parentController = UIApplication.shared.windows.first?.rootViewController
@@ -104,7 +104,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                 switchToTabBarController()
                 ProfileImageService.shared.fetchProfileImageURL(username: profile.login, token) { _ in }
             case .failure(let error):
-                // TODO: - показать ошибку получения профиля
+                showFailedLoginAlert()
                 print(error.localizedDescription)
             }
         }
