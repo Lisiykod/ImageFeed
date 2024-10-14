@@ -10,7 +10,6 @@ import ProgressHUD
 
 protocol AuthViewControllerDelegate: AnyObject {
     func didAuthenticate(_ vc: AuthViewController)
-    func showFailedLoginAlert()
 }
 
 final class AuthViewController: UIViewController {
@@ -60,12 +59,29 @@ extension AuthViewController: WebViewViewControllerDelegate {
             case .success:
                 delegate?.didAuthenticate(self)
             case .failure:
-                delegate?.showFailedLoginAlert()
+                showFailedLoginAlert()
             }
         }
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         vc.dismiss(animated: true)
+    }
+    
+    private func showFailedLoginAlert() {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel) { _ in
+            self.dismiss(animated: true)
+        }
+        alert.addAction(action)
+        var topController = UIApplication.shared.windows.first?.rootViewController
+        while (topController?.presentedViewController != nil &&
+               topController != topController!.presentedViewController) {
+            topController = topController!.presentedViewController
+        }
+        topController?.present(alert, animated: true, completion: nil)
     }
 }

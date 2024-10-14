@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="old-WE-gHJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -201,7 +201,7 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mdv-2d-nQf">
-                                <rect key="frame" x="16" y="758" width="382" height="48"/>
+                                <rect key="frame" x="16" y="724" width="382" height="48"/>
                                 <color key="backgroundColor" name="YP White"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="feW-cI-Zj0"/>
@@ -234,7 +234,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="F7k-Ad-CLz"/>
                     <connections>
-                        <outlet property="logInButton" destination="mdv-2d-nQf" id="Xgu-W8-ri9"/>
+                        <outlet property="logInButton" destination="mdv-2d-nQf" id="K7M-IY-Ptx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x2g-fM-Q6s" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -317,38 +317,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uCZ-GU-TvL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-999" y="349"/>
-        </scene>
-        <!--Splash View Controller-->
-        <scene sceneID="AO6-sw-nfK">
-            <objects>
-                <viewController storyboardIdentifier="SplashViewController" id="old-WE-gHJ" customClass="SplashViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="q4v-k4-ZSo">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch_image2" translatesAutoresizingMaskIntoConstraints="NO" id="Wyc-WP-gwc">
-                                <rect key="frame" x="169.5" y="409.5" width="75" height="77"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="77" id="BaM-eH-8eL"/>
-                                    <constraint firstAttribute="width" constant="75" id="elt-Y5-U74"/>
-                                </constraints>
-                            </imageView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="EnH-WZ-Zys"/>
-                        <color key="backgroundColor" name="YP Black"/>
-                        <constraints>
-                            <constraint firstItem="Wyc-WP-gwc" firstAttribute="centerX" secondItem="q4v-k4-ZSo" secondAttribute="centerX" id="7Ur-Lf-nYd"/>
-                            <constraint firstItem="Wyc-WP-gwc" firstAttribute="centerY" secondItem="q4v-k4-ZSo" secondAttribute="centerY" id="c2h-aV-7RT"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <segue destination="12O-zm-tRl" kind="presentation" identifier="ShowAuthenticationScreen" animates="NO" modalPresentationStyle="fullScreen" id="gIn-Pf-TgW"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9Pp-fy-AgY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2011.594202898551" y="-209.59821428571428"/>
+            <point key="canvasLocation" x="-1000" y="-3"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="rZ2-0Q-PEf">
@@ -357,7 +326,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="GC9-9j-zcg"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="oRH-qO-eCo">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -373,7 +342,6 @@
     <resources>
         <image name="0" width="1600" height="1059"/>
         <image name="backward_image" width="24" height="24"/>
-        <image name="launch_image2" width="73" height="75.5"/>
         <image name="logo_of_unsplash" width="60" height="60"/>
         <image name="nav_back_button" width="24" height="24"/>
         <image name="not_favorite" width="42" height="42"/>

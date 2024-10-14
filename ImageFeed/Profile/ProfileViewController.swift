@@ -57,6 +57,7 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypBlack
         addViewsToSuperView()
         setupConstraints()
         guard let profile = profileService.profile else { return }
@@ -138,7 +139,7 @@ final class ProfileViewController: UIViewController {
     
     private func switchToSplashController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        let splashViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SplashViewController")
+        let splashViewController = SplashViewController()
         window.rootViewController = splashViewController
     }
     

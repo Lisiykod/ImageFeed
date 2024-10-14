@@ -16,23 +16,34 @@ final class SplashViewController: UIViewController {
     private let profileService = ProfileService.shared
     private var profileIsFethced: Bool = false
     
-    // MARK: - Lifecycle
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if let token = tokenStorage.token, !profileIsFethced {
-            print(token)
-            fetchProfile(token)
-//            switchToTabBarController()
-        } else {
-            performSegue(withIdentifier: showAuthViewControllerSegueIdentifier, sender: nil)
-        }
-    }
+    private lazy var splashScreenImage: UIImageView = {
+        let splashImage = UIImage(named: "logo_of_unsplash")
+        let image = UIImageView(image: splashImage)
+        return image
+    }()
     
+    // MARK: - Lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addViewToSuperView()
+        setupSplashViewController()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if let token = tokenStorage.token, !profileIsFethced {
+            print(token)
+            fetchProfile(token)
+        } else {
+            showAuthViewController()
+        }
+    }
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
@@ -44,21 +55,28 @@ final class SplashViewController: UIViewController {
         window.rootViewController = tabBarController
     }
     
-}
-
-extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showAuthViewControllerSegueIdentifier {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let authViewController =  navigationController.viewControllers[0] as? AuthViewController
-            else {
-                fatalError("Failed to prepare for \(showAuthViewControllerSegueIdentifier)")
-            }
-            authViewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
+    private func addViewToSuperView() {
+        view.addSubview(splashScreenImage)
+    }
+    
+    private func setupSplashViewController() {
+        view.backgroundColor = .ypBlack
+        
+        splashScreenImage.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            splashScreenImage.widthAnchor.constraint(equalToConstant: 75),
+            splashScreenImage.heightAnchor.constraint(equalToConstant: 77),
+            splashScreenImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            splashScreenImage.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+    private func showAuthViewController() {
+        let authViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AuthViewController")
+        guard let authViewController = authViewController as? AuthViewController else { return }
+        authViewController.delegate = self
+        authViewController.modalPresentationStyle = .fullScreen
+        present(authViewController, animated: true)
     }
 }
 
@@ -70,23 +88,6 @@ extension SplashViewController: AuthViewControllerDelegate {
         fetchProfile(token)
         profileIsFethced = true
         vc.dismiss(animated: true)
-    }
-    
-    func showFailedLoginAlert() {
-        let alert = UIAlertController(
-            title: "Что-то пошло не так(",
-            message: "Не удалось войти в систему",
-            preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel) { _ in
-            self.dismiss(animated: true)
-        }
-        alert.addAction(action)
-        var parentController = UIApplication.shared.windows.first?.rootViewController
-        while (parentController?.presentedViewController != nil &&
-               parentController != parentController!.presentedViewController) {
-            parentController = parentController!.presentedViewController
-        }
-        parentController?.present(alert, animated: true, completion: nil)
     }
     
     private func fetchProfile(_ token: String) {
@@ -104,7 +105,6 @@ extension SplashViewController: AuthViewControllerDelegate {
                 switchToTabBarController()
                 ProfileImageService.shared.fetchProfileImageURL(username: profile.login, token) { _ in }
             case .failure(let error):
-                showFailedLoginAlert()
                 print(error.localizedDescription)
             }
         }
