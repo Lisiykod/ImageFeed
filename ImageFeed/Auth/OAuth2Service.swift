@@ -50,7 +50,7 @@ final class OAuth2Service {
                 self.lastCode = nil
                 completion(.success(accessToken))
             case .failure(let error):
-                print("[OAuth2Service.fetchOAuthToken]: NetworkError -  \(String(describing: error))")
+                print("[OAuth2Service.fetchOAuthToken]: NetworkError - \(String(describing: error))")
                 completion(.failure(error))
             }
         }

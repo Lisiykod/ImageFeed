@@ -16,7 +16,7 @@ struct UserResult: Codable {
 }
 
 struct ImageSize: Codable {
-    let small: String
+    let medium: String
 }
 
 final class ProfileImageService {
@@ -40,7 +40,7 @@ final class ProfileImageService {
         let task = urlSession.objectTask(for: profileImageRequest) { (result: Result<UserResult, Error>) in
             switch result {
             case .success(let user):
-                self.avatarURL = user.profileImage.small
+                self.avatarURL = user.profileImage.medium
                 guard let avatarURL = self.avatarURL else { return }
                 completion(.success(avatarURL))
                 NotificationCenter.default.post(
@@ -62,7 +62,6 @@ final class ProfileImageService {
     
     private func makeProfileImageRequest(with authToken: String, username: String) -> URLRequest? {
         let baseURL = URL(string: "https://api.unsplash.com")
-        //        https://api.unsplash.com/users/airlis
         let url = URL(string: "/users/\(username)", relativeTo: baseURL)
         
         guard let url else {
@@ -74,7 +73,6 @@ final class ProfileImageService {
         var request = URLRequest(url: url)
         request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
-        print("request url: \(String(describing: request))")
         return request
     }
 }

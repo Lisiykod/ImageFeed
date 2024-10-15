@@ -25,6 +25,7 @@ final class ProfileViewController: UIViewController {
     private let userPick: UIImageView = {
         let userImage = UIImage(named: "userpick_photo")
         let image = UIImageView(image: userImage)
+        image.backgroundColor = .ypBlack
         return image
     }()
     
@@ -134,7 +135,11 @@ final class ProfileViewController: UIViewController {
             let url = URL(string: profileImageURL)
         else { return }
         let processor = RoundCornerImageProcessor(cornerRadius: 61)
-        userPick.kf.setImage(with: url, options: [.processor(processor)])
+        let optionInfo: KingfisherOptionsInfo = [
+            .cacheSerializer(FormatIndicatedCacheSerializer.png),
+            .processor(processor)
+        ]
+        userPick.kf.setImage(with: url, options: optionInfo)
     }
     
     private func switchToSplashController() {

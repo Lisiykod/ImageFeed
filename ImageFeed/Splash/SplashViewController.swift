@@ -9,7 +9,6 @@ import UIKit
 
 final class SplashViewController: UIViewController {
     
-    private let showAuthViewControllerSegueIdentifier: String = "ShowAuthenticationScreen"
     private let tabBarViewControllerIdentifier: String = "TabBarViewController"
     private let tokenStorage = OAuth2TokenStorage()
     private let oauth2Service = OAuth2Service.shared
@@ -37,7 +36,6 @@ final class SplashViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let token = tokenStorage.token, !profileIsFethced {
-            print(token)
             fetchProfile(token)
         } else {
             showAuthViewController()
@@ -105,7 +103,8 @@ extension SplashViewController: AuthViewControllerDelegate {
                 switchToTabBarController()
                 ProfileImageService.shared.fetchProfileImageURL(username: profile.login, token) { _ in }
             case .failure(let error):
-                print(error.localizedDescription)
+                print("[Profile service error] - \(error.localizedDescription)")
+                break
             }
         }
     }

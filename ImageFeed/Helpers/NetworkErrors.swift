@@ -16,14 +16,14 @@ final class NetworkErrors {
         if let error = error as? NetworkError {
             switch error {
             case .httpStatusCode(let code):
-                print("failure status code: \(code)")
+                print("[Network errors] - failure status code: \(code)")
             case .urlRequestError(let requestError):
-                print("failed request: \(requestError)")
+                print("[Network errors] - failed request: \(requestError)")
             case .urlSessionError:
-                print("session unknown error")
+                print("[Network errors] - session unknown error")
             }
         } else {
-            print("unknown error: \(error.localizedDescription)")
+            print("[Network errors] - unknown error: \(error.localizedDescription)")
         }
     }
 }
