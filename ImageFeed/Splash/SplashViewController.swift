@@ -16,7 +16,7 @@ final class SplashViewController: UIViewController {
     private var profileIsFethced: Bool = false
     
     private lazy var splashScreenImage: UIImageView = {
-        let splashImage = UIImage(named: "logo_of_unsplash")
+        let splashImage = UIImage(named: "launch_image")
         let image = UIImageView(image: splashImage)
         return image
     }()
@@ -70,11 +70,10 @@ final class SplashViewController: UIViewController {
     }
     
     private func showAuthViewController() {
-        let authViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AuthViewController")
-        guard let authViewController = authViewController as? AuthViewController else { return }
+        let authViewController = AuthViewController()
         authViewController.delegate = self
         authViewController.modalPresentationStyle = .fullScreen
-        present(authViewController, animated: true)
+        present(authViewController, animated: false)
     }
 }
 

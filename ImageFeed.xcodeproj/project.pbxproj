@@ -115,12 +115,12 @@
 				D0543F112C83A608004DF2EB /* ImagesList */,
 				D08ABAFC2C874989009A4F82 /* Profile */,
 				D08ABAFF2C89BA08009A4F82 /* SingleImage */,
+				D0C6B3942CBE8A6B00B531AA /* TabBar */,
 				D082C25F2C9C31D2002C3C00 /* Constants */,
 				D060868A2C8069E7002C6C8C /* Main.storyboard */,
 				D060868D2C8069EB002C6C8C /* Assets.xcassets */,
 				D060868F2C8069EB002C6C8C /* LaunchScreen.storyboard */,
 				D06086922C8069EB002C6C8C /* Info.plist */,
-				D072F8192CBD394800033611 /* TabBarViewController.swift */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
@@ -181,6 +181,14 @@
 				D09975602CA34EDB003B4FBB /* SplashViewController.swift */,
 			);
 			path = Splash;
+			sourceTree = "<group>";
+		};
+		D0C6B3942CBE8A6B00B531AA /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				D072F8192CBD394800033611 /* TabBarViewController.swift */,
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

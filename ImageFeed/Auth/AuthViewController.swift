@@ -14,37 +14,82 @@ protocol AuthViewControllerDelegate: AnyObject {
 
 final class AuthViewController: UIViewController {
     
-    @IBOutlet private var logInButton: UIButton!
-    
-    private let showingWebViewSegueIdentifier: String = "ShowWebView"
+//    private let showingWebViewSegueIdentifier: String = "ShowWebView"
     private let oauth2Service = OAuth2Service.shared
     weak var delegate: AuthViewControllerDelegate?
+    
+    private lazy var loginButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Войти", for: .normal)
+        button.layer.cornerRadius = 16
+        button.layer.masksToBounds = true
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        button.backgroundColor = .ypWhite
+        button.setTitleColor(.ypBlack, for: .normal)
+        button.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var authImage: UIImageView = {
+        let authImage = UIImage(named: "logo_of_unsplash")
+        let image = UIImageView(image: authImage)
+        return image
+    }()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLoginButton()
+        view.backgroundColor = .ypBlack
+        addViewsToSuperView()
+        setupConstraints()
     }
     
     // MARK: - Public Methods
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showingWebViewSegueIdentifier {
-            guard
-                let webViewViewController = segue.destination as? WebViewViewController
-            else {
-                fatalError("Failed to prepare for \(showingWebViewSegueIdentifier)")
-            }
-            webViewViewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == showingWebViewSegueIdentifier {
+//            guard
+//                let webViewViewController = segue.destination as? WebViewViewController
+//            else {
+//                fatalError("Failed to prepare for \(showingWebViewSegueIdentifier)")
+//            }
+//            webViewViewController.delegate = self
+//        } else {
+//            super.prepare(for: segue, sender: sender)
+//        }
+//    }
+    
+    // MARK: - Private Methods
+    @objc
+    private func didTapLoginButton() {
+        let webViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WebViewController")
+        guard let webViewController = webViewController as? WebViewViewController else { return }
+        webViewController.delegate = self
+        webViewController.modalPresentationStyle = .fullScreen
+        present(webViewController, animated: true)
+    }
+    
+    private func addViewsToSuperView() {
+        let viewArray: [UIView] = [authImage, loginButton]
+        viewArray.forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
         }
     }
     
-    // MARK: - Private Methods
-    private func setupLoginButton() {
-        logInButton.layer.cornerRadius = 16
-        logInButton.layer.masksToBounds = true
-        logInButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+    private func setupConstraints() {
+        let guide = view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            authImage.widthAnchor.constraint(equalToConstant: 60),
+            authImage.heightAnchor.constraint(equalToConstant: 60),
+            authImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            authImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            loginButton.heightAnchor.constraint(equalToConstant: 48),
+            loginButton.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 16),
+            guide.trailingAnchor.constraint(equalTo: loginButton.trailingAnchor, constant: 16),
+            guide.bottomAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 90)
+
+        ])
     }
     
     private func showFailedLoginAlert() {
