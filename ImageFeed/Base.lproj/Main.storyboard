@@ -27,63 +27,9 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oAz-Ll-glW" id="L5A-uR-CpK">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="180"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="oGh-6B-dJq">
-                                                    <rect key="frame" x="16" y="4" width="382" height="172"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius ">
-                                                            <integer key="value" value="16"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </imageView>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0od-pq-oVb">
-                                                    <rect key="frame" x="16" y="146" width="382" height="30"/>
-                                                    <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="27 августа 2022" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x42-ye-vMS">
-                                                            <rect key="frame" x="8" y="4" width="101.5" height="18"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                            <color key="textColor" name="YP White"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                    </subviews>
-                                                    <constraints>
-                                                        <constraint firstAttribute="bottom" secondItem="x42-ye-vMS" secondAttribute="bottom" constant="8" id="1iw-S0-8h0"/>
-                                                        <constraint firstAttribute="height" constant="30" id="2An-4h-3un"/>
-                                                        <constraint firstItem="x42-ye-vMS" firstAttribute="top" secondItem="0od-pq-oVb" secondAttribute="top" constant="4" id="JVm-vE-tTF"/>
-                                                        <constraint firstItem="x42-ye-vMS" firstAttribute="leading" secondItem="0od-pq-oVb" secondAttribute="leading" constant="8" id="pxR-g2-rlU"/>
-                                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="x42-ye-vMS" secondAttribute="trailing" id="sog-jF-Afn"/>
-                                                    </constraints>
-                                                </view>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bd7-da-oi2">
-                                                    <rect key="frame" x="354" y="4" width="44" height="44"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="44" id="XnU-Eh-QZZ"/>
-                                                        <constraint firstAttribute="width" constant="44" id="a9u-Sd-KFa"/>
-                                                    </constraints>
-                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    <state key="normal" image="not_favorite"/>
-                                                </button>
-                                            </subviews>
                                             <color key="backgroundColor" name="YP Black"/>
-                                            <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="oGh-6B-dJq" secondAttribute="bottom" constant="4" id="8YN-1s-iue"/>
-                                                <constraint firstItem="oGh-6B-dJq" firstAttribute="top" secondItem="L5A-uR-CpK" secondAttribute="top" constant="4" id="AdU-Qz-QJ8"/>
-                                                <constraint firstItem="0od-pq-oVb" firstAttribute="leading" secondItem="L5A-uR-CpK" secondAttribute="leading" constant="16" id="FYb-zM-top"/>
-                                                <constraint firstAttribute="trailing" secondItem="0od-pq-oVb" secondAttribute="trailing" constant="16" id="UMr-LH-qmX"/>
-                                                <constraint firstAttribute="trailing" secondItem="Bd7-da-oi2" secondAttribute="trailing" constant="16" id="bJm-vb-vqC"/>
-                                                <constraint firstAttribute="bottom" secondItem="0od-pq-oVb" secondAttribute="bottom" constant="4" id="czf-yH-g8c"/>
-                                                <constraint firstItem="oGh-6B-dJq" firstAttribute="leading" secondItem="L5A-uR-CpK" secondAttribute="leading" constant="16" id="gcz-5K-6b7"/>
-                                                <constraint firstAttribute="trailing" secondItem="oGh-6B-dJq" secondAttribute="trailing" constant="16" id="k1I-HH-LpN"/>
-                                                <constraint firstItem="Bd7-da-oi2" firstAttribute="top" secondItem="oGh-6B-dJq" secondAttribute="top" id="kT4-WG-JT2"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" name="YP Black"/>
-                                        <connections>
-                                            <outlet property="dateLabel" destination="x42-ye-vMS" id="e5H-Pw-YHg"/>
-                                            <outlet property="favoriteImage" destination="Bd7-da-oi2" id="CSG-7x-uEF"/>
-                                            <outlet property="gradientView" destination="0od-pq-oVb" id="oac-c1-i7p"/>
-                                            <outlet property="mainImage" destination="oGh-6B-dJq" id="UCd-Dv-WVw"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -111,22 +57,6 @@
             </objects>
             <point key="canvasLocation" x="966.66666666666674" y="-2.6785714285714284"/>
         </scene>
-        <!--Single Image View Controller-->
-        <scene sceneID="iGP-mS-IH9">
-            <objects>
-                <viewController modalPresentationStyle="fullScreen" id="w21-1Q-AIi" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="xFv-BG-TzP">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="6cH-SF-Rii"/>
-                        <color key="backgroundColor" name="YP Black"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="jGy-mD-BH2"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7t2-mR-iL1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1873.913043478261" y="0.6696428571428571"/>
-        </scene>
         <!--Tab Bar View Controller-->
         <scene sceneID="t8H-Qt-1us">
             <objects>
@@ -148,8 +78,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="0" width="1600" height="1059"/>
-        <image name="not_favorite" width="42" height="42"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

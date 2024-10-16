@@ -12,7 +12,7 @@ final class ImageListViewController: UIViewController {
     @IBOutlet private var tableView: UITableView!
     
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
-    private let showSingleImageSegueIdentifier: String = "ShowSingleImage"
+//    private let showSingleImageSegueIdentifier: String = "ShowSingleImage"
     private let currentDate: Date = Date()
     
     private lazy var dateFormatter: DateFormatter = {
@@ -59,11 +59,8 @@ final class ImageListViewController: UIViewController {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return
         }
-        
         // настраиваем картинку
         cell.mainImage.image = image
-        cell.mainImage.layer.cornerRadius = 16
-        cell.mainImage.layer.masksToBounds = true
         
         // настраиваем дату
         cell.dateLabel.text = dateFormatter.string(from: currentDate)
@@ -71,7 +68,7 @@ final class ImageListViewController: UIViewController {
         // настраиваем лайк
         let isFavorite = indexPath.row % 2 == 0
         let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
-        cell.favoriteImage.setImage(imageName, for: .normal)
+        cell.favoriteImageButton.setImage(imageName, for: .normal)
     }
 }
 
