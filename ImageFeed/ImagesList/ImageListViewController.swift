@@ -9,11 +9,18 @@ import UIKit
 
 final class ImageListViewController: UIViewController {
     
-    @IBOutlet private var tableView: UITableView!
+//    @IBOutlet private var tableView: UITableView!
     
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
-//    private let showSingleImageSegueIdentifier: String = "ShowSingleImage"
     private let currentDate: Date = Date()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.backgroundColor = .ypBlack
+        return tableView
+    }()
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -26,35 +33,22 @@ final class ImageListViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(tableView)
+        view.backgroundColor = .ypBlack
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        tableView.register(ImagesListCell.self, forCellReuseIdentifier: ImagesListCell.reuseIdentifier)
+        setConstraints()
     }
     
-    // MARK: - Public Methods
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == showSingleImageSegueIdentifier {
-//            guard
-//                let viewController = segue.destination as? SingleImageViewController,
-//                let indexPath = sender as? IndexPath
-//            else {
-//                assertionFailure("Invalid segue destination")
-//                return
-//            }
-//            
-//            let image = UIImage(named: photosName[indexPath.row])
-//            viewController.image = image
-//        } else {
-//            super.prepare(for: segue, sender: sender)
-//        }
-//    }
-    
-    func showSingleImage(with indexPath: IndexPath) {
+    // MARK: - Private Methods
+    private func showSingleImage(with indexPath: IndexPath) {
         let singleImageViewController = SingleImageViewController()
         let image = UIImage(named: photosName[indexPath.row])
         singleImageViewController.image = image
         singleImageViewController.modalPresentationStyle = .fullScreen
         present(singleImageViewController, animated: true)
     }
-    // MARK: - Private Methods
+    
     private func configureCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return
@@ -69,7 +63,22 @@ final class ImageListViewController: UIViewController {
         let isFavorite = indexPath.row % 2 == 0
         let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
         cell.favoriteImageButton.setImage(imageName, for: .normal)
+        
+        // настраиваем фон ячейки
+        cell.backgroundColor = .ypBlack
     }
+    
+    private func setConstraints() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+        
 }
 
 

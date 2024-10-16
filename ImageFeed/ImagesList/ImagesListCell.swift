@@ -53,6 +53,8 @@ final class ImagesListCell: UITableViewCell {
         gradientLayer.frame = gradientView.bounds
     }
     
+    // MARK: - Initialization
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
@@ -63,7 +65,9 @@ final class ImagesListCell: UITableViewCell {
         setupCell()
     }
     
-    func setupCell() {
+    // MARK: - Private Methods
+    
+    private func setupCell() {
         addSubviews()
         setupConstraints()
     }
