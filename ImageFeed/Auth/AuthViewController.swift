@@ -61,8 +61,7 @@ final class AuthViewController: UIViewController {
     // MARK: - Private Methods
     @objc
     private func didTapLoginButton() {
-        let webViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WebViewController")
-        guard let webViewController = webViewController as? WebViewViewController else { return }
+        let webViewController = WebViewViewController()
         webViewController.delegate = self
         webViewController.modalPresentationStyle = .fullScreen
         present(webViewController, animated: true)
