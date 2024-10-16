@@ -8,10 +8,9 @@
 import UIKit
 
 final class TabBarViewController: UITabBarController {
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: .main)
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         let imagesListViewController = ImageListViewController()
         imagesListViewController.tabBarItem = UITabBarItem(
@@ -25,5 +24,14 @@ final class TabBarViewController: UITabBarController {
             selectedImage: nil)
         
         self.viewControllers = [imagesListViewController, profileViewController]
+        setTabBarAppearance()
+    }
+    
+    private func setTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .ypBlack
+        appearance.stackedLayoutAppearance.selected.iconColor = .ypWhite
+        tabBar.standardAppearance = appearance
     }
 }

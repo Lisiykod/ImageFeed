@@ -134,12 +134,8 @@ final class ProfileViewController: UIViewController {
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
-        let processor = RoundCornerImageProcessor(cornerRadius: 61)
-        let optionInfo: KingfisherOptionsInfo = [
-            .cacheSerializer(FormatIndicatedCacheSerializer.png),
-            .processor(processor)
-        ]
-        userPick.kf.setImage(with: url, options: optionInfo)
+        let processor = RoundCornerImageProcessor(cornerRadius: 61, backgroundColor: .ypBlack)
+        userPick.kf.setImage(with: url, options: [.processor(processor)])
     }
     
     private func switchToSplashController() {

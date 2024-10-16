@@ -49,7 +49,7 @@ final class SplashViewController: UIViewController {
     // MARK: - Private Methods
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        let tabBarController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: tabBarViewControllerIdentifier)
+        let tabBarController = TabBarViewController()
         window.rootViewController = tabBarController
     }
     
