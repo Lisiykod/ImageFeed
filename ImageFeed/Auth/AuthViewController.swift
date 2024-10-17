@@ -14,7 +14,6 @@ protocol AuthViewControllerDelegate: AnyObject {
 
 final class AuthViewController: UIViewController {
     
-//    private let showingWebViewSegueIdentifier: String = "ShowWebView"
     private let oauth2Service = OAuth2Service.shared
     weak var delegate: AuthViewControllerDelegate?
     
@@ -43,20 +42,6 @@ final class AuthViewController: UIViewController {
         addViewsToSuperView()
         setupConstraints()
     }
-    
-    // MARK: - Public Methods
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == showingWebViewSegueIdentifier {
-//            guard
-//                let webViewViewController = segue.destination as? WebViewViewController
-//            else {
-//                fatalError("Failed to prepare for \(showingWebViewSegueIdentifier)")
-//            }
-//            webViewViewController.delegate = self
-//        } else {
-//            super.prepare(for: segue, sender: sender)
-//        }
-//    }
     
     // MARK: - Private Methods
     @objc

@@ -9,7 +9,6 @@ import UIKit
 
 final class SplashViewController: UIViewController {
     
-    private let tabBarViewControllerIdentifier: String = "TabBarViewController"
     private let tokenStorage = OAuth2TokenStorage()
     private let oauth2Service = OAuth2Service.shared
     private let profileService = ProfileService.shared

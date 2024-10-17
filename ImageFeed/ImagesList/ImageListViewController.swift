@@ -9,8 +9,6 @@ import UIKit
 
 final class ImageListViewController: UIViewController {
     
-//    @IBOutlet private var tableView: UITableView!
-    
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
     private let currentDate: Date = Date()
     
@@ -66,6 +64,7 @@ final class ImageListViewController: UIViewController {
         
         // настраиваем фон ячейки
         cell.backgroundColor = .ypBlack
+        cell.selectionStyle = .none
     }
     
     private func setConstraints() {
@@ -80,7 +79,6 @@ final class ImageListViewController: UIViewController {
     }
         
 }
-
 
 extension ImageListViewController: UITableViewDataSource {
     // реализуем требуемые методы протокола
@@ -108,7 +106,6 @@ extension ImageListViewController: UITableViewDataSource {
 extension ImageListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
         showSingleImage(with: indexPath)
     }
     
