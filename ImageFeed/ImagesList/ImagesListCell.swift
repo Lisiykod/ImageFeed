@@ -61,8 +61,7 @@ final class ImagesListCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setupCell()
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Private Methods
@@ -84,7 +83,7 @@ final class ImagesListCell: UITableViewCell {
         setFavoriteImageButtonConstraints()
         setGradienViewAndDataLabelConstraints()
     }
-
+    
     private func setMainImageConstraints() {
         mainImage.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -121,7 +120,7 @@ final class ImagesListCell: UITableViewCell {
             dateLabel.topAnchor.constraint(equalTo: gradientView.topAnchor, constant: 4),
             dateLabel.trailingAnchor.constraint(greaterThanOrEqualTo: gradientView.trailingAnchor),
             gradientView.bottomAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 8)
-        
+            
         ])
     }
     
