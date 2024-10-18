@@ -27,7 +27,6 @@ final class ProfileImageService {
     private var task: URLSessionTask?
     
     func fetchProfileImageURL(username: String,_ token: String, _ completion: @escaping (Result<String, Error>) -> Void) {
-        assert(Thread.isMainThread)
         task?.cancel()
         
         guard let profileImageRequest = makeProfileImageRequest(with: token, username: username)
@@ -37,7 +36,8 @@ final class ProfileImageService {
             return
         }
         
-        let task = urlSession.objectTask(for: profileImageRequest) { (result: Result<UserResult, Error>) in
+        let task = urlSession.objectTask(for: profileImageRequest) { [weak self] (result: Result<UserResult, Error>) in
+            guard let self else { return }
             switch result {
             case .success(let user):
                 self.avatarURL = user.profileImage.medium
@@ -65,8 +65,7 @@ final class ProfileImageService {
         let url = URL(string: "/users/\(username)", relativeTo: baseURL)
         
         guard let url else {
-            assertionFailure("Failed to create URL")
-            print("invalid url")
+            print("Failed to create URL")
             return nil
         }
         

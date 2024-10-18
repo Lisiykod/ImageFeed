@@ -81,7 +81,8 @@ final class AuthViewController: UIViewController {
             title: "Что-то пошло не так(",
             message: "Не удалось войти в систему",
             preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel) { _ in
+        let action = UIAlertAction(title: "OK", style: .cancel) { [weak self] _ in
+            guard let self else { return }
             self.dismiss(animated: true)
         }
         alert.addAction(action)

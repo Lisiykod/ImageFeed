@@ -26,6 +26,7 @@ final class ProfileViewController: UIViewController {
         let userImage = UIImage(named: "userpick_photo")
         let image = UIImageView(image: userImage)
         image.backgroundColor = .ypBlack
+        image.layer.cornerRadius = 61
         return image
     }()
     

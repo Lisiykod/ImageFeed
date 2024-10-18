@@ -24,7 +24,6 @@ final class OAuth2Service {
     // MARK: - Public Methods
     // метод для запроса токена
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        assert(Thread.isMainThread)
         // если коды не совпадают, то делаем новый запрос
         guard lastCode != code else {
             completion(.failure(AuthServiceError.invalidRequest))
@@ -41,7 +40,8 @@ final class OAuth2Service {
             return
         }
         
-        let task = urlSession.objectTask(for: tokenRequest) { (result: Result<OAuthTokenResponseBody, Error>) in
+        let task = urlSession.objectTask(for: tokenRequest) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            guard let self else { return }
             switch result {
             case .success(let response):
                 let accessToken = response.accessToken
@@ -76,12 +76,11 @@ final class OAuth2Service {
             + "&&redirect_uri=\(Constants.redirectURI)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
-            relativeTo: baseURL // опираемся на базовый URL, которые содержат схему и имя хоста
+            relativeTo: baseURL // опираемся на базовый URL, который содержат схему и имя хоста
         )
         
         guard let url else {
-            assertionFailure("Failed to create URL")
-            print("invalid url")
+            print("Failed to create UR")
             return nil
         }
         

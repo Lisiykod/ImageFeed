@@ -31,8 +31,6 @@ final class ProfileService {
     
 
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
-        
-        assert(Thread.isMainThread)
         task?.cancel()
         
         guard let profileRequest = makeProfileInfoRequest(with: token)
@@ -42,7 +40,8 @@ final class ProfileService {
             return
         }
         
-        let task = urlSession.objectTask(for: profileRequest) { (result: Result<ProfileBody, Error>) in
+        let task = urlSession.objectTask(for: profileRequest) { [weak self] (result: Result<ProfileBody, Error>) in
+            guard let self else { return }
             switch result {
             case .success(let profile):
                 self.profile = Profile(profileInfo: profile)
@@ -66,8 +65,7 @@ final class ProfileService {
         let url = URL(string: "/me", relativeTo: baseURL)
         
         guard let url else {
-            assertionFailure("Failed to create URL")
-            print("invalid url")
+            print("Failed to create URL")
             return nil
         }
         
