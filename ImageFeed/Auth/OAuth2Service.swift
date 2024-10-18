@@ -7,50 +7,55 @@
 
 import Foundation
 
+enum AuthServiceError: Error {
+    case invalidRequest
+}
+
 final class OAuth2Service {
     
     static let shared = OAuth2Service()
     private let storage = OAuth2TokenStorage()
+    private let urlSession = URLSession.shared
+    // переменная для хранения указателя на последнюю созданную задачу
+    private var task: URLSessionTask?
+    // переменная для хранения кода из последнего созданного запроса
+    private var lastCode: String?
     
     // MARK: - Public Methods
     // метод для запроса токена
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        let tokenRequest = makeOAuthTokenRequest(code: code)
-        guard let tokenRequest else {
+        // если коды не совпадают, то делаем новый запрос
+        guard lastCode != code else {
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+        // старый запрос отменяем и делаем новый
+        task?.cancel()
+        lastCode = code
+        guard
+            let tokenRequest = makeOAuthTokenRequest(code: code)
+        else {
+            completion(.failure(AuthServiceError.invalidRequest))
             print("invalid token request")
             return
         }
-        let task = URLSession.shared.data(for: tokenRequest) { [weak self] result in
+        
+        let task = urlSession.objectTask(for: tokenRequest) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             guard let self else { return }
             switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    let accessToken = response.accessToken
-                    self.storage.store(token: accessToken)
-                    completion(.success(accessToken))
-                } catch {
-                    print("data decoding error: \(error.localizedDescription)")
-                    completion(.failure(error))
-                }
-            case.failure(let error):
-                if let error = error as? NetworkError {
-                    switch error {
-                    case .httpStatusCode(let code):
-                        print("failure status code: \(code)")
-                    case .urlRequestError(let requestError):
-                        print("failed request: \(requestError)")
-                    case .urlSessionError:
-                        print("session unknown error")
-                    }
-                } else {
-                    print("unknown error: \(error.localizedDescription)")
-                }
+            case .success(let response):
+                let accessToken = response.accessToken
+                self.storage.store(token: accessToken)
+                self.task = nil
+                self.lastCode = nil
+                completion(.success(accessToken))
+            case .failure(let error):
+                print("[OAuth2Service.fetchOAuthToken]: NetworkError - \(String(describing: error))")
                 completion(.failure(error))
             }
         }
+        // зафиксируем состояние таска
+        self.task = task
         task.resume()
     }
     
@@ -71,16 +76,17 @@ final class OAuth2Service {
             + "&&redirect_uri=\(Constants.redirectURI)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
-            relativeTo: baseURL // опираемся на базовый URL, которые содержат схему и имя хоста
+            relativeTo: baseURL // опираемся на базовый URL, который содержат схему и имя хоста
         )
         
         guard let url else {
-            print("invalid url")
+            print("Failed to create UR")
             return nil
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
+        request.timeoutInterval = 30
         return request
     }
 }

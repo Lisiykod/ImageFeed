@@ -9,11 +9,16 @@ import UIKit
 
 final class ImageListViewController: UIViewController {
     
-    @IBOutlet private var tableView: UITableView!
-    
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
-    private let showSingleImageSegueIdentifier: String = "ShowSingleImage"
     private let currentDate: Date = Date()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.backgroundColor = .ypBlack
+        return tableView
+    }()
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -26,37 +31,28 @@ final class ImageListViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(tableView)
+        view.backgroundColor = .ypBlack
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-    }
-    
-    // MARK: - Public Methods
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showSingleImageSegueIdentifier {
-            guard
-                let viewController = segue.destination as? SingleImageViewController,
-                let indexPath = sender as? IndexPath
-            else {
-                assertionFailure("Invalid segue destination")
-                return
-            }
-            
-            let image = UIImage(named: photosName[indexPath.row])
-            viewController.image = image
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
+        tableView.register(ImagesListCell.self, forCellReuseIdentifier: ImagesListCell.reuseIdentifier)
+        setConstraints()
     }
     
     // MARK: - Private Methods
+    private func showSingleImage(with indexPath: IndexPath) {
+        let singleImageViewController = SingleImageViewController()
+        let image = UIImage(named: photosName[indexPath.row])
+        singleImageViewController.image = image
+        singleImageViewController.modalPresentationStyle = .fullScreen
+        present(singleImageViewController, animated: true)
+    }
+    
     private func configureCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return
         }
-        
         // настраиваем картинку
         cell.mainImage.image = image
-        cell.mainImage.layer.cornerRadius = 16
-        cell.mainImage.layer.masksToBounds = true
         
         // настраиваем дату
         cell.dateLabel.text = dateFormatter.string(from: currentDate)
@@ -64,10 +60,25 @@ final class ImageListViewController: UIViewController {
         // настраиваем лайк
         let isFavorite = indexPath.row % 2 == 0
         let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
-        cell.favoriteImage.setImage(imageName, for: .normal)
+        cell.favoriteImageButton.setImage(imageName, for: .normal)
+        
+        // настраиваем фон ячейки
+        cell.backgroundColor = .ypBlack
+        cell.selectionStyle = .none
     }
+    
+    private func setConstraints() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+        
 }
-
 
 extension ImageListViewController: UITableViewDataSource {
     // реализуем требуемые методы протокола
@@ -95,7 +106,7 @@ extension ImageListViewController: UITableViewDataSource {
 extension ImageListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
+        showSingleImage(with: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
