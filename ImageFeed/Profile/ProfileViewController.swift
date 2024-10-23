@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
     private let tokenStorage = OAuth2TokenStorage()
+    private let profileService = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     private lazy var exitButton: UIButton = {
         let button = UIButton()
@@ -22,6 +25,8 @@ final class ProfileViewController: UIViewController {
     private let userPick: UIImageView = {
         let userImage = UIImage(named: "userpick_photo")
         let image = UIImageView(image: userImage)
+        image.backgroundColor = .ypBlack
+        image.layer.cornerRadius = 61
         return image
     }()
     
@@ -54,8 +59,24 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypBlack
         addViewsToSuperView()
         setupConstraints()
+        guard let profile = profileService.profile else { return }
+        updateProfileResult(profile: profile)
+        // добавляем наблюдателя, что изображение получено 
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(forName: ProfileImageService.didChangeNotification,
+                         object: nil,
+                         queue: .main) { [weak self] _ in
+                guard let self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
+    }
+    
+    deinit {
+        profileImageServiceObserver = nil
     }
     
     // метод, в котором всех добавляем в иерархию
@@ -109,9 +130,24 @@ final class ProfileViewController: UIViewController {
         switchToSplashController()
     }
     
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 61, backgroundColor: .ypBlack)
+        userPick.kf.setImage(with: url, options: [.processor(processor)])
+    }
+    
     private func switchToSplashController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        let splashViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SplashViewController")
+        let splashViewController = SplashViewController()
         window.rootViewController = splashViewController
+    }
+    
+    private func updateProfileResult(profile: Profile) {
+        self.mainNameLabel.text = profile.name
+        self.logoLabel.text = "@" + profile.login
+        self.statusLabel.text = profile.bio
     }
 }
