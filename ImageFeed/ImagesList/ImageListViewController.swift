@@ -11,6 +11,7 @@ final class ImageListViewController: UIViewController {
     
     private let photosName: [String] = Array(0..<20).map{"\($0)"}
     private let currentDate: Date = Date()
+    private let imageListServie = ImageListService.shared
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -122,5 +123,11 @@ extension ImageListViewController: UITableViewDelegate {
         let scale = imageViewWidth/imageWidth
         let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
         return cellHeight
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == photosName.count {
+            
+        }
     }
 }
