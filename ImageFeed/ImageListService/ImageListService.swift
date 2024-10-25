@@ -41,6 +41,7 @@ final class ImageListService {
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private let dateFormatter = DateFormatter()
+    private let storage = OAuth2TokenStorage()
     
     func fetchPhotosNextPage() {
         let nextPage = (lastLoadedPage ?? 0) + 1
@@ -56,30 +57,37 @@ final class ImageListService {
             return
         }
         
-        let task = urlSession.objectTask(for: photosRequest) { [weak self] (result: Result<PhotoResult, Error>) in
+        let task = urlSession.objectTask(for: photosRequest) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self else { return }
             switch result {
-            case .success(let data):
-                let photo = convert(result: data)
-                self.photos.append(photo)
+            case .success(let photos):
+                photos.forEach { photo in
+                    self.photos.append(self.convert(result: photo))
+                }
                 NotificationCenter.default.post(
                     name: ImageListService.didChangeNotification,
                     object: self
                 )
                 lastLoadedPage = nextPage
+                self.task = nil
                 print("Photos count: \(photos.count)")
             case .failure(let error):
                 print("Error in \(#file) \(#function): NetworkError - \(String(describing: error))")
             }
-            self.task = nil
         }
         self.task = task
         task.resume()
     }
     
+    // MARK: - Private Methods
     private init() {}
     
     private func makePhotosRequest(page: Int) -> URLRequest? {
+        let authToken = storage.token
+        guard let authToken else {
+            print("invalid auth token")
+            return nil
+        }
         let baseURL = URL(string: "https://api.unsplash.com")
         let url = URL(string: "/photos/"
                       + "?page=\(page)",
@@ -89,6 +97,7 @@ final class ImageListService {
             return nil
         }
         var request = URLRequest(url: url)
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
         return request
     }
@@ -103,7 +112,6 @@ final class ImageListService {
             largeImageURL: data.urls.full,
             isLiked: data.likedByUser
         )
-        
         return photo
     }
 }
