@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ImageListViewController: UIViewController {
     
-    private let photosName: [String] = Array(0..<20).map{"\($0)"}
-    private let currentDate: Date = Date()
+    private var photos: [Photo] = []
     private let imageListServie = ImageListService.shared
+    private var imageListServiceObserver: NSObjectProtocol?
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -37,35 +38,73 @@ final class ImageListViewController: UIViewController {
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         tableView.register(ImagesListCell.self, forCellReuseIdentifier: ImagesListCell.reuseIdentifier)
         setConstraints()
+        imageListServie.fetchPhotosNextPage()
+        updateTableViewAnimated()
+        imageListServiceObserver = NotificationCenter.default.addObserver(
+                    forName: ImageListService.didChangeNotification,
+                    object: nil,
+                    queue: .main) { [weak self] _ in
+            guard let self else { return }
+            self.updateTableViewAnimated()
+        }
     }
     
     // MARK: - Private Methods
     private func showSingleImage(with indexPath: IndexPath) {
         let singleImageViewController = SingleImageViewController()
-        let image = UIImage(named: photosName[indexPath.row])
-        singleImageViewController.image = image
+        let imageURL = UIImage(named: photos[indexPath.row].largeImageURL)
+        singleImageViewController.image = imageURL
         singleImageViewController.modalPresentationStyle = .fullScreen
         present(singleImageViewController, animated: true)
     }
     
     private func configureCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
+        
+        // настраиваем картинку
+        guard let imageURL = URL(string: photos[indexPath.row].thumbImageURL) else {
             return
         }
-        // настраиваем картинку
-        cell.mainImage.image = image
+        
+        let placeholder = UIImage(named: "placeholder")
+        cell.mainImage.kf.indicatorType = .activity
+        cell.mainImage.kf.setImage(with: imageURL, placeholder: placeholder) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success(_):
+                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            case .failure(let error):
+                cell.mainImage.image = placeholder
+                print("Set image error: \(error.localizedDescription)")
+            }
+        }
         
         // настраиваем дату
-        cell.dateLabel.text = dateFormatter.string(from: currentDate)
+        if let date = photos[indexPath.row].createdAt {
+            cell.dateLabel.text = dateFormatter.string(from: date)
+        } else {
+            cell.dateLabel.text = ""
+        }
         
         // настраиваем лайк
         let isFavorite = indexPath.row % 2 == 0
         let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
         cell.favoriteImageButton.setImage(imageName, for: .normal)
         
-        // настраиваем фон ячейки
-        cell.backgroundColor = .ypBlack
-        cell.selectionStyle = .none
+    }
+    
+    // метод для добавления новых изображений в таблицу
+    private func updateTableViewAnimated() {
+        let oldCount = photos.count
+        let newCount = imageListServie.photos.count
+        photos = imageListServie.photos
+        if oldCount != newCount {
+            tableView.performBatchUpdates {
+                let indexPaths = (oldCount..<newCount).map { i in
+                    IndexPath(row: i, section: 0)
+                }
+                tableView.insertRows(at: indexPaths, with: .automatic)
+            } completion: { _ in }
+        }
     }
     
     private func setConstraints() {
@@ -78,13 +117,13 @@ final class ImageListViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-        
+    
 }
 
 extension ImageListViewController: UITableViewDataSource {
     // реализуем требуемые методы протокола
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photosName.count
+        return photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -111,23 +150,25 @@ extension ImageListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
-            return 0
-        }
-        
-        // высчитываем высоту ячейки
+//        guard let image = UIImage(named: photos[indexPath.row].thumbImageURL) else {
+//            return 0
+//        }
+
+       let image = photos[indexPath.row]
+//        // высчитываем высоту ячейки
         let imageInsets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
         let imageViewWidth = tableView.bounds.width - imageInsets.left - imageInsets.right
         guard image.size.width != 0 else { return 0 }
         let imageWidth = image.size.width
         let scale = imageViewWidth/imageWidth
         let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
+
         return cellHeight
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row + 1 == photosName.count {
-            
+        if indexPath.row + 1 == photos.count {
+            imageListServie.fetchPhotosNextPage()
         }
     }
 }

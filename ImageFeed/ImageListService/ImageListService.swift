@@ -40,7 +40,7 @@ final class ImageListService {
     private var lastLoadedPage: Int?
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
-    private let dateFormatter = DateFormatter()
+    private let dateFormatter = ISO8601DateFormatter()
     private let storage = OAuth2TokenStorage()
     
     func fetchPhotosNextPage() {
@@ -70,7 +70,7 @@ final class ImageListService {
                 )
                 lastLoadedPage = nextPage
                 self.task = nil
-                print("Photos count: \(photos.count)")
+                print("Photos count: \(photos.count) \n \(photos)")
             case .failure(let error):
                 print("Error in \(#file) \(#function): NetworkError - \(String(describing: error))")
             }
