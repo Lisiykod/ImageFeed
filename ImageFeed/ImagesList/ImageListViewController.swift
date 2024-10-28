@@ -59,6 +59,8 @@ final class ImageListViewController: UIViewController {
     }
     
     private func configureCell(for cell: ImagesListCell, with indexPath: IndexPath) {
+        // устанавливаем делегата
+        cell.delegate = self
         
         // настраиваем картинку
         guard let imageURL = URL(string: photos[indexPath.row].thumbImageURL) else {
@@ -86,13 +88,11 @@ final class ImageListViewController: UIViewController {
         }
         
         // настраиваем лайк
-        let isFavorite = indexPath.row % 2 == 0
-        let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
-        cell.favoriteImageButton.setImage(imageName, for: .normal)
-        
+        let isFavorite = photos[indexPath.row].isLiked
+        cell.setIsLiked(isFavorite)
     }
     
-    // метод для добавления новых изображений в таблицу
+    // метод для добавления новых фотографий
     private func updateTableViewAnimated() {
         let oldCount = photos.count
         let newCount = imageListServie.photos.count
@@ -150,9 +150,6 @@ extension ImageListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        guard let image = UIImage(named: photos[indexPath.row].thumbImageURL) else {
-//            return 0
-//        }
 
        let image = photos[indexPath.row]
 //        // высчитываем высоту ячейки
@@ -169,6 +166,30 @@ extension ImageListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row + 1 == photos.count {
             imageListServie.fetchPhotosNextPage()
+        }
+    }
+}
+
+extension ImageListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
+        let photo = photos[indexPath.row]
+        UIBlockingProgressHUD.show()
+        imageListServie.changeLike(photoId: photo.id, isLiked: !photo.isLiked) { [weak self] result in
+            guard let self else { return }
+            switch result {
+            case .success:
+                // синхронизируем фотографии
+                self.photos = self.imageListServie.photos
+                // изменяем инцикацию лайка картинки
+                cell.setIsLiked(self.photos[indexPath.row].isLiked)
+                UIBlockingProgressHUD.dismiss()
+            case .failure:
+                UIBlockingProgressHUD.dismiss()
+                //TODO: - показать алерт с ошибкой
+            }
         }
     }
 }

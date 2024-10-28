@@ -32,6 +32,10 @@ struct Photo {
     let isLiked: Bool
 }
 
+struct Photos: Decodable {
+    let photo: PhotoResult
+}
+
 final class ImageListService {
     static let shared = ImageListService()
     static let didChangeNotification = Notification.Name("ImageListServiceDidChange")
@@ -43,6 +47,7 @@ final class ImageListService {
     private let dateFormatter = ISO8601DateFormatter()
     private let storage = OAuth2TokenStorage()
     
+    // метод для запрашивания фотографий
     func fetchPhotosNextPage() {
         let nextPage = (lastLoadedPage ?? 0) + 1
         assert(Thread.isMainThread)
@@ -70,9 +75,53 @@ final class ImageListService {
                 )
                 lastLoadedPage = nextPage
                 self.task = nil
-                print("Photos count: \(photos.count) \n \(photos)")
             case .failure(let error):
                 print("Error in \(#file) \(#function): NetworkError - \(String(describing: error))")
+            }
+        }
+        self.task = task
+        task.resume()
+    }
+    
+    // метод для работы с лайками
+    func changeLike(photoId: String, isLiked: Bool, completion: @escaping (Result<Void, Error>)-> Void) {
+
+        guard task == nil else {
+            print("retry fetch change like")
+            return
+        }
+        
+        let requestMethod = isLiked ? "POST" : "DELETE"
+        guard let request = makeLikeRequest(id: photoId, requestMethod: requestMethod) else {
+            print("invalid like request")
+            return
+        }
+        
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<Photos, Error>) in
+            guard let self else { return }
+            switch result {
+            case .success(let photoResult):
+                // поиск индекса элемента
+                if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
+                    // текущий элемент
+                    let photo = self.photos[index]
+                    // копия элемента с инвертированным значением isLiked
+                    let newPhoto = Photo(
+                        id: photo.id,
+                        size: photo.size,
+                        createdAt: photo.createdAt,
+                        welcomeDescription: photo.welcomeDescription,
+                        thumbImageURL: photo.thumbImageURL,
+                        largeImageURL: photo.largeImageURL,
+                        isLiked: !photo.isLiked
+                    )
+                    self.photos[index] = newPhoto
+                }
+                self.task = nil
+                completion(.success(()))
+            case .failure(let error):
+                print("Error in \(#file) \(#function): NetworkError - \(String(describing: error))")
+                completion(.failure(error))
             }
         }
         self.task = task
@@ -99,6 +148,25 @@ final class ImageListService {
         var request = URLRequest(url: url)
         request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
+        return request
+    }
+    
+    private func makeLikeRequest(id: String, requestMethod: String) -> URLRequest? {
+        let authToken = storage.token
+        guard let authToken else {
+            print("invalid auth token")
+            return nil
+        }
+        let baseURL = URL(string: "https://api.unsplash.com")
+        let url = URL(string: "/photos/\(id)/like",
+                      relativeTo: baseURL)
+        guard let url else {
+            print("Failed to create URL")
+            return nil
+        }
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = requestMethod
         return request
     }
     
