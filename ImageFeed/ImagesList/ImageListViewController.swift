@@ -13,6 +13,7 @@ final class ImageListViewController: UIViewController {
     private var photos: [Photo] = []
     private let imageListServie = ImageListService.shared
     private var imageListServiceObserver: NSObjectProtocol?
+    let placeholder: UIImage? = UIImage(named: "placeholder")
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -52,8 +53,9 @@ final class ImageListViewController: UIViewController {
     // MARK: - Private Methods
     private func showSingleImage(with indexPath: IndexPath) {
         let singleImageViewController = SingleImageViewController()
-        let imageURL = UIImage(named: photos[indexPath.row].largeImageURL)
-        singleImageViewController.image = imageURL
+        guard let imageURL = URL(string: photos[indexPath.row].largeImageURL) else { return }
+        singleImageViewController.imageURL = imageURL
+        singleImageViewController.image = placeholder
         singleImageViewController.modalPresentationStyle = .fullScreen
         present(singleImageViewController, animated: true)
     }
@@ -67,7 +69,6 @@ final class ImageListViewController: UIViewController {
             return
         }
         
-        let placeholder = UIImage(named: "placeholder")
         cell.mainImage.kf.indicatorType = .activity
         cell.mainImage.kf.setImage(with: imageURL, placeholder: placeholder) { [weak self] result in
             guard let self else { return }

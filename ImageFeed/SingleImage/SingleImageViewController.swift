@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class SingleImageViewController: UIViewController {
+    
+    var imageURL: URL?
     
     var image: UIImage? {
         didSet {
@@ -49,13 +52,13 @@ final class SingleImageViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypBlack
         imageView.image = image
-        guard let image = image else { return }
-        imageView.frame.size = image.size
-     
         addViewsToSuperview()
         setupConstraints()
-        rescaleAndCenterImageInScrollView(image: image)
+        
+        guard let imageURL else { return }
+        loadImage(with: imageURL)
     }
     
     
@@ -145,6 +148,41 @@ final class SingleImageViewController: UIViewController {
         if imageFrame.height < boundsSize.height {
             imageFrame.origin.y = (boundsSize.height - imageFrame.height) / 2
         }
+    }
+    
+    // метод для загрузки изображения
+    private func loadImage(with largeImageURL: URL) {
+        UIBlockingProgressHUD.show()
+        
+        imageView.kf.setImage(with: largeImageURL) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            guard let self else { return }
+            switch result {
+            case .success(let imageResult):
+                self.image = imageResult.image
+                guard let image else { return }
+                self.imageView.frame.size = image.size
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                self.showError()
+            }
+        }
+    }
+    
+    private func showError() {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так",
+            message: "Поробовать еще раз",
+            preferredStyle: .alert
+        )
+        let cancelAction = UIAlertAction(title: "Не надо", style: .cancel)
+        let retryAction = UIAlertAction(title: "Попробовать еще раз", style: .default) { [weak self] _ in
+            guard let imageURL = self?.imageURL else { return }
+            self?.loadImage(with: imageURL)
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(retryAction)
+        present(alert, animated: true)
     }
 }
 

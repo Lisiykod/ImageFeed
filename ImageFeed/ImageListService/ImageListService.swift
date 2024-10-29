@@ -100,7 +100,7 @@ final class ImageListService {
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<Photos, Error>) in
             guard let self else { return }
             switch result {
-            case .success(let photoResult):
+            case .success:
                 // поиск индекса элемента
                 if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
                     // текущий элемент
