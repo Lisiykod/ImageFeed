@@ -81,19 +81,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D017E9EE2CCA51A800253C78 /* ImageListService */ = {
-			isa = PBXGroup;
-			children = (
-				D017E9EC2CCA51A100253C78 /* ImageListService.swift */,
-			);
-			path = ImageListService;
-			sourceTree = "<group>";
-		};
 		D0543F112C83A608004DF2EB /* ImagesList */ = {
 			isa = PBXGroup;
 			children = (
 				D06086882C8069E7002C6C8C /* ImageListViewController.swift */,
 				D0543F0F2C83A5E4004DF2EB /* ImagesListCell.swift */,
+				D017E9EC2CCA51A100253C78 /* ImageListService.swift */,
 			);
 			path = ImagesList;
 			sourceTree = "<group>";
@@ -131,7 +124,6 @@
 				D060868D2C8069EB002C6C8C /* Assets.xcassets */,
 				D060868F2C8069EB002C6C8C /* LaunchScreen.storyboard */,
 				D06086922C8069EB002C6C8C /* Info.plist */,
-				D017E9EE2CCA51A800253C78 /* ImageListService */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
