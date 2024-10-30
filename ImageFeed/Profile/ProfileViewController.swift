@@ -10,9 +10,9 @@ import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
-    private let tokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
+    private let profileLogoutService = ProfileLogoutService.shared
     
     private lazy var exitButton: UIButton = {
         let button = UIButton()
@@ -126,7 +126,7 @@ final class ProfileViewController: UIViewController {
     // метод для кнопки выход
     @objc
     private func didTapExitButton() {
-        tokenStorage.removeToken()
+        profileLogoutService.logout()
         switchToSplashController()
     }
     

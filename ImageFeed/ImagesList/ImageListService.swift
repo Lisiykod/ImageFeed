@@ -128,6 +128,10 @@ final class ImageListService {
         task.resume()
     }
     
+    func cleanPhotos() {
+        photos = []
+    }
+    
     // MARK: - Private Methods
     private init() {}
     

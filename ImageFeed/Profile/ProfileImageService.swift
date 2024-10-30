@@ -57,6 +57,10 @@ final class ProfileImageService {
         
     }
     
+    func cleanAvatar() {
+        avatarURL = nil
+    }
+    
     //MARK: - Private Methods
     private init() {}
     
