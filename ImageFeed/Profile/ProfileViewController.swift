@@ -13,6 +13,8 @@ final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     private let profileLogoutService = ProfileLogoutService.shared
+    private let gradient: CAGradientLayer = CAGradientLayer()
+    private var animationLayers: Set<CALayer> = Set<CALayer>()
     
     private lazy var exitButton: UIButton = {
         let button = UIButton()
@@ -62,6 +64,9 @@ final class ProfileViewController: UIViewController {
         view.backgroundColor = .ypBlack
         addViewsToSuperView()
         setupConstraints()
+        setGradient(gradient: gradient, width: 70, height: 70)
+        userPick.layer.addSublayer(gradient)
+        animation()
         guard let profile = profileService.profile else { return }
         updateProfileResult(profile: profile)
         // добавляем наблюдателя, что изображение получено 
@@ -137,6 +142,7 @@ final class ProfileViewController: UIViewController {
         else { return }
         let processor = RoundCornerImageProcessor(cornerRadius: 61, backgroundColor: .ypBlack)
         userPick.kf.setImage(with: url, options: [.processor(processor)])
+        self.gradient.removeFromSuperlayer()
     }
     
     private func switchToSplashController() {
@@ -149,5 +155,29 @@ final class ProfileViewController: UIViewController {
         self.mainNameLabel.text = profile.name
         self.logoLabel.text = "@" + profile.login
         self.statusLabel.text = profile.bio
+    }
+    
+    private func setGradient(gradient: CAGradientLayer, width: CGFloat, height: CGFloat) {
+        gradient.frame = CGRect(origin:.zero, size: CGSize(width: width, height: height))
+        gradient.locations = [0, 0.1, 0.3]
+        gradient.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
+                UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
+                UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
+        ]
+        gradient.startPoint = CGPoint(x: 0, y: 0.5)
+        gradient.endPoint = CGPoint(x: 1, y: 0.5)
+        gradient.cornerRadius = 35
+        gradient.masksToBounds = true
+        animationLayers.insert(gradient)
+    }
+    
+    private func animation() {
+        let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
+        gradientChangeAnimation.duration = 1.0
+        gradientChangeAnimation.repeatCount = .infinity
+        gradientChangeAnimation.fromValue = [0, 0.1, 0.3]
+        gradientChangeAnimation.toValue = [0, 0.8, 1]
+        gradient.add(gradientChangeAnimation, forKey: "locationsChange")
     }
 }
