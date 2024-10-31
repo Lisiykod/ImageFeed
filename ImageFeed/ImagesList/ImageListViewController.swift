@@ -13,7 +13,7 @@ final class ImageListViewController: UIViewController {
     private var photos: [Photo] = []
     private let imageListServie = ImageListService.shared
     private var imageListServiceObserver: NSObjectProtocol?
-    let placeholder: UIImage? = UIImage(named: "placeholder")
+    private let placeholder: UIImage? = UIImage(named: "placeholder")
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -187,9 +187,9 @@ extension ImageListViewController: ImagesListCellDelegate {
                 // изменяем инцикацию лайка картинки
                 cell.setIsLiked(self.photos[indexPath.row].isLiked)
                 UIBlockingProgressHUD.dismiss()
-            case .failure:
+            case .failure(let error):
                 UIBlockingProgressHUD.dismiss()
-                //TODO: - показать алерт с ошибкой
+                print("Error in \(#file) \(#function): \(String(describing: error))")
             }
         }
     }

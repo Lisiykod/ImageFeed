@@ -49,7 +49,7 @@ final class ProfileImageService {
                     userInfo: ["URL": avatarURL])
                 self.task = nil
             case .failure(let error):
-                print("[ProfileImageService.fetchProfileImageURL]: NetworkError - \(String(describing: error))")
+                print("Error in \(#file) \(#function): NetworkError - \(String(describing: error))")
             }
         }
         self.task = task

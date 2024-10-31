@@ -46,7 +46,8 @@ final class ImageListService {
     private var task: URLSessionTask?
     private let dateFormatter = ISO8601DateFormatter()
     private let storage = OAuth2TokenStorage()
-    
+  
+    // MARK: - Public Methods
     // метод для запрашивания фотографий
     func fetchPhotosNextPage() {
         let nextPage = (lastLoadedPage ?? 0) + 1

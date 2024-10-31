@@ -175,7 +175,7 @@ final class SingleImageViewController: UIViewController {
             message: "Поробовать еще раз",
             preferredStyle: .alert
         )
-        let cancelAction = UIAlertAction(title: "Не надо", style: .cancel)
+        let cancelAction = UIAlertAction(title: "Не надо", style: .default)
         let retryAction = UIAlertAction(title: "Попробовать еще раз", style: .default) { [weak self] _ in
             guard let imageURL = self?.imageURL else { return }
             self?.loadImage(with: imageURL)

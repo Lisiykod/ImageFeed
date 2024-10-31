@@ -50,7 +50,7 @@ final class OAuth2Service {
                 self.lastCode = nil
                 completion(.success(accessToken))
             case .failure(let error):
-                print("[OAuth2Service.fetchOAuthToken]: NetworkError - \(String(describing: error))")
+                print("Error in \(#file) \(#function): NetworkError - \(String(describing: error))")
                 completion(.failure(error))
             }
         }
@@ -80,7 +80,7 @@ final class OAuth2Service {
         )
         
         guard let url else {
-            print("Failed to create UR")
+            print("Failed to create URL")
             return nil
         }
         

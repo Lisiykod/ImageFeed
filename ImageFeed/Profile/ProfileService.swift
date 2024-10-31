@@ -49,7 +49,7 @@ final class ProfileService {
                 completion(.success(profile))
                 self.task = nil
             case .failure(let error):
-                print("[ProfileService.fetchProfile]: NetworkError - \(String(describing: error))")
+                print("Error in \(#file) \(#function): NetworkError - \(String(describing: error))")
                 completion(.failure(error))
             }
         }
