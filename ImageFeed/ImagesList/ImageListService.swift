@@ -51,10 +51,9 @@ final class ImageListService {
     // метод для запрашивания фотографий
     func fetchPhotosNextPage() {
         let nextPage = (lastLoadedPage ?? 0) + 1
-        assert(Thread.isMainThread)
         
         guard task == nil else {
-            print("retry fetch")
+            print("retry fetch next photo page")
             return
         }
         
