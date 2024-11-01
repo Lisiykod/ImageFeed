@@ -7,35 +7,6 @@
 
 import Foundation
 
-struct PhotoResult: Decodable {
-    let id: String
-    let width: Int
-    let height: Int
-    let createdAt: String
-    let likedByUser: Bool
-    let urls: UrlsResult
-    let description: String?
-}
-
-struct UrlsResult: Decodable {
-    let full: String
-    let thumb: String
-}
-
-struct Photo {
-    let id: String
-    let size: CGSize
-    let createdAt: Date?
-    let welcomeDescription: String?
-    let thumbImageURL: String
-    let largeImageURL: String
-    let isLiked: Bool
-}
-
-struct Photos: Decodable {
-    let photo: PhotoResult
-}
-
 final class ImageListService {
     static let shared = ImageListService()
     static let didChangeNotification = Notification.Name("ImageListServiceDidChange")
@@ -46,7 +17,12 @@ final class ImageListService {
     private var task: URLSessionTask?
     private let dateFormatter = ISO8601DateFormatter()
     private let storage = OAuth2TokenStorage()
-  
+    
+    private enum HTTPMethods {
+        static let post = "POST"
+        static let delete = "DELETE"
+    }
+    
     // MARK: - Public Methods
     // метод для запрашивания фотографий
     func fetchPhotosNextPage() {
@@ -85,13 +61,14 @@ final class ImageListService {
     
     // метод для работы с лайками
     func changeLike(photoId: String, isLiked: Bool, completion: @escaping (Result<Void, Error>)-> Void) {
-
+        
         guard task == nil else {
             print("retry fetch change like")
             return
         }
         
-        let requestMethod = isLiked ? "POST" : "DELETE"
+        let requestMethod = isLiked ? HTTPMethods.post : HTTPMethods.delete
+        
         guard let request = makeLikeRequest(id: photoId, requestMethod: requestMethod) else {
             print("invalid like request")
             return
@@ -142,9 +119,9 @@ final class ImageListService {
             return nil
         }
         let baseURL = URL(string: "https://api.unsplash.com")
-        let url = URL(string: "/photos/"
-                      + "?page=\(page)",
-                      relativeTo: baseURL)
+        let url = URL(
+            string: "/photos/?page=\(page)",
+            relativeTo: baseURL)
         guard let url else {
             print("Failed to create URL")
             return nil

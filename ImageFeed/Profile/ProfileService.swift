@@ -11,18 +11,6 @@ enum ProfileServiceError: Error {
     case invalidRequest
 }
 
-struct Profile {
-    let name: String
-    let login: String
-    let bio: String
-    
-    init(profileInfo: ProfileBody) {
-        self.name = (profileInfo.firstName ?? "") + " " + (profileInfo.lastName ?? "")
-        self.login = profileInfo.username
-        self.bio = profileInfo.bio ?? ""
-    }
-}
-
 final class ProfileService {
     static let shared = ProfileService()
     private let urlSession = URLSession.shared
