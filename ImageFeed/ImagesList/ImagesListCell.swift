@@ -53,11 +53,13 @@ final class ImagesListCell: UITableViewCell {
     }()
     
     private let gradientLayer = CAGradientLayer()
+    private var cellGradientLayer = CAGradientLayer()
     
     override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: self.layer)
         // настраиваем область показа градиента, чтобы он не обрезался
         gradientLayer.frame = gradientView.bounds
+        cellGradientLayer.frame = mainImage.bounds
     }
     
     // MARK: - Initialization
@@ -92,6 +94,8 @@ final class ImagesListCell: UITableViewCell {
     private func setupCell() {
         addSubviews()
         setupConstraints()
+        setCellGradientLayer()
+        animation()
     }
     
     private func addSubviews() {
@@ -145,6 +149,23 @@ final class ImagesListCell: UITableViewCell {
             gradientView.bottomAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 8)
             
         ])
+    }
+    
+   func setCellGradientLayer() {
+        let gradient = CAGradientLayer().setImagesGradient()
+        cellGradientLayer = gradient
+        cellGradientLayer.cornerRadius = 16
+        cellGradientLayer.masksToBounds = true
+        favoriteImageButton.layer.addSublayer(cellGradientLayer)
+    }
+    
+    func animation() {
+        let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
+        gradientChangeAnimation.duration = 1.0
+        gradientChangeAnimation.repeatCount = .infinity
+        gradientChangeAnimation.fromValue = [0, 0.1, 0.3]
+        gradientChangeAnimation.toValue = [0, 0.8, 1]
+        cellGradientLayer.add(gradientChangeAnimation, forKey: "locationsChange")
     }
     
     @objc

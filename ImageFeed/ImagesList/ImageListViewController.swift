@@ -68,7 +68,8 @@ final class ImageListViewController: UIViewController {
         guard let imageURL = URL(string: photos[indexPath.row].thumbImageURL) else {
             return
         }
-        
+//        cell.setCellGradientLayer()
+//        cell.animation()
         cell.mainImage.kf.indicatorType = .activity
         cell.mainImage.kf.setImage(with: imageURL, placeholder: placeholder) { [weak self] result in
             guard let self else { return }

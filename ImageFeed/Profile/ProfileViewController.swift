@@ -249,6 +249,7 @@ final class ProfileViewController: UIViewController {
     private func removeGradients() {
         print("gradientsLayers - \(gradientsLayers.count)")
         gradientsLayers.forEach { gradient in
+            //TODO: - Подумать почему не удаляются все слои
             gradient.removeFromSuperlayer()
         }
         print("gradientsLayers - \(gradientsLayers.count)")
