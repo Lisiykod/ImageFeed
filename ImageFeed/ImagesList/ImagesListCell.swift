@@ -59,7 +59,7 @@ final class ImagesListCell: UITableViewCell {
         super.layoutSublayers(of: self.layer)
         // настраиваем область показа градиента, чтобы он не обрезался
         gradientLayer.frame = gradientView.bounds
-        cellGradientLayer.frame = mainImage.bounds
+        cellGradientLayer.frame = CGRect(x: 16, y: 4, width: mainImage.bounds.width, height: mainImage.bounds.height)
     }
     
     // MARK: - Initialization
@@ -80,6 +80,7 @@ final class ImagesListCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         mainImage.kf.cancelDownloadTask()
+        removeAnimation()
     }
     
     // MARK: - Public Methods
@@ -89,13 +90,20 @@ final class ImagesListCell: UITableViewCell {
         favoriteImageButton.setImage(imageName, for: .normal)
     }
     
+    func animationGradient() {
+        setCellGradientLayer()
+        animation()
+    }
+    
+    func removeAnimation() {
+        gradientLayer.removeFromSuperlayer()
+    }
+    
     // MARK: - Private Methods
     
     private func setupCell() {
         addSubviews()
         setupConstraints()
-        setCellGradientLayer()
-        animation()
     }
     
     private func addSubviews() {
@@ -151,15 +159,15 @@ final class ImagesListCell: UITableViewCell {
         ])
     }
     
-   func setCellGradientLayer() {
+   private func setCellGradientLayer() {
         let gradient = CAGradientLayer().setImagesGradient()
         cellGradientLayer = gradient
         cellGradientLayer.cornerRadius = 16
         cellGradientLayer.masksToBounds = true
-        favoriteImageButton.layer.addSublayer(cellGradientLayer)
+        contentView.layer.addSublayer(cellGradientLayer)
     }
     
-    func animation() {
+    private func animation() {
         let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
         gradientChangeAnimation.duration = 1.0
         gradientChangeAnimation.repeatCount = .infinity

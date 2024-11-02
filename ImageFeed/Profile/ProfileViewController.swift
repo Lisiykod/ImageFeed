@@ -84,12 +84,6 @@ final class ProfileViewController: UIViewController {
         updateAvatar()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setupAvatarGradient()
-        setupMainNameLabelGradient()
-    }
-    
     deinit {
         profileImageServiceObserver = nil
     }
@@ -152,7 +146,6 @@ final class ProfileViewController: UIViewController {
         else { return }
         let processor = RoundCornerImageProcessor(cornerRadius: 61, backgroundColor: .ypBlack)
         userPick.kf.setImage(with: url, options: [.processor(processor)])
-//        self.gradient.removeFromSuperlayer()
         removeGradients()
     }
     
@@ -167,24 +160,6 @@ final class ProfileViewController: UIViewController {
         self.logoLabel.text = "@" + profile.login
         self.statusLabel.text = profile.bio
     }
-    
-//    private func setGradient(gradient: CAGradientLayer, view: UIView) {
-//        let viewWidth = view.frame.width
-//        let viewHeight = view.frame.height
-//        gradient.frame = CGRect(origin:.zero, size: CGSize(width: viewWidth, height: viewHeight))
-//        gradient.locations = [0, 0.1, 0.3]
-//        gradient.colors = [
-//            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 1).cgColor,
-//                UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 1).cgColor,
-//                UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 1).cgColor
-//        ]
-//        gradient.startPoint = CGPoint(x: 0, y: 0.5)
-//        gradient.endPoint = CGPoint(x: 1, y: 0.5)
-//        gradient.cornerRadius = 35
-//        gradient.masksToBounds = true
-//        animationLayers.insert(gradient)
-//    }
-//
     
     private func animation(gradient: CAGradientLayer) {
         let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
@@ -210,7 +185,7 @@ final class ProfileViewController: UIViewController {
     private func setupMainNameLabelGradient() {
         var mainLabelGradient = CAGradientLayer()
         mainLabelGradient = gradient.setImagesGradient()
-        mainLabelGradient.frame = CGRect(origin:.zero, size: CGSize(width: 223, height: 18))
+        mainLabelGradient.frame = CGRect(origin:.zero, size: CGSize(width: 223, height: 28))
         print("label frame - \(mainLabelGradient.frame)")
         mainLabelGradient.cornerRadius = 9
         mainLabelGradient.masksToBounds = true
@@ -249,10 +224,8 @@ final class ProfileViewController: UIViewController {
     private func removeGradients() {
         print("gradientsLayers - \(gradientsLayers.count)")
         gradientsLayers.forEach { gradient in
-            //TODO: - Подумать почему не удаляются все слои
             gradient.removeFromSuperlayer()
         }
-        print("gradientsLayers - \(gradientsLayers.count)")
     }
 }
 

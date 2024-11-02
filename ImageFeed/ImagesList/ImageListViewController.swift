@@ -31,6 +31,14 @@ final class ImageListViewController: UIViewController {
         return formatter
     }()
     
+    private enum ImageCellState {
+        case loading
+        case error
+        case loaded
+    }
+    
+    private var imageState: ImageCellState = .loading
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,16 +76,17 @@ final class ImageListViewController: UIViewController {
         guard let imageURL = URL(string: photos[indexPath.row].thumbImageURL) else {
             return
         }
-//        cell.setCellGradientLayer()
-//        cell.animation()
+        
         cell.mainImage.kf.indicatorType = .activity
         cell.mainImage.kf.setImage(with: imageURL, placeholder: placeholder) { [weak self] result in
             guard let self else { return }
             switch result {
             case .success(_):
+                imageState = .loaded
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
             case .failure(let error):
-                cell.mainImage.image = placeholder
+                imageState = .error
+//                cell.mainImage.image = placeholder
                 print("Set image error: \(error.localizedDescription)")
             }
         }
@@ -92,6 +101,17 @@ final class ImageListViewController: UIViewController {
         // настраиваем лайк
         let isFavorite = photos[indexPath.row].isLiked
         cell.setIsLiked(isFavorite)
+        
+//        cell.removeAnimation()
+        switch imageState {
+        case .loading:
+            cell.animationGradient()
+        case .error:
+            cell.mainImage.image = placeholder
+            cell.removeAnimation()
+        case .loaded:
+            cell.removeAnimation()
+        }
     }
     
     // метод для добавления новых фотографий
