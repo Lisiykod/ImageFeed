@@ -73,8 +73,8 @@ final class ImageListViewController: UIViewController {
         cell.mainImage.kf.setImage(with: imageURL, placeholder: placeholder) { [weak self] result in
             guard let self else { return }
             switch result {
-            case .success(_):
-                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            case .success(let image):
+                print("Image loaded: \(image.image)")
             case .failure(let error):
                 cell.mainImage.image = placeholder
                 print("Set image error: \(error.localizedDescription)")
