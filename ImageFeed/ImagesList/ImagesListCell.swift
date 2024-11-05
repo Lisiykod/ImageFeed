@@ -80,7 +80,10 @@ final class ImagesListCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         mainImage.kf.cancelDownloadTask()
-        removeAnimation()
+        mainImage.image = nil
+        dateLabel.text = nil
+        favoriteImageButton.setImage(UIImage(named: "not_favorite"), for: .normal)
+//        removeAnimation()
     }
     
     // MARK: - Public Methods

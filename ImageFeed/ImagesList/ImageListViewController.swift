@@ -14,12 +14,14 @@ final class ImageListViewController: UIViewController {
     private let imageListServie = ImageListService.shared
     private var imageListServiceObserver: NSObjectProtocol?
     let placeholder: UIImage? = UIImage(named: "placeholder")
+    private var imageState: ImageCellState = .loading
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.backgroundColor = .ypBlack
+        tableView.estimatedRowHeight = 100
         return tableView
     }()
     
@@ -34,10 +36,9 @@ final class ImageListViewController: UIViewController {
     private enum ImageCellState {
         case loading
         case error
-        case loaded
+        case loaded(UIImage)
     }
     
-    private var imageState: ImageCellState = .loading
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -56,6 +57,9 @@ final class ImageListViewController: UIViewController {
             guard let self else { return }
             self.updateTableViewAnimated()
         }
+//        if #available(iOS 15.0, *) {
+//            UITableView.appearance().isPrefetchingEnabled = false
+//        }
     }
     
     // MARK: - Private Methods
@@ -71,7 +75,6 @@ final class ImageListViewController: UIViewController {
     private func configureCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         // устанавливаем делегата
         cell.delegate = self
-        
         // настраиваем картинку
         guard let imageURL = URL(string: photos[indexPath.row].thumbImageURL) else {
             return
@@ -81,8 +84,8 @@ final class ImageListViewController: UIViewController {
         cell.mainImage.kf.setImage(with: imageURL, placeholder: placeholder) { [weak self] result in
             guard let self else { return }
             switch result {
-            case .success(_):
-                imageState = .loaded
+            case .success(let image):
+                imageState = .loaded(image.image)
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
             case .failure(let error):
                 imageState = .error
@@ -102,16 +105,17 @@ final class ImageListViewController: UIViewController {
         let isFavorite = photos[indexPath.row].isLiked
         cell.setIsLiked(isFavorite)
         
-//        cell.removeAnimation()
-        switch imageState {
-        case .loading:
-            cell.animationGradient()
-        case .error:
-            cell.mainImage.image = placeholder
-            cell.removeAnimation()
-        case .loaded:
-            cell.removeAnimation()
-        }
+////        cell.removeAnimation()
+//        switch imageState {
+//        case .loading:
+//            cell.animationGradient()
+//        case .error:
+//            cell.mainImage.image = placeholder
+//            cell.removeAnimation()
+//        case .loaded(_):
+////            cell.mainImage.image = image
+//            cell.removeAnimation()
+//        }
     }
     
     // метод для добавления новых фотографий
