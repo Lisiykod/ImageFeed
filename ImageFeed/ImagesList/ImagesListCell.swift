@@ -6,10 +6,17 @@
 //
 
 import UIKit
+import Kingfisher
+
+protocol ImagesListCellDelegate: AnyObject {
+    func imageListCellDidTapLike(_ cell: ImagesListCell)
+}
 
 final class ImagesListCell: UITableViewCell {
     
     static let reuseIdentifier = "ImagesListCell"
+    
+    weak var delegate: ImagesListCellDelegate?
     
     lazy var mainImage: UIImageView = {
         let imageView = UIImageView()
@@ -57,11 +64,27 @@ final class ImagesListCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        // настраиваем фон
+        backgroundColor = .ypBlack
+        selectionStyle = .none
+        // настраиваем все остальное
         setupCell()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        mainImage.kf.cancelDownloadTask()
+    }
+    
+    // MARK: - Public Methods
+    
+    func setIsLiked(_ isFavorite: Bool) {
+        let imageName = isFavorite ? UIImage(named: "favorite") : UIImage(named: "not_favorite")
+        favoriteImageButton.setImage(imageName, for: .normal)
     }
     
     // MARK: - Private Methods
@@ -126,7 +149,7 @@ final class ImagesListCell: UITableViewCell {
     
     @objc
     private func didTapFavoriteButton() {
-        
+        delegate?.imageListCellDidTapLike(self)
     }
 }
 

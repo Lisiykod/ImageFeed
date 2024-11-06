@@ -10,9 +10,9 @@ import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
-    private let tokenStorage = OAuth2TokenStorage()
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
+    private let profileLogoutService = ProfileLogoutService.shared
     
     private lazy var exitButton: UIButton = {
         let button = UIButton()
@@ -23,7 +23,7 @@ final class ProfileViewController: UIViewController {
     }()
     
     private let userPick: UIImageView = {
-        let userImage = UIImage(named: "userpick_photo")
+        let userImage = UIImage(named: "avatar_placeholder")
         let image = UIImageView(image: userImage)
         image.backgroundColor = .ypBlack
         image.layer.cornerRadius = 61
@@ -34,7 +34,7 @@ final class ProfileViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
         label.textColor = .ypWhite
-        label.text = "Екатерина Новикова"
+        label.text = ""
         label.numberOfLines = 0
         return label
     }()
@@ -43,7 +43,7 @@ final class ProfileViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypGray
-        label.text = "@ekaterina_nov"
+        label.text = ""
         label.numberOfLines = 0
         return label
     }()
@@ -52,7 +52,7 @@ final class ProfileViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textColor = .ypWhite
-        label.text = "Hello, world!"
+        label.text = ""
         label.numberOfLines = 0
         return label
     }()
@@ -126,8 +126,7 @@ final class ProfileViewController: UIViewController {
     // метод для кнопки выход
     @objc
     private func didTapExitButton() {
-        tokenStorage.removeToken()
-        switchToSplashController()
+        exitAlert()
     }
     
     private func updateAvatar() {
@@ -149,5 +148,22 @@ final class ProfileViewController: UIViewController {
         self.mainNameLabel.text = profile.name
         self.logoLabel.text = "@" + profile.login
         self.statusLabel.text = profile.bio
+    }
+    
+    private func exitAlert() {
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
+        let noAction = UIAlertAction(title: "Нет", style: .default)
+        let yesAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            guard let self else { return }
+            self.profileLogoutService.logout()
+            self.switchToSplashController()
+        }
+        alert.addAction(noAction)
+        alert.addAction(yesAction)
+        present(alert, animated: true)
     }
 }

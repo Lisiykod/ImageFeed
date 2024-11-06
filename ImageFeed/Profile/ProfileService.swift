@@ -11,18 +11,6 @@ enum ProfileServiceError: Error {
     case invalidRequest
 }
 
-struct Profile {
-    let name: String
-    let login: String
-    let bio: String
-    
-    init(profileInfo: ProfileBody) {
-        self.name = (profileInfo.firstName ?? "") + " " + (profileInfo.lastName ?? "")
-        self.login = profileInfo.username
-        self.bio = profileInfo.bio ?? ""
-    }
-}
-
 final class ProfileService {
     static let shared = ProfileService()
     private let urlSession = URLSession.shared
@@ -49,12 +37,16 @@ final class ProfileService {
                 completion(.success(profile))
                 self.task = nil
             case .failure(let error):
-                print("[ProfileService.fetchProfile]: NetworkError - \(String(describing: error))")
+                print("Error in \(#file) \(#function): NetworkError - \(String(describing: error))")
                 completion(.failure(error))
             }
         }
         self.task = task
         task.resume()
+    }
+    
+    func cleanProfile() {
+        profile = nil
     }
     
     //MARK: - Private Methods
