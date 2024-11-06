@@ -20,6 +20,7 @@ final class ImagesListCell: UITableViewCell {
     
     lazy var mainImage: UIImageView = {
         let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 16
         imageView.layer.masksToBounds = true
         return imageView
@@ -71,6 +72,7 @@ final class ImagesListCell: UITableViewCell {
         selectionStyle = .none
         // настраиваем все остальное
         setupCell()
+//        animationGradient()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -83,7 +85,7 @@ final class ImagesListCell: UITableViewCell {
         mainImage.image = nil
         dateLabel.text = nil
         favoriteImageButton.setImage(UIImage(named: "not_favorite"), for: .normal)
-//        removeAnimation()
+        removeAnimation()
     }
     
     // MARK: - Public Methods
@@ -99,6 +101,7 @@ final class ImagesListCell: UITableViewCell {
     }
     
     func removeAnimation() {
+        gradientLayer.removeAllAnimations()
         gradientLayer.removeFromSuperlayer()
     }
     

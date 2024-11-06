@@ -36,10 +36,9 @@ final class ImageListViewController: UIViewController {
     private enum ImageCellState {
         case loading
         case error
-        case loaded(UIImage)
+        case loaded
     }
-    
-    
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,9 +56,6 @@ final class ImageListViewController: UIViewController {
             guard let self else { return }
             self.updateTableViewAnimated()
         }
-//        if #available(iOS 15.0, *) {
-//            UITableView.appearance().isPrefetchingEnabled = false
-//        }
     }
     
     // MARK: - Private Methods
@@ -79,20 +75,24 @@ final class ImageListViewController: UIViewController {
         guard let imageURL = URL(string: photos[indexPath.row].thumbImageURL) else {
             return
         }
-        
+
         cell.mainImage.kf.indicatorType = .activity
         cell.mainImage.kf.setImage(with: imageURL, placeholder: placeholder) { [weak self] result in
             guard let self else { return }
             switch result {
-            case .success(let image):
-                imageState = .loaded(image.image)
-                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            case .success:
+                imageState = .loaded
             case .failure(let error):
                 imageState = .error
-//                cell.mainImage.image = placeholder
                 print("Set image error: \(error.localizedDescription)")
             }
         }
+        
+//        if cell.mainImage.image != nil {
+//            imageState = .loaded
+//        } else {
+//            imageState = .error
+//        }
         
         // настраиваем дату
         if let date = photos[indexPath.row].createdAt {
@@ -104,18 +104,19 @@ final class ImageListViewController: UIViewController {
         // настраиваем лайк
         let isFavorite = photos[indexPath.row].isLiked
         cell.setIsLiked(isFavorite)
-        
-////        cell.removeAnimation()
-//        switch imageState {
-//        case .loading:
-//            cell.animationGradient()
-//        case .error:
-//            cell.mainImage.image = placeholder
-//            cell.removeAnimation()
-//        case .loaded(_):
-////            cell.mainImage.image = image
-//            cell.removeAnimation()
-//        }
+    
+    }
+    
+    func animationState(for cell: ImagesListCell) {
+        switch imageState {
+        case .loading:
+            cell.animationGradient()
+        case .error:
+            cell.mainImage.image = placeholder
+            cell.removeAnimation()
+        case .loaded:
+            cell.removeAnimation()
+        }
     }
     
     // метод для добавления новых фотографий
