@@ -120,7 +120,7 @@ final class ImageListService {
         }
         let baseURL = URL(string: "https://api.unsplash.com")
         let url = URL(
-            string: "/photos/?page=\(page)",
+            string: "/photos/?page=\(page)&&per_page=10",
             relativeTo: baseURL)
         guard let url else {
             print("Failed to create URL")

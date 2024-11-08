@@ -22,6 +22,7 @@ final class ImagesListCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 16
         imageView.layer.masksToBounds = true
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
