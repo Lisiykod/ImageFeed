@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D017E9ED2CCA51A100253C78 /* ImageListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D017E9EC2CCA51A100253C78 /* ImageListService.swift */; };
+		D042FE9E2CDF6AAA00280B67 /* WebViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D042FE9D2CDF6AAA00280B67 /* WebViewPresenter.swift */; };
 		D0543F102C83A5E4004DF2EB /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0543F0F2C83A5E4004DF2EB /* ImagesListCell.swift */; };
 		D06086852C8069E7002C6C8C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06086842C8069E7002C6C8C /* AppDelegate.swift */; };
 		D06086872C8069E7002C6C8C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06086862C8069E7002C6C8C /* SceneDelegate.swift */; };
@@ -43,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		D017E9EC2CCA51A100253C78 /* ImageListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListService.swift; sourceTree = "<group>"; };
+		D042FE9D2CDF6AAA00280B67 /* WebViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenter.swift; sourceTree = "<group>"; };
 		D0543F0F2C83A5E4004DF2EB /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 		D06086812C8069E7002C6C8C /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D06086842C8069E7002C6C8C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				D09975572CA15820003B4FBB /* OAuth2Service.swift */,
 				D099755C2CA1A4C2003B4FBB /* OAuthTokenResponseBody.swift */,
 				D099755E2CA2110D003B4FBB /* OAuth2TokenStorage.swift */,
+				D042FE9D2CDF6AAA00280B67 /* WebViewPresenter.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				D072F8102CB490C300033611 /* ProfileImageService.swift in Sources */,
 				D082C2612C9C4747002C3C00 /* AuthViewController.swift in Sources */,
 				D09975612CA34EDB003B4FBB /* SplashViewController.swift in Sources */,
+				D042FE9E2CDF6AAA00280B67 /* WebViewPresenter.swift in Sources */,
 				D082C25E2C9C31C1002C3C00 /* Constants.swift in Sources */,
 				D099755A2CA19F7D003B4FBB /* URLSession+data.swift in Sources */,
 				D08ABAFE2C87AEF7009A4F82 /* SingleImageViewController.swift in Sources */,

@@ -6,18 +6,16 @@
 //
 
 import UIKit
-import WebKit
+@preconcurrency import WebKit
 
-final class WebViewViewController: UIViewController {
+public protocol WebViewViewControllerProtocol: AnyObject {
+    var presenter: WebViewPresenterProtocol? {get set}
+    func load(request: URLRequest)
+}
+
+final class WebViewViewController: UIViewController, WebViewViewControllerProtocol {
     
-    private enum WebViewConstants {
-        static let unsplashAutorizeURLString = "https://unsplash.com/oauth/authorize"
-        static let clientID = "client_id"
-        static let redirectURI = "redirect_uri"
-        static let responseType = "response_type"
-        static let scope = "scope"
-    }
-    
+    var presenter: WebViewPresenterProtocol? 
     weak var delegate: WebViewViewControllerDelegate?
     private let tokenStorage: OAuth2TokenStorage = OAuth2TokenStorage()
     private var estimatedProgressObservation: NSKeyValueObservation?
@@ -48,8 +46,8 @@ final class WebViewViewController: UIViewController {
         view.backgroundColor = .ypWhite
         addViewsToSuperView()
         setupConstraints()
-        loadAuthView()
         webView.navigationDelegate = self
+        presenter?.viewDidLoad()
         estimatedProgressObservation = webView.observe(
             \.estimatedProgress,
              options: [],
@@ -62,6 +60,11 @@ final class WebViewViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateProgress()
+    }
+    
+    // MARK: - Public Methods
+    func load(request: URLRequest) {
+        webView.load(request)
     }
     
     // MARK: - Private Methods
@@ -96,28 +99,6 @@ final class WebViewViewController: UIViewController {
             view.trailingAnchor.constraint(equalTo: webView.trailingAnchor),
             view.bottomAnchor.constraint(equalTo: webView.bottomAnchor)
         ])
-    }
-    
-    // метод для загрузки окна авторизации
-    private func loadAuthView() {
-        guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAutorizeURLString) else {
-            return
-        }
-        // значения компонентов, которые мы хотим передать в запросе
-        urlComponents.queryItems = [
-            URLQueryItem(name: WebViewConstants.clientID, value: Constants.accessKey),
-            URLQueryItem(name: WebViewConstants.redirectURI, value: Constants.redirectURI),
-            URLQueryItem(name: WebViewConstants.responseType, value: "code"),
-            URLQueryItem(name: WebViewConstants.scope, value: Constants.accessScope)
-        ]
-        
-        guard let url = urlComponents.url else {
-            return
-        }
-        
-        let request = URLRequest(url: url)
-        // передаем запрос webView
-        webView.load(request)
     }
     
     // метод для возврата кода авторизации (если получен)
