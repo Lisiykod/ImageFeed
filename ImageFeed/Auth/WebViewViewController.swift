@@ -17,7 +17,7 @@ public protocol WebViewViewControllerProtocol: AnyObject {
 
 final class WebViewViewController: UIViewController, WebViewViewControllerProtocol {
     
-    var presenter: WebViewPresenterProtocol? 
+    var presenter: WebViewPresenterProtocol?
     weak var delegate: WebViewViewControllerDelegate?
     private let tokenStorage: OAuth2TokenStorage = OAuth2TokenStorage()
     private var estimatedProgressObservation: NSKeyValueObservation?
@@ -55,14 +55,14 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
              options: [],
              changeHandler: { [weak self] _, _ in
                  guard let self else { return }
-//                 self.updateProgress()
+                 //                 self.updateProgress()
                  presenter?.didUpdateProgressValue(webView.estimatedProgress)
              })
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        updateProgress()
+        //        updateProgress()
     }
     
     // MARK: - Public Methods
@@ -114,22 +114,11 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
     
     // метод для возврата кода авторизации (если получен)
     private func code(from navigationAction: WKNavigationAction) -> String? {
-        if
-            // получаем url
-            let url = navigationAction.request.url,
-            // получаем из него значения компонентов
-            let urlComponents = URLComponents(string: url.absoluteString),
-            // проверяем совпадает ли адрес запроса с адресом получением кода
-            urlComponents.path == "/oauth/authorize/native",
-            // проверяем есть ли компоненты запроса
-            let items = urlComponents.queryItems,
-            // провреяем есть ли "code"
-            let codeItem = items.first(where: {$0.name == "code"})
-        {
-            return codeItem.value
-        } else {
-            return nil
+        // получаем url
+        if let url = navigationAction.request.url {
+            return presenter?.code(from: url)
         }
+        return nil
     }
     
 }
