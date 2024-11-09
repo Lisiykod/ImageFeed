@@ -10,6 +10,7 @@ import Foundation
 public protocol WebViewPresenterProtocol: AnyObject {
     var view: WebViewViewControllerProtocol? {get set}
     func viewDidLoad()
+    func didUpdateProgressValue(_ newValue: Double)
 }
 
 final class WebViewPresenter: WebViewPresenterProtocol {
@@ -41,7 +42,21 @@ final class WebViewPresenter: WebViewPresenterProtocol {
         }
         
         let request = URLRequest(url: url)
+        // обновляем значение для прогресс бара
+        didUpdateProgressValue(0)
         // передаем запрос webView
         view?.load(request: request)
+    }
+    
+    func didUpdateProgressValue(_ newValue: Double) {
+        let newProgressValue = Float(newValue)
+        view?.setProgressValue(newProgressValue)
+        
+        let shouldHideProgress = shouldHideProgress(for: newProgressValue)
+        view?.setProgressIsHidden(shouldHideProgress)
+    }
+    
+    private func shouldHideProgress(for value: Float) -> Bool {
+        abs(value - 1.0) <= 0.0001
     }
 }
