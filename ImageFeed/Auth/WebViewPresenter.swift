@@ -16,33 +16,20 @@ public protocol WebViewPresenterProtocol: AnyObject {
 
 final class WebViewPresenter: WebViewPresenterProtocol {
     weak var view: WebViewViewControllerProtocol?
-    
-    private enum WebViewConstants {
-        static let unsplashAutorizeURLString = "https://unsplash.com/oauth/authorize"
-        static let clientID = "client_id"
-        static let redirectURI = "redirect_uri"
-        static let responseType = "response_type"
-        static let scope = "scope"
+    var authHelper: AuthHelperProtocol
+//    private enum WebViewConstants {
+//        static let unsplashAutorizeURLString = "https://unsplash.com/oauth/authorize"
+//        static let clientID = "client_id"
+//        static let redirectURI = "redirect_uri"
+//        static let responseType = "response_type"
+//        static let scope = "scope"
+//    }
+    init(authHelper: AuthHelperProtocol) {
+        self.authHelper = authHelper
     }
-    
     // метод для формирования запроса и загрузки окна авторизации
     func viewDidLoad() {
-        guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAutorizeURLString) else {
-            return
-        }
-        // значения компонентов, которые мы хотим передать в запросе
-        urlComponents.queryItems = [
-            URLQueryItem(name: WebViewConstants.clientID, value: Constants.accessKey),
-            URLQueryItem(name: WebViewConstants.redirectURI, value: Constants.redirectURI),
-            URLQueryItem(name: WebViewConstants.responseType, value: "code"),
-            URLQueryItem(name: WebViewConstants.scope, value: Constants.accessScope)
-        ]
-        
-        guard let url = urlComponents.url else {
-            return
-        }
-        
-        let request = URLRequest(url: url)
+        guard let request = authHelper.authRequest() else { return }
         // обновляем значение для прогресс бара
         didUpdateProgressValue(0)
         // передаем запрос webView
@@ -50,20 +37,7 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     }
     
     func code(from url: URL) -> String? {
-        if
-            // получаем значения компонентов
-            let urlComponents = URLComponents(string: url.absoluteString),
-            // проверяем совпадает ли адрес запроса с адресом получением кода
-            urlComponents.path == "/oauth/authorize/native",
-            // проверяем есть ли компоненты запроса
-            let items = urlComponents.queryItems,
-            // провреяем есть ли "code"
-            let codeItem = items.first(where: {$0.name == "code"})
-        {
-            return codeItem.value
-        } else {
-            return nil
-        }
+        authHelper.code(from: url)
     }
     
     func didUpdateProgressValue(_ newValue: Double) {
