@@ -17,16 +17,11 @@ public protocol WebViewPresenterProtocol: AnyObject {
 final class WebViewPresenter: WebViewPresenterProtocol {
     weak var view: WebViewViewControllerProtocol?
     var authHelper: AuthHelperProtocol
-//    private enum WebViewConstants {
-//        static let unsplashAutorizeURLString = "https://unsplash.com/oauth/authorize"
-//        static let clientID = "client_id"
-//        static let redirectURI = "redirect_uri"
-//        static let responseType = "response_type"
-//        static let scope = "scope"
-//    }
+
     init(authHelper: AuthHelperProtocol) {
         self.authHelper = authHelper
     }
+    
     // метод для формирования запроса и загрузки окна авторизации
     func viewDidLoad() {
         guard let request = authHelper.authRequest() else { return }
@@ -48,7 +43,7 @@ final class WebViewPresenter: WebViewPresenterProtocol {
         view?.setProgressIsHidden(shouldHideProgress)
     }
     
-    private func shouldHideProgress(for value: Float) -> Bool {
+    func shouldHideProgress(for value: Float) -> Bool {
         abs(value - 1.0) <= 0.0001
     }
 }
