@@ -13,6 +13,7 @@ final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     private let profileLogoutService = ProfileLogoutService.shared
+    private var alertPresenter: AlertPresenterProtocol?
     
     private lazy var exitButton: UIButton = {
         let button = UIButton()
@@ -62,6 +63,7 @@ final class ProfileViewController: UIViewController {
         view.backgroundColor = .ypBlack
         addViewsToSuperView()
         setupConstraints()
+        initialSetup()
         guard let profile = profileService.profile else { return }
         updateProfileResult(profile: profile)
         // добавляем наблюдателя, что изображение получено 
@@ -129,6 +131,13 @@ final class ProfileViewController: UIViewController {
         exitAlert()
     }
     
+    private func initialSetup() {
+        let alertPresenter = AlertPresenter()
+        alertPresenter.setup(delegate: self)
+        self.alertPresenter = alertPresenter
+        
+    }
+    
     private func updateAvatar() {
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
@@ -151,19 +160,18 @@ final class ProfileViewController: UIViewController {
     }
     
     private func exitAlert() {
-        let alert = UIAlertController(
+        
+        let alertModel = AlertModel(
             title: "Пока, пока!",
             message: "Уверены, что хотите выйти?",
-            preferredStyle: .alert
-        )
-        let noAction = UIAlertAction(title: "Нет", style: .default)
-        let yesAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
-            guard let self else { return }
-            self.profileLogoutService.logout()
-            self.switchToSplashController()
-        }
-        alert.addAction(noAction)
-        alert.addAction(yesAction)
-        present(alert, animated: true)
+            buttonText: "Нет",
+            secondButtonText: "Да",
+            completion: nil) { [weak self] in
+                guard let self else { return }
+                self.profileLogoutService.logout()
+                self.switchToSplashController()
+            }
+        alertPresenter?.present(alert: alertModel)
     }
+    
 }
