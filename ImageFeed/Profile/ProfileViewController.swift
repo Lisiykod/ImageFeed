@@ -8,11 +8,16 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfilePresenterProtocol? { get set }
+    func updateProfileResult(profile: Profile)
+    func updateAvatar(wiht url: URL)
+}
+
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     
-    private let profileService = ProfileService.shared
+    var presenter: ProfilePresenterProtocol?
     private var profileImageServiceObserver: NSObjectProtocol?
-    private let profileLogoutService = ProfileLogoutService.shared
     private var alertPresenter: AlertPresenterProtocol?
     
     private lazy var exitButton: UIButton = {
@@ -58,28 +63,43 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
+        initialSetup()
         addViewsToSuperView()
         setupConstraints()
-        initialSetup()
-        guard let profile = profileService.profile else { return }
-        updateProfileResult(profile: profile)
+        presenter?.viewDidLoad()
         // добавляем наблюдателя, что изображение получено 
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(forName: ProfileImageService.didChangeNotification,
                          object: nil,
                          queue: .main) { [weak self] _ in
                 guard let self else { return }
-                self.updateAvatar()
+                self.presenter?.updateAvatar()
             }
-        updateAvatar()
     }
     
     deinit {
         profileImageServiceObserver = nil
     }
+    
+    // MARK: - Public Methods
+    
+    func updateAvatar(wiht url: URL) {
+        let processor = RoundCornerImageProcessor(cornerRadius: 61, backgroundColor: .ypBlack)
+        userPick.kf.setImage(with: url, options: [.processor(processor)])
+    }
+    
+    func updateProfileResult(profile: Profile) {
+        self.mainNameLabel.text = profile.name
+        self.logoLabel.text = "@" + profile.login
+        self.statusLabel.text = profile.bio
+    }
+
+    // MARK: - Private Methods
     
     // метод, в котором всех добавляем в иерархию
     private func addViewsToSuperView() {
@@ -138,29 +158,7 @@ final class ProfileViewController: UIViewController {
         
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        let processor = RoundCornerImageProcessor(cornerRadius: 61, backgroundColor: .ypBlack)
-        userPick.kf.setImage(with: url, options: [.processor(processor)])
-    }
-    
-    private func switchToSplashController() {
-        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        let splashViewController = SplashViewController()
-        window.rootViewController = splashViewController
-    }
-    
-    private func updateProfileResult(profile: Profile) {
-        self.mainNameLabel.text = profile.name
-        self.logoLabel.text = "@" + profile.login
-        self.statusLabel.text = profile.bio
-    }
-    
     private func exitAlert() {
-        
         let alertModel = AlertModel(
             title: "Пока, пока!",
             message: "Уверены, что хотите выйти?",
@@ -168,8 +166,7 @@ final class ProfileViewController: UIViewController {
             secondButtonText: "Да",
             completion: nil) { [weak self] in
                 guard let self else { return }
-                self.profileLogoutService.logout()
-                self.switchToSplashController()
+                self.presenter?.logout()
             }
         alertPresenter?.present(alert: alertModel)
     }
