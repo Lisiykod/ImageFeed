@@ -12,6 +12,7 @@ public protocol ProfileViewControllerProtocol: AnyObject {
     var presenter: ProfilePresenterProtocol? { get set }
     func updateProfileResult(profile: Profile)
     func updateAvatar(wiht url: URL)
+    func showExitAlert()
 }
 
 final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
@@ -98,6 +99,20 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         self.logoLabel.text = "@" + profile.login
         self.statusLabel.text = profile.bio
     }
+    
+    func showExitAlert() {
+        let alertModel = AlertModel(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            buttonText: "Нет",
+            secondButtonText: "Да",
+            completion: nil) { [weak self] in
+                guard let self else { return }
+                self.presenter?.logout()
+                switchToSplashController()
+            }
+        alertPresenter?.present(alert: alertModel)
+    }
 
     // MARK: - Private Methods
     
@@ -148,7 +163,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     // метод для кнопки выход
     @objc
     private func didTapExitButton() {
-        exitAlert()
+        presenter?.didTapExitButton()
     }
     
     private func initialSetup() {
@@ -158,17 +173,10 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         
     }
     
-    private func exitAlert() {
-        let alertModel = AlertModel(
-            title: "Пока, пока!",
-            message: "Уверены, что хотите выйти?",
-            buttonText: "Нет",
-            secondButtonText: "Да",
-            completion: nil) { [weak self] in
-                guard let self else { return }
-                self.presenter?.logout()
-            }
-        alertPresenter?.present(alert: alertModel)
+    private func switchToSplashController() {
+        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+        let splashViewController = SplashViewController()
+        window.rootViewController = splashViewController
     }
     
 }

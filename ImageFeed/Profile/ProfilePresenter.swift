@@ -5,14 +5,16 @@
 //  Created by Olga Trofimova on 11.11.2024.
 //
 
-import UIKit
+import Foundation
 
 public protocol ProfilePresenterProtocol: AnyObject {
     var view: ProfileViewControllerProtocol? { get set }
-    func logout()
     func viewDidLoad()
     func updateAvatar()
-    func updateProfile() 
+    func updateProfile()
+    func didTapExitButton()
+    func logout()
+    
 }
 
 final class ProfilePresenter: ProfilePresenterProtocol {
@@ -39,15 +41,12 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         view?.updateProfileResult(profile: profile)
     }
     
-    func logout() {
-        profileLogoutService.logout()
-        switchToSplashController()
+    func didTapExitButton() {
+        view?.showExitAlert()
     }
     
-    private func switchToSplashController() {
-        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        let splashViewController = SplashViewController()
-        window.rootViewController = splashViewController
+    func logout() {
+        profileLogoutService.logout()
     }
     
 }
