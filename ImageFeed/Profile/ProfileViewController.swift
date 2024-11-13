@@ -8,13 +8,6 @@
 import UIKit
 import Kingfisher
 
-public protocol ProfileViewControllerProtocol: AnyObject {
-    var presenter: ProfilePresenterProtocol? { get set }
-    func updateProfileResult(profile: Profile)
-    func updateAvatar(wiht url: URL)
-    func showExitAlert()
-}
-
 final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     
     var presenter: ProfilePresenterProtocol?

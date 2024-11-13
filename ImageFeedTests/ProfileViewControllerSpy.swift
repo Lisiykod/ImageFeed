@@ -13,9 +13,7 @@ final class ProfileViewControllerSpy: ProfileViewControllerProtocol {
     var showExitAlertCalled: Bool = false
     var updateAvararCalled: Bool = false
     
-    func updateProfileResult(profile: ImageFeed.Profile) {
-        
-    }
+    func updateProfileResult(profile: ImageFeed.Profile) { }
     
     func updateAvatar(wiht url: URL) {
         updateAvararCalled = true

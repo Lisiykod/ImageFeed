@@ -7,16 +7,6 @@
 
 import Foundation
 
-public protocol ProfilePresenterProtocol: AnyObject {
-    var view: ProfileViewControllerProtocol? { get set }
-    func viewDidLoad()
-    func updateAvatar()
-    func updateProfile()
-    func didTapExitButton()
-    func logout()
-    
-}
-
 final class ProfilePresenter: ProfilePresenterProtocol {
     weak var view: ProfileViewControllerProtocol?
     
