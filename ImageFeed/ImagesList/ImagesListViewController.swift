@@ -1,5 +1,5 @@
 //
-//  ImageListViewController.swift
+//  ImagesListViewController.swift
 //  ImageFeed
 //
 //  Created by Olga Trofimova on 29.08.2024.
@@ -8,11 +8,9 @@
 import UIKit
 import Kingfisher
 
-final class ImageListViewController: UIViewController, ImageListViewControllerProtocol {
+final class ImagesListViewController: UIViewController, ImagesListViewControllerProtocol {
     
-    var presenter: ImageListPresenterProtocol?
-    private var photos: [Photo] = []
-    private let imageListServie = ImageListService.shared
+    var presenter: ImagesListPresenterProtocol?
     private var imageListServiceObserver: NSObjectProtocol?
     private let placeholder: UIImage? = UIImage(named: "placeholder")
     
@@ -131,7 +129,7 @@ final class ImageListViewController: UIViewController, ImageListViewControllerPr
     
 }
 
-extension ImageListViewController: UITableViewDataSource {
+extension ImagesListViewController: UITableViewDataSource {
     // реализуем требуемые методы протокола
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter?.photosCount() ?? 0
@@ -154,7 +152,7 @@ extension ImageListViewController: UITableViewDataSource {
     
 }
 
-extension ImageListViewController: UITableViewDelegate {
+extension ImagesListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         showSingleImage(with: indexPath)
@@ -181,7 +179,7 @@ extension ImageListViewController: UITableViewDelegate {
     }
 }
 
-extension ImageListViewController: ImagesListCellDelegate {
+extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else {
             return

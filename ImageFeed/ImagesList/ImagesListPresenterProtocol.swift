@@ -1,5 +1,5 @@
 //
-//  ImageListPresenterProtocol.swift
+//  ImagesListPresenterProtocol.swift
 //  ImageFeed
 //
 //  Created by Olga Trofimova on 13.11.2024.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-protocol ImageListPresenterProtocol: AnyObject {
-   var view: ImageListViewControllerProtocol? { get set }
+protocol ImagesListPresenterProtocol: AnyObject {
+   var view: ImagesListViewControllerProtocol? { get set }
    func viewDidLoad()
    func fetchPhotosNextPage()
    func fetchNewPhotosPage(for indexPath: IndexPath)

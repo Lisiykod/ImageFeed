@@ -7,8 +7,8 @@
 
 import Foundation
 
-final class ImagesListPresenter: ImageListPresenterProtocol {
-    weak var view: ImageListViewControllerProtocol?
+final class ImagesListPresenter: ImagesListPresenterProtocol {
+    weak var view: ImagesListViewControllerProtocol?
     private let imageListServie = ImageListService.shared
     private var photos: [Photo] = []
     

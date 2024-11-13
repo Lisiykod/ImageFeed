@@ -13,7 +13,7 @@ final class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         
         let imagesListPresenter = ImagesListPresenter()
-        let imagesListViewController = ImageListViewController()
+        let imagesListViewController = ImagesListViewController()
         imagesListViewController.presenter = imagesListPresenter
         imagesListPresenter.view = imagesListViewController
         imagesListViewController.tabBarItem = UITabBarItem(
