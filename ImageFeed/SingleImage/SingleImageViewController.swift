@@ -39,6 +39,7 @@ final class SingleImageViewController: UIViewController {
     private lazy var backButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "backward_image"), for: .normal)
+        button.accessibilityIdentifier = "Back button"
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         return button
     }()

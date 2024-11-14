@@ -14,11 +14,12 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     private var profileImageServiceObserver: NSObjectProtocol?
     private var alertPresenter: AlertPresenterProtocol?
     
-    private lazy var exitButton: UIButton = {
+    private lazy var logoutButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "exit_image"), for: .normal)
         button.addTarget(self, action: #selector(didTapExitButton), for: .touchUpInside)
         button.tintColor = .ypRed
+        button.accessibilityIdentifier = "Logout button"
         return button
     }()
     
@@ -111,7 +112,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     
     // метод, в котором всех добавляем в иерархию
     private func addViewsToSuperView() {
-        let viewsArray: [UIView] = [exitButton, userPick, mainNameLabel, logoLabel, statusLabel]
+        let viewsArray: [UIView] = [logoutButton, userPick, mainNameLabel, logoLabel, statusLabel]
         viewsArray.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
@@ -131,10 +132,10 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             userPick.heightAnchor.constraint(equalToConstant: 70),
             userPick.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             userPick.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-            exitButton.widthAnchor.constraint(equalToConstant: 44),
-            exitButton.heightAnchor.constraint(equalToConstant: 44),
-            exitButton.centerYAnchor.constraint(equalTo: userPick.centerYAnchor),
-            view.trailingAnchor.constraint(equalTo: exitButton.trailingAnchor, constant: 12)
+            logoutButton.widthAnchor.constraint(equalToConstant: 44),
+            logoutButton.heightAnchor.constraint(equalToConstant: 44),
+            logoutButton.centerYAnchor.constraint(equalTo: userPick.centerYAnchor),
+            view.trailingAnchor.constraint(equalTo: logoutButton.trailingAnchor, constant: 12)
         ])
     }
     

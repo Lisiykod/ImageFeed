@@ -25,6 +25,7 @@ final class AuthViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         button.backgroundColor = .ypWhite
         button.setTitleColor(.ypBlack, for: .normal)
+        button.accessibilityIdentifier = "Authenticate"
         button.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
         return button
     }()

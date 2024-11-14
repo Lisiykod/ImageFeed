@@ -25,6 +25,7 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
     private var webView: WKWebView = {
         let webView = WKWebView()
         webView.backgroundColor = .ypWhite
+        webView.accessibilityIdentifier = "UnsplashWebView"
         return webView
     }()
     

@@ -29,6 +29,7 @@ final class ImagesListCell: UITableViewCell {
     lazy var favoriteImageButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapFavoriteButton), for: .touchUpInside)
+        button.accessibilityIdentifier = "Like button"
         return button
     }()
     

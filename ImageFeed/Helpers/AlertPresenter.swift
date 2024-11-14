@@ -31,9 +31,11 @@ final class AlertPresenter: AlertPresenterProtocol {
             let secondAction = UIAlertAction(title: secondButtonText, style: .default) { _ in
                 alert.secondCompletion?()
             }
+            secondAction.accessibilityIdentifier = "Yes"
             alertModel.addAction(secondAction)
         }
         
+        alertModel.view.accessibilityIdentifier = "Alert"
         var topController = UIApplication.shared.windows.first?.rootViewController
         while (topController?.presentedViewController != nil &&
                topController != topController!.presentedViewController) {

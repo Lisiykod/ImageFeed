@@ -26,10 +26,13 @@ final class ImagesListTest: XCTestCase {
     
     func testPhotosCount() {
         // Given
+        let viewController = ImagesListViewController()
         let presenter = ImagesListPresenterSpy()
+        presenter.view = viewController
+        viewController.presenter = presenter
         
         // When
-        let photosCount = presenter.photosCount()
+        let photosCount = viewController.presenter?.photosCount()
         
         // Then
         XCTAssertEqual(photosCount, 10)
