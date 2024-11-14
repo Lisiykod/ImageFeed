@@ -39,6 +39,7 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
                 view?.hideProgressHUD()
             case .failure(let error):
                 view?.hideProgressHUD()
+                view?.showDidTapLikeError()
                 print("Error in \(#file) \(#function): \(String(describing: error))")
             }
         }

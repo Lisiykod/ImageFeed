@@ -12,6 +12,7 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     
     var presenter: ImagesListPresenterProtocol?
     private var imageListServiceObserver: NSObjectProtocol?
+    private var alertPresenter: AlertPresenterProtocol?
     private let placeholder: UIImage? = UIImage(named: "placeholder")
     
     private lazy var tableView: UITableView = {
@@ -33,11 +34,8 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(tableView)
-        view.backgroundColor = .ypBlack
-        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
-        tableView.register(ImagesListCell.self, forCellReuseIdentifier: ImagesListCell.reuseIdentifier)
-        setConstraints()
+        viewSetup()
+        initialSetup()
         presenter?.viewDidLoad()
         imageListServiceObserver = NotificationCenter.default.addObserver(
             forName: ImageListService.didChangeNotification,
@@ -65,6 +63,15 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     
     func hideProgressHUD() {
         UIBlockingProgressHUD.dismiss()
+    }
+    
+    func showDidTapLikeError() {
+        let alert = AlertModel(
+            title: "Что-то пошло не так(",
+            message: "Не удалось поставить лайк. Попробуйте еще раз.",
+            buttonText: "ОК"
+        )
+        alertPresenter?.present(alert: alert)
     }
     
     // MARK: - Private Methods
@@ -125,6 +132,20 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    private func viewSetup() {
+        view.addSubview(tableView)
+        view.backgroundColor = .ypBlack
+        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        tableView.register(ImagesListCell.self, forCellReuseIdentifier: ImagesListCell.reuseIdentifier)
+        setConstraints()
+    }
+    
+    private func initialSetup() {
+        let alertPresenter = AlertPresenter()
+        alertPresenter.setup(delegate: self)
+        self.alertPresenter = alertPresenter
     }
     
 }

@@ -164,7 +164,6 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         let alertPresenter = AlertPresenter()
         alertPresenter.setup(delegate: self)
         self.alertPresenter = alertPresenter
-        
     }
     
     private func switchToSplashController() {

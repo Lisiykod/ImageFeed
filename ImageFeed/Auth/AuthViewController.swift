@@ -14,8 +14,9 @@ protocol AuthViewControllerDelegate: AnyObject {
 
 final class AuthViewController: UIViewController {
     
-    private let oauth2Service = OAuth2Service.shared
     weak var delegate: AuthViewControllerDelegate?
+    private let oauth2Service = OAuth2Service.shared
+    private var alertPresenter: AlertPresenterProtocol?
     
     private lazy var loginButton: UIButton = {
         let button = UIButton()
@@ -40,6 +41,7 @@ final class AuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
+        initialSetup()
         addViewsToSuperView()
         setupConstraints()
     }
@@ -82,21 +84,21 @@ final class AuthViewController: UIViewController {
     }
     
     private func showFailedLoginAlert() {
-        let alert = UIAlertController(
+        let alertModel = AlertModel(
             title: "Что-то пошло не так(",
             message: "Не удалось войти в систему",
-            preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel) { [weak self] _ in
-            guard let self else { return }
-            self.dismiss(animated: true)
-        }
-        alert.addAction(action)
-        var topController = UIApplication.shared.windows.first?.rootViewController
-        while (topController?.presentedViewController != nil &&
-               topController != topController!.presentedViewController) {
-            topController = topController!.presentedViewController
-        }
-        topController?.present(alert, animated: true, completion: nil)
+            buttonText: "OK",
+            completion: { [weak self] in
+                guard let self else { return }
+                self.dismiss(animated: true)
+            })
+        alertPresenter?.present(alert: alertModel)
+    }
+    
+    private func initialSetup() {
+        let alertPresenter = AlertPresenter()
+        alertPresenter.setup(delegate: self)
+        self.alertPresenter = alertPresenter
     }
 }
 

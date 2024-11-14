@@ -11,6 +11,7 @@ import Kingfisher
 final class SingleImageViewController: UIViewController {
     
     var imageURL: URL?
+    private var alertPresenter: AlertPresenterProtocol?
     
     var image: UIImage? {
         didSet {
@@ -57,6 +58,7 @@ final class SingleImageViewController: UIViewController {
         imageView.image = image
         addViewsToSuperview()
         setupConstraints()
+        initialSetup()
         
         guard let imageURL else { return }
         loadImage(with: imageURL)
@@ -171,19 +173,21 @@ final class SingleImageViewController: UIViewController {
     }
     
     private func showError() {
-        let alert = UIAlertController(
+        let alertModel = AlertModel(
             title: "Что-то пошло не так",
             message: "Поробовать еще раз",
-            preferredStyle: .alert
-        )
-        let cancelAction = UIAlertAction(title: "Не надо", style: .default)
-        let retryAction = UIAlertAction(title: "Попробовать еще раз", style: .default) { [weak self] _ in
-            guard let imageURL = self?.imageURL else { return }
-            self?.loadImage(with: imageURL)
-        }
-        alert.addAction(cancelAction)
-        alert.addAction(retryAction)
-        present(alert, animated: true)
+            buttonText: "Не надо",
+            secondButtonText: "Попробовать еще раз", secondCompletion: { [weak self] in
+                guard let imageURL = self?.imageURL else { return }
+                self?.loadImage(with: imageURL)
+            })
+        alertPresenter?.present(alert: alertModel)
+    }
+    
+    private func initialSetup() {
+        let alertPresenter = AlertPresenter()
+        alertPresenter.setup(delegate: self)
+        self.alertPresenter = alertPresenter
     }
 }
 
