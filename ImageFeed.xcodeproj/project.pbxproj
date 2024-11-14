@@ -147,12 +147,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D0105CBD2CE6992600A2D3DE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D09975572CA15820003B4FBB /* OAuth2Service.swift */,
+				D099755E2CA2110D003B4FBB /* OAuth2TokenStorage.swift */,
+				D017E9EC2CCA51A100253C78 /* ImageListService.swift */,
+				D0D3E5C22CB323EC00802B7C /* ProfileService.swift */,
+				D072F80F2CB490C300033611 /* ProfileImageService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		D0105CBE2CE699CF00A2D3DE /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				D0C6B3942CBE8A6B00B531AA /* TabBar */,
+				D08ABAFF2C89BA08009A4F82 /* SingleImage */,
+				D08ABAFC2C874989009A4F82 /* Profile */,
+				D0543F112C83A608004DF2EB /* ImagesList */,
+				D082C2662C9D8047002C3C00 /* Auth */,
+				D09975622CA355D6003B4FBB /* Splash */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
 		D0543F112C83A608004DF2EB /* ImagesList */ = {
 			isa = PBXGroup;
 			children = (
 				D06086882C8069E7002C6C8C /* ImagesListViewController.swift */,
 				D0543F0F2C83A5E4004DF2EB /* ImagesListCell.swift */,
-				D017E9EC2CCA51A100253C78 /* ImageListService.swift */,
 				D08D2C562CE3F702007AC842 /* ImagesListPresenter.swift */,
 				D08D2C582CE5262E007AC842 /* ImagesListViewControllerProtocol.swift */,
 				D08D2C5A2CE52669007AC842 /* ImagesListPresenterProtocol.swift */,
@@ -186,14 +210,9 @@
 				D06086842C8069E7002C6C8C /* AppDelegate.swift */,
 				D06086862C8069E7002C6C8C /* SceneDelegate.swift */,
 				D08D2C3D2CE15B50007AC842 /* Models */,
-				D09975622CA355D6003B4FBB /* Splash */,
+				D0105CBE2CE699CF00A2D3DE /* Presentation */,
 				D099755B2CA1A4A3003B4FBB /* Helpers */,
-				D082C2662C9D8047002C3C00 /* Auth */,
-				D0543F112C83A608004DF2EB /* ImagesList */,
-				D08ABAFC2C874989009A4F82 /* Profile */,
-				D08ABAFF2C89BA08009A4F82 /* SingleImage */,
-				D0C6B3942CBE8A6B00B531AA /* TabBar */,
-				D082C25F2C9C31D2002C3C00 /* Constants */,
+				D0105CBD2CE6992600A2D3DE /* Services */,
 				D060868A2C8069E7002C6C8C /* Main.storyboard */,
 				D060868D2C8069EB002C6C8C /* Assets.xcassets */,
 				D060868F2C8069EB002C6C8C /* LaunchScreen.storyboard */,
@@ -216,9 +235,6 @@
 				D082C2602C9C4747002C3C00 /* AuthViewController.swift */,
 				D08F0E042C9D86600038FBB0 /* WebViewViewController.swift */,
 				D08F0E062C9EE0C00038FBB0 /* WebViewViewControllerDelegate.swift */,
-				D09975572CA15820003B4FBB /* OAuth2Service.swift */,
-				D099755C2CA1A4C2003B4FBB /* OAuthTokenResponseBody.swift */,
-				D099755E2CA2110D003B4FBB /* OAuth2TokenStorage.swift */,
 				D042FE9D2CDF6AAA00280B67 /* WebViewPresenter.swift */,
 			);
 			path = Auth;
@@ -228,8 +244,6 @@
 			isa = PBXGroup;
 			children = (
 				D08ABAFA2C874311009A4F82 /* ProfileViewController.swift */,
-				D0D3E5C22CB323EC00802B7C /* ProfileService.swift */,
-				D072F80F2CB490C300033611 /* ProfileImageService.swift */,
 				D0DC2F282CD23C3A00A2BC76 /* ProfileLogoutService.swift */,
 				D08D2C402CE15CC2007AC842 /* ProfilePresenter.swift */,
 				D08D2C522CE3F6C9007AC842 /* ProfilePresenterProtocol.swift */,
@@ -253,6 +267,7 @@
 				D0C3E6112CD4FA8A00A08D4E /* Profile.swift */,
 				D0C3E60F2CD4F96E00A08D4E /* Photo.swift */,
 				D0C3E60D2CD4F91F00A08D4E /* PhotoResult.swift */,
+				D099755C2CA1A4C2003B4FBB /* OAuthTokenResponseBody.swift */,
 				D08D2C3E2CE15BB3007AC842 /* AlertModel.swift */,
 			);
 			path = Models;
@@ -261,6 +276,7 @@
 		D099755B2CA1A4A3003B4FBB /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				D082C25F2C9C31D2002C3C00 /* Constants */,
 				D0D3E5C02CB29E5F00802B7C /* UIBlockingProgressHUD.swift */,
 				D09975592CA19F7D003B4FBB /* URLSession+data.swift */,
 				D072F8112CB53CC800033611 /* NetworkErrors.swift */,
