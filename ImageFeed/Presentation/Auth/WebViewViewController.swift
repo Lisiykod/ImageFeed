@@ -21,6 +21,7 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
     weak var delegate: WebViewViewControllerDelegate?
     private let tokenStorage: OAuth2TokenStorage = OAuth2TokenStorage()
     private var estimatedProgressObservation: NSKeyValueObservation?
+    private var alertPresenter: AlertPresenterProtocol?
     
     private var webView: WKWebView = {
         let webView = WKWebView()
@@ -49,6 +50,7 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
         view.backgroundColor = .ypWhite
         addViewsToSuperView()
         setupConstraints()
+        initialSetup()
         webView.navigationDelegate = self
         presenter?.viewDidLoad()
         estimatedProgressObservation = webView.observe(
@@ -71,7 +73,7 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
     }
     
     func setProgressValue(_ newValue: Float) {
-        progressView.progress = newValue
+        progressView.setProgress(newValue, animated: true)
     }
     
     func setProgressIsHidden(_ isHidden: Bool) {
@@ -136,5 +138,25 @@ extension WebViewViewController: WKNavigationDelegate {
             // разрешаем переход, чтобы была возможность перейти на новую стр (возможно в рамках авторизации)
             decisionHandler(.allow)
         }
+    }
+}
+
+extension WebViewViewController: AlertPresenterDelegate {
+    func showFailedLoginAlert() {
+        let alertModel = AlertModel(
+            title: "Что-то пошло не так(",
+            message: "Не удалось войти в систему",
+            buttonText: "OK",
+            completion: { [weak self] in
+                guard let self else { return }
+                self.dismiss(animated: true)
+            })
+        alertPresenter?.present(alert: alertModel)
+    }
+    
+    private func initialSetup() {
+        let alertPresenter = AlertPresenter()
+        alertPresenter.setup(delegate: self)
+        self.alertPresenter = alertPresenter
     }
 }

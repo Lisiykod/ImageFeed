@@ -15,8 +15,8 @@ protocol AuthViewControllerDelegate: AnyObject {
 final class AuthViewController: UIViewController {
     
     weak var delegate: AuthViewControllerDelegate?
+    weak var alertDelegate: AlertPresenterDelegate?
     private let oauth2Service = OAuth2Service.shared
-    private var alertPresenter: AlertPresenterProtocol?
     
     private lazy var loginButton: UIButton = {
         let button = UIButton()
@@ -41,7 +41,6 @@ final class AuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
-        initialSetup()
         addViewsToSuperView()
         setupConstraints()
     }
@@ -55,6 +54,7 @@ final class AuthViewController: UIViewController {
         webViewController.presenter = webViewPresenter
         webViewPresenter.view = webViewController
         webViewController.delegate = self
+        alertDelegate = webViewController
         webViewController.modalPresentationStyle = .fullScreen
         present(webViewController, animated: true)
     }
@@ -83,23 +83,6 @@ final class AuthViewController: UIViewController {
         ])
     }
     
-    private func showFailedLoginAlert() {
-        let alertModel = AlertModel(
-            title: "Что-то пошло не так(",
-            message: "Не удалось войти в систему",
-            buttonText: "OK",
-            completion: { [weak self] in
-                guard let self else { return }
-                self.dismiss(animated: true)
-            })
-        alertPresenter?.present(alert: alertModel)
-    }
-    
-    private func initialSetup() {
-        let alertPresenter = AlertPresenter()
-        alertPresenter.setup(delegate: self)
-        self.alertPresenter = alertPresenter
-    }
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
@@ -112,7 +95,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
             case .success:
                 delegate?.didAuthenticate(self)
             case .failure:
-                showFailedLoginAlert()
+                alertDelegate?.showFailedLoginAlert()
             }
         }
     }

@@ -11,6 +11,10 @@ protocol AlertPresenterProtocol: AnyObject {
     func present(alert: AlertModel)
 }
 
+protocol AlertPresenterDelegate: AnyObject {
+    func showFailedLoginAlert()
+}
+
 final class AlertPresenter: AlertPresenterProtocol {
     
     private weak var delegate: UIViewController?
@@ -31,17 +35,11 @@ final class AlertPresenter: AlertPresenterProtocol {
             let secondAction = UIAlertAction(title: secondButtonText, style: .default) { _ in
                 alert.secondCompletion?()
             }
-            secondAction.accessibilityIdentifier = "Yes"
             alertModel.addAction(secondAction)
         }
         
         alertModel.view.accessibilityIdentifier = "Alert"
-        var topController = UIApplication.shared.windows.first?.rootViewController
-        while (topController?.presentedViewController != nil &&
-               topController != topController!.presentedViewController) {
-            topController = topController!.presentedViewController
-        }
-        topController?.present(alertModel, animated: true, completion: nil)
+        delegate?.present(alertModel, animated: true)
     }
     
     func setup(delegate: UIViewController) {
