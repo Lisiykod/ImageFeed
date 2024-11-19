@@ -17,6 +17,7 @@ final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
     
     weak var delegate: ImagesListCellDelegate?
+    var imageState: ImageCellState = .loading 
     
     lazy var mainImage: UIImageView = {
         let imageView = UIImageView()
@@ -56,6 +57,12 @@ final class ImagesListCell: UITableViewCell {
     private let gradientLayer = CAGradientLayer()
     private var cellGradientLayer = CAGradientLayer()
     
+    enum ImageCellState {
+        case loading
+        case error
+        case loaded(UIImage)
+    }
+    
     override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: self.layer)
         // настраиваем область показа градиента, чтобы он не обрезался
@@ -72,7 +79,7 @@ final class ImagesListCell: UITableViewCell {
         selectionStyle = .none
         // настраиваем все остальное
         setupCell()
-//        animationGradient()
+//        animationState()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -95,17 +102,32 @@ final class ImagesListCell: UITableViewCell {
         favoriteImageButton.setImage(imageName, for: .normal)
     }
     
-    func animationGradient() {
+    func animationState() {
+        switch imageState {
+        case .loading:
+            animationGradient()
+            print("cell loading")
+        case .error:
+            print("cell error")
+            mainImage.image = UIImage(named: "placeholder")
+            removeAnimation()
+        case .loaded(let image):
+            print("cell loaded")
+            mainImage.image = image
+            removeAnimation()
+        }
+    }
+    
+    // MARK: - Private Methods
+    private func animationGradient() {
         setCellGradientLayer()
         animation()
     }
     
-    func removeAnimation() {
+    private func removeAnimation() {
         gradientLayer.removeAllAnimations()
         gradientLayer.removeFromSuperlayer()
     }
-    
-    // MARK: - Private Methods
     
     private func setupCell() {
         addSubviews()
@@ -165,7 +187,7 @@ final class ImagesListCell: UITableViewCell {
         ])
     }
     
-   private func setCellGradientLayer() {
+    private func setCellGradientLayer() {
         let gradient = CAGradientLayer().setImagesGradient()
         cellGradientLayer = gradient
         cellGradientLayer.cornerRadius = 16

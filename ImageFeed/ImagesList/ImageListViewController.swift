@@ -14,7 +14,6 @@ final class ImageListViewController: UIViewController {
     private let imageListServie = ImageListService.shared
     private var imageListServiceObserver: NSObjectProtocol?
     let placeholder: UIImage? = UIImage(named: "placeholder")
-    private var imageState: ImageCellState = .loading
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -32,12 +31,6 @@ final class ImageListViewController: UIViewController {
         formatter.locale = Locale(identifier: "RU_ru")
         return formatter
     }()
-    
-    private enum ImageCellState {
-        case loading
-        case error
-        case loaded
-    }
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -75,24 +68,23 @@ final class ImageListViewController: UIViewController {
         guard let imageURL = URL(string: photos[indexPath.row].thumbImageURL) else {
             return
         }
-
+        
+        if cell.mainImage.image == nil {
+            cell.imageState = .loading
+        }
+        
         cell.mainImage.kf.indicatorType = .activity
-        cell.mainImage.kf.setImage(with: imageURL, placeholder: placeholder) { [weak self] result in
+        cell.mainImage.kf.setImage(with: imageURL) { [weak self] result in
             guard let self else { return }
             switch result {
-            case .success:
-                imageState = .loaded
+            case .success(let image):
+                cell.imageState = .loaded(image.image)
             case .failure(let error):
-                imageState = .error
+                cell.imageState = .error
                 print("Set image error: \(error.localizedDescription)")
             }
         }
-        
-//        if cell.mainImage.image != nil {
-//            imageState = .loaded
-//        } else {
-//            imageState = .error
-//        }
+        cell.animationState()
         
         // настраиваем дату
         if let date = photos[indexPath.row].createdAt {
@@ -105,18 +97,6 @@ final class ImageListViewController: UIViewController {
         let isFavorite = photos[indexPath.row].isLiked
         cell.setIsLiked(isFavorite)
     
-    }
-    
-    func animationState(for cell: ImagesListCell) {
-        switch imageState {
-        case .loading:
-            cell.animationGradient()
-        case .error:
-            cell.mainImage.image = placeholder
-            cell.removeAnimation()
-        case .loaded:
-            cell.removeAnimation()
-        }
     }
     
     // метод для добавления новых фотографий
@@ -165,6 +145,10 @@ extension ImageListViewController: UITableViewDataSource {
         
         // конфигурирем ячейку
         configureCell(for: imageListCell, with: indexPath)
+//        imageListCell.animationState()
+//        if imageListCell.mainImage.image != nil {
+//            imageListCell.removeAnimation()
+//        }
         return imageListCell
     }
     
