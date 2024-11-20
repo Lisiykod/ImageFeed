@@ -22,12 +22,14 @@ final class ImagesListCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 16
         imageView.layer.masksToBounds = true
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     lazy var favoriteImageButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(didTapFavoriteButton), for: .touchUpInside)
+        button.accessibilityIdentifier = "Like button"
         return button
     }()
     

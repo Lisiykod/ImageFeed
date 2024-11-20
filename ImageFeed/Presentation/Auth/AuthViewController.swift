@@ -14,8 +14,9 @@ protocol AuthViewControllerDelegate: AnyObject {
 
 final class AuthViewController: UIViewController {
     
-    private let oauth2Service = OAuth2Service.shared
     weak var delegate: AuthViewControllerDelegate?
+    weak var alertDelegate: AlertPresenterDelegate?
+    private let oauth2Service = OAuth2Service.shared
     
     private lazy var loginButton: UIButton = {
         let button = UIButton()
@@ -25,6 +26,7 @@ final class AuthViewController: UIViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         button.backgroundColor = .ypWhite
         button.setTitleColor(.ypBlack, for: .normal)
+        button.accessibilityIdentifier = "Authenticate"
         button.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
         return button
     }()
@@ -47,7 +49,12 @@ final class AuthViewController: UIViewController {
     @objc
     private func didTapLoginButton() {
         let webViewController = WebViewViewController()
+        let authHelper = AuthHelper()
+        let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+        webViewController.presenter = webViewPresenter
+        webViewPresenter.view = webViewController
         webViewController.delegate = self
+        alertDelegate = webViewController
         webViewController.modalPresentationStyle = .fullScreen
         present(webViewController, animated: true)
     }
@@ -76,23 +83,6 @@ final class AuthViewController: UIViewController {
         ])
     }
     
-    private func showFailedLoginAlert() {
-        let alert = UIAlertController(
-            title: "Что-то пошло не так(",
-            message: "Не удалось войти в систему",
-            preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel) { [weak self] _ in
-            guard let self else { return }
-            self.dismiss(animated: true)
-        }
-        alert.addAction(action)
-        var topController = UIApplication.shared.windows.first?.rootViewController
-        while (topController?.presentedViewController != nil &&
-               topController != topController!.presentedViewController) {
-            topController = topController!.presentedViewController
-        }
-        topController?.present(alert, animated: true, completion: nil)
-    }
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
@@ -105,7 +95,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
             case .success:
                 delegate?.didAuthenticate(self)
             case .failure:
-                showFailedLoginAlert()
+                alertDelegate?.showFailedLoginAlert()
             }
         }
     }

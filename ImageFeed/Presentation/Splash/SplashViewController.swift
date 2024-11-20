@@ -34,13 +34,15 @@ final class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let token = tokenStorage.token, !profileIsFethced {
-            fetchProfile(token)
+        if let token = tokenStorage.token {
+            if !profileIsFethced {
+                fetchProfile(token)
+            }
         } else {
             showAuthViewController()
         }
     }
-
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }

@@ -6,25 +6,27 @@
 //
 
 import UIKit
-import WebKit
+@preconcurrency import WebKit
 
-final class WebViewViewController: UIViewController {
+public protocol WebViewViewControllerProtocol: AnyObject {
+    var presenter: WebViewPresenterProtocol? {get set}
+    func load(request: URLRequest)
+    func setProgressValue(_ newValue: Float)
+    func setProgressIsHidden(_ isHidden: Bool)
+}
+
+final class WebViewViewController: UIViewController, WebViewViewControllerProtocol {
     
-    private enum WebViewConstants {
-        static let unsplashAutorizeURLString = "https://unsplash.com/oauth/authorize"
-        static let clientID = "client_id"
-        static let redirectURI = "redirect_uri"
-        static let responseType = "response_type"
-        static let scope = "scope"
-    }
-    
+    var presenter: WebViewPresenterProtocol?
     weak var delegate: WebViewViewControllerDelegate?
     private let tokenStorage: OAuth2TokenStorage = OAuth2TokenStorage()
     private var estimatedProgressObservation: NSKeyValueObservation?
+    private var alertPresenter: AlertPresenterProtocol?
     
     private var webView: WKWebView = {
         let webView = WKWebView()
         webView.backgroundColor = .ypWhite
+        webView.accessibilityIdentifier = "UnsplashWebView"
         return webView
     }()
     
@@ -48,20 +50,34 @@ final class WebViewViewController: UIViewController {
         view.backgroundColor = .ypWhite
         addViewsToSuperView()
         setupConstraints()
-        loadAuthView()
+        initialSetup()
         webView.navigationDelegate = self
+        presenter?.viewDidLoad()
         estimatedProgressObservation = webView.observe(
             \.estimatedProgress,
              options: [],
              changeHandler: { [weak self] _, _ in
                  guard let self else { return }
-                 self.updateProgress()
+                 presenter?.didUpdateProgressValue(webView.estimatedProgress)
              })
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateProgress()
+        presenter?.didUpdateProgressValue(webView.estimatedProgress)
+    }
+    
+    // MARK: - Public Methods
+    func load(request: URLRequest) {
+        webView.load(request)
+    }
+    
+    func setProgressValue(_ newValue: Float) {
+        progressView.setProgress(newValue, animated: true)
+    }
+    
+    func setProgressIsHidden(_ isHidden: Bool) {
+        progressView.isHidden = isHidden
     }
     
     // MARK: - Private Methods
@@ -98,52 +114,15 @@ final class WebViewViewController: UIViewController {
         ])
     }
     
-    // метод для загрузки окна авторизации
-    private func loadAuthView() {
-        guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAutorizeURLString) else {
-            return
-        }
-        // значения компонентов, которые мы хотим передать в запросе
-        urlComponents.queryItems = [
-            URLQueryItem(name: WebViewConstants.clientID, value: Constants.accessKey),
-            URLQueryItem(name: WebViewConstants.redirectURI, value: Constants.redirectURI),
-            URLQueryItem(name: WebViewConstants.responseType, value: "code"),
-            URLQueryItem(name: WebViewConstants.scope, value: Constants.accessScope)
-        ]
-        
-        guard let url = urlComponents.url else {
-            return
-        }
-        
-        let request = URLRequest(url: url)
-        // передаем запрос webView
-        webView.load(request)
-    }
-    
     // метод для возврата кода авторизации (если получен)
     private func code(from navigationAction: WKNavigationAction) -> String? {
-        if
-            // получаем url
-            let url = navigationAction.request.url,
-            // получаем из него значения компонентов
-            let urlComponents = URLComponents(string: url.absoluteString),
-            // проверяем совпадает ли адрес запроса с адресом получением кода
-            urlComponents.path == "/oauth/authorize/native",
-            // проверяем есть ли компоненты запроса
-            let items = urlComponents.queryItems,
-            // провреяем есть ли "code"
-            let codeItem = items.first(where: {$0.name == "code"})
-        {
-            return codeItem.value
-        } else {
-            return nil
+        // получаем url
+        if let url = navigationAction.request.url {
+            return presenter?.code(from: url)
         }
+        return nil
     }
     
-    private func updateProgress() {
-        progressView.progress = Float(webView.estimatedProgress)
-        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
-    }
 }
 
 extension WebViewViewController: WKNavigationDelegate {
@@ -159,5 +138,25 @@ extension WebViewViewController: WKNavigationDelegate {
             // разрешаем переход, чтобы была возможность перейти на новую стр (возможно в рамках авторизации)
             decisionHandler(.allow)
         }
+    }
+}
+
+extension WebViewViewController: AlertPresenterDelegate {
+    func showFailedLoginAlert() {
+        let alertModel = AlertModel(
+            title: "Что-то пошло не так(",
+            message: "Не удалось войти в систему",
+            buttonText: "OK",
+            completion: { [weak self] in
+                guard let self else { return }
+                self.dismiss(animated: true)
+            })
+        alertPresenter?.present(alert: alertModel)
+    }
+    
+    private func initialSetup() {
+        let alertPresenter = AlertPresenter()
+        alertPresenter.setup(delegate: self)
+        self.alertPresenter = alertPresenter
     }
 }

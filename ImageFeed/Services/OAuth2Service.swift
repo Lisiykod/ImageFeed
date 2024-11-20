@@ -64,10 +64,6 @@ final class OAuth2Service {
     
     // метод для формирования запроса авторизационного токена
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
-        guard let baseURL = Constants.defaultBaseURL else {
-            print("not base url")
-            return nil
-        }
         
         let url = URL(
             string: "/oauth/token"
@@ -76,7 +72,7 @@ final class OAuth2Service {
             + "&&redirect_uri=\(Constants.redirectURI)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
-            relativeTo: baseURL // опираемся на базовый URL, который содержат схему и имя хоста
+            relativeTo: Constants.defaultBaseURL // опираемся на базовый URL, который содержат схему и имя хоста
         )
         
         guard let url else {

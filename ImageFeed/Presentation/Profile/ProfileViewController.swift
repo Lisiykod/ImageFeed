@@ -8,17 +8,18 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     
-    private let profileService = ProfileService.shared
+    var presenter: ProfilePresenterProtocol?
     private var profileImageServiceObserver: NSObjectProtocol?
-    private let profileLogoutService = ProfileLogoutService.shared
+    private var alertPresenter: AlertPresenterProtocol?
     
-    private lazy var exitButton: UIButton = {
+    private lazy var logoutButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "exit_image"), for: .normal)
         button.addTarget(self, action: #selector(didTapExitButton), for: .touchUpInside)
         button.tintColor = .ypRed
+        button.accessibilityIdentifier = "Logout button"
         return button
     }()
     
@@ -57,31 +58,61 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
+        initialSetup()
         addViewsToSuperView()
         setupConstraints()
-        guard let profile = profileService.profile else { return }
-        updateProfileResult(profile: profile)
+        presenter?.viewDidLoad()
         // добавляем наблюдателя, что изображение получено 
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(forName: ProfileImageService.didChangeNotification,
                          object: nil,
                          queue: .main) { [weak self] _ in
                 guard let self else { return }
-                self.updateAvatar()
+                self.presenter?.updateAvatar()
             }
-        updateAvatar()
     }
     
     deinit {
         profileImageServiceObserver = nil
     }
     
+    // MARK: - Public Methods
+    
+    func updateAvatar(wiht url: URL) {
+        let processor = RoundCornerImageProcessor(cornerRadius: 61, backgroundColor: .ypBlack)
+        userPick.kf.setImage(with: url, options: [.processor(processor)])
+    }
+    
+    func updateProfileResult(profile: Profile) {
+        self.mainNameLabel.text = profile.name
+        self.logoLabel.text = "@" + profile.login
+        self.statusLabel.text = profile.bio
+    }
+    
+    func showExitAlert() {
+        let alertModel = AlertModel(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            buttonText: "Нет",
+            secondButtonText: "Да",
+            completion: nil) { [weak self] in
+                guard let self else { return }
+                self.presenter?.logout()
+                switchToSplashController()
+            }
+        alertPresenter?.present(alert: alertModel)
+    }
+
+    // MARK: - Private Methods
+    
     // метод, в котором всех добавляем в иерархию
     private func addViewsToSuperView() {
-        let viewsArray: [UIView] = [exitButton, userPick, mainNameLabel, logoLabel, statusLabel]
+        let viewsArray: [UIView] = [logoutButton, userPick, mainNameLabel, logoLabel, statusLabel]
         viewsArray.forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
@@ -101,10 +132,10 @@ final class ProfileViewController: UIViewController {
             userPick.heightAnchor.constraint(equalToConstant: 70),
             userPick.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             userPick.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-            exitButton.widthAnchor.constraint(equalToConstant: 44),
-            exitButton.heightAnchor.constraint(equalToConstant: 44),
-            exitButton.centerYAnchor.constraint(equalTo: userPick.centerYAnchor),
-            view.trailingAnchor.constraint(equalTo: exitButton.trailingAnchor, constant: 12)
+            logoutButton.widthAnchor.constraint(equalToConstant: 44),
+            logoutButton.heightAnchor.constraint(equalToConstant: 44),
+            logoutButton.centerYAnchor.constraint(equalTo: userPick.centerYAnchor),
+            view.trailingAnchor.constraint(equalTo: logoutButton.trailingAnchor, constant: 12)
         ])
     }
     
@@ -126,16 +157,13 @@ final class ProfileViewController: UIViewController {
     // метод для кнопки выход
     @objc
     private func didTapExitButton() {
-        exitAlert()
+        presenter?.didTapExitButton()
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        let processor = RoundCornerImageProcessor(cornerRadius: 61, backgroundColor: .ypBlack)
-        userPick.kf.setImage(with: url, options: [.processor(processor)])
+    private func initialSetup() {
+        let alertPresenter = AlertPresenter()
+        alertPresenter.setup(delegate: self)
+        self.alertPresenter = alertPresenter
     }
     
     private func switchToSplashController() {
@@ -144,26 +172,4 @@ final class ProfileViewController: UIViewController {
         window.rootViewController = splashViewController
     }
     
-    private func updateProfileResult(profile: Profile) {
-        self.mainNameLabel.text = profile.name
-        self.logoLabel.text = "@" + profile.login
-        self.statusLabel.text = profile.bio
-    }
-    
-    private func exitAlert() {
-        let alert = UIAlertController(
-            title: "Пока, пока!",
-            message: "Уверены, что хотите выйти?",
-            preferredStyle: .alert
-        )
-        let noAction = UIAlertAction(title: "Нет", style: .default)
-        let yesAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
-            guard let self else { return }
-            self.profileLogoutService.logout()
-            self.switchToSplashController()
-        }
-        alert.addAction(noAction)
-        alert.addAction(yesAction)
-        present(alert, animated: true)
-    }
 }
