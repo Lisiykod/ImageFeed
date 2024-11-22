@@ -17,8 +17,19 @@ final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
     
     weak var delegate: ImagesListCellDelegate?
-    var imageState: ImageCellState = .loading 
     
+    var imageState: ImageCellState = .loading {
+        didSet {
+            animationState()
+        }
+    }
+    
+    enum ImageCellState {
+        case loading
+        case error
+        case loaded(UIImage)
+    }
+
     lazy var mainImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -54,15 +65,16 @@ final class ImagesListCell: UITableViewCell {
         return gradientView
     }()
     
+    private lazy var cellGradientLayer: CALayer = {
+        let gradient = CAGradientLayer().setImagesGradient()
+        cellGradientLayer = gradient
+        cellGradientLayer.cornerRadius = 16
+        cellGradientLayer.masksToBounds = true
+        return gradient
+    }()
+    
     private let gradientLayer = CAGradientLayer()
-    private var cellGradientLayer = CAGradientLayer()
-    
-    enum ImageCellState {
-        case loading
-        case error
-        case loaded(UIImage)
-    }
-    
+
     override func layoutSublayers(of layer: CALayer) {
         super.layoutSublayers(of: self.layer)
         // настраиваем область показа градиента, чтобы он не обрезался
@@ -79,7 +91,6 @@ final class ImagesListCell: UITableViewCell {
         selectionStyle = .none
         // настраиваем все остальное
         setupCell()
-//        animationState()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -105,28 +116,21 @@ final class ImagesListCell: UITableViewCell {
     func animationState() {
         switch imageState {
         case .loading:
-            animationGradient()
-            print("cell loading")
+            startAnimation()
         case .error:
-            print("cell error")
             mainImage.image = UIImage(named: "placeholder")
             removeAnimation()
         case .loaded(let image):
-            print("cell loaded")
             mainImage.image = image
             removeAnimation()
         }
     }
     
     // MARK: - Private Methods
-    private func animationGradient() {
-        setCellGradientLayer()
-        animation()
-    }
     
     private func removeAnimation() {
-        gradientLayer.removeAllAnimations()
-        gradientLayer.removeFromSuperlayer()
+        cellGradientLayer.removeAllAnimations()
+        cellGradientLayer.isHidden = true
     }
     
     private func setupCell() {
@@ -139,6 +143,7 @@ final class ImagesListCell: UITableViewCell {
         self.contentView.addSubview(favoriteImageButton)
         mainImage.addSubview(gradientView)
         gradientView.addSubview(dateLabel)
+        contentView.layer.addSublayer(cellGradientLayer)
     }
     
     private func setupConstraints() {
@@ -187,21 +192,36 @@ final class ImagesListCell: UITableViewCell {
         ])
     }
     
-    private func setCellGradientLayer() {
-        let gradient = CAGradientLayer().setImagesGradient()
-        cellGradientLayer = gradient
-        cellGradientLayer.cornerRadius = 16
-        cellGradientLayer.masksToBounds = true
-        contentView.layer.addSublayer(cellGradientLayer)
-    }
-    
-    private func animation() {
-        let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
+    private func startAnimation() {
+        // первый вариант
+        let gradientChangeAnimation = CABasicAnimation(keyPath: "cellLocations")
         gradientChangeAnimation.duration = 1.0
         gradientChangeAnimation.repeatCount = .infinity
         gradientChangeAnimation.fromValue = [0, 0.1, 0.3]
         gradientChangeAnimation.toValue = [0, 0.8, 1]
-        cellGradientLayer.add(gradientChangeAnimation, forKey: "locationsChange")
+        cellGradientLayer.add(gradientChangeAnimation, forKey: "cellLocationChange")
+        cellGradientLayer.isHidden = false
+        
+        // второй вариант
+//        let gradientChangeAnimation = CAKeyframeAnimation(keyPath: "locations")
+        //        gradientChangeAnimation.duration = 2.0
+        //        gradientChangeAnimation.repeatCount = .infinity
+        //        gradientChangeAnimation.values = [
+        //            [0.0, 0.1, 0.2],
+        //            [0.2, 0.3, 0.5],
+        //            [0.5, 0.7, 1.0],
+        //            [0.8, 0.9, 1.0],
+        //            [1.0, 1.0, 1.0]
+        //        ]
+        //        gradientChangeAnimation.timingFunctions = [
+        //            CAMediaTimingFunction(name: .easeInEaseOut),
+        //            CAMediaTimingFunction(name: .easeInEaseOut),
+        //            CAMediaTimingFunction(name: .easeInEaseOut),
+        //            CAMediaTimingFunction(name: .easeInEaseOut)
+        //        ]
+        //
+        //        gradientLayer.add(gradientChangeAnimation, forKey: "locationsChange")
+        //        gradientLayer.isHidden = false
     }
     
     @objc

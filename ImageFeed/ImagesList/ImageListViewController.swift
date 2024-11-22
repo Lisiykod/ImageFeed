@@ -69,9 +69,6 @@ final class ImageListViewController: UIViewController {
             return
         }
         
-        if cell.mainImage.image == nil {
-            cell.imageState = .loading
-        }
         
         cell.mainImage.kf.indicatorType = .activity
         cell.mainImage.kf.setImage(with: imageURL) { [weak self] result in
@@ -84,7 +81,6 @@ final class ImageListViewController: UIViewController {
                 print("Set image error: \(error.localizedDescription)")
             }
         }
-        cell.animationState()
         
         // настраиваем дату
         if let date = photos[indexPath.row].createdAt {
@@ -145,10 +141,6 @@ extension ImageListViewController: UITableViewDataSource {
         
         // конфигурирем ячейку
         configureCell(for: imageListCell, with: indexPath)
-//        imageListCell.animationState()
-//        if imageListCell.mainImage.image != nil {
-//            imageListCell.removeAnimation()
-//        }
         return imageListCell
     }
     
